@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/22 16:48:19 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/23 11:23:55 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int     find_strlen(char *str);
 void    print_string(char *str);
 // char    *strjoin(char *s1, char *s2);
 char    *make_empty_string();
+int     approve_map(int **map, int height);
+void    show_error(char *error_message);
 
 
 // # define BUFFER_SIZE 128

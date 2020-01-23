@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 11:53:34 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/22 17:43:28 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/23 11:31:38 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,16 @@ char    *read_content_from_file(char *file_name)
     return (full_content);
 }
 
-void    print_map(int **map, int rows, int columns)
+void    print_map(int **map, int height)
 {
     int x;
     int y;
 
     x = 0;
     y = 0;
-    while (y < columns)
+    while (y < height)
     {
-        while (x < rows)
+        while (map[y][x] != -1)
         {
             printf("%d ", map[y][x]);
             x++;
@@ -63,62 +63,116 @@ void    print_map(int **map, int rows, int columns)
     }
 }
 
-int     **allocate_map(int rows, int columns, char *content_string)
+int     get_map_height(char *content_string)
 {
-    int **map;
-    int index;
+    int i;
+    int height;
+
+    i = 0;
+    height = 0;
+    while (content_string[i] != '\0')
+    {
+        if (content_string[i] == '\n')
+        {
+            height++;
+        }
+        i++;
+    }
+    height++;
+    return (height);
+}
+
+int     get_map_width(char *content_string, int index)
+{
+    int width;
+
+    width = 0;
+    while (content_string[index] != '\0')
+    {
+        if (content_string[index] == '\n')
+        {
+            width = (width / 2) + 1;
+            return (width);
+        }
+        index++;
+        width++;
+    }
+    width = (width / 2) + 1;
+    return (width);
+}
+
+/* Fills in the pointer to the 2D array */
+void    fill_map(int ***map, int height, char *content_string)
+{
     int x;
     int y;
+    int index;
+    int width;
 
     x = 0;
     y = 0;
     index = 0;
-    map = (int **)malloc(sizeof(int *) * rows);
-    if (!map)
-        return (NULL);
-    while (y < columns && content_string[index] != '\0')
+    while (y < height && content_string[index] != '\0')
     {
-        map[y] = (int *)malloc(sizeof(int) * columns);
-        while (x < rows)
+        width = get_map_width(content_string, index);
+        (*map)[y] = (int *)malloc(sizeof(int) * (width + 1)); /* One more for the -1 at the end of each column */
+        if (!(*map)[y])
+            return ;
+        while (x < width)
         {
-            map[y][x] = (content_string[index] - 48);
-            printf("%d", map[y][x]);
+            (*map)[y][x] = (content_string[index] - 48);
             index = index + 2;
             x++;
         }
-        printf("\n");
+        (*map)[y][x] = -1; /* Put a -1 at the end of every column */
         x = 0;
         y++;
     }
-    //print_map(map, 9, 9);
+}
+
+int     **allocate_map(char *content_string)
+{
+    int **map;
+    int height;
+
+    height = get_map_height(content_string);
+    map = (int **)malloc(sizeof(int *) * height);
+    if (!map)
+        return (0);
+    fill_map(&map, height, content_string);
+    if (!approve_map(map, height))
+        return (0);
+
+    print_map(map, height);
+    
     return (map);
 }
 
-/* Function that collects all the data */
-void    collect_file_information(char *file_name)
+/* Function that collects all the data from the file*/
+int     collect_file_information(char *file_name)
 {
     char    *file_content;
     int     **map;
 
-
     file_content = read_content_from_file(file_name);
     if (!file_content)
-        return ;
-
-   map = allocate_map(9, 9, file_content);
-
-
+        return (0);
+    map = allocate_map(file_content);
+    if (!map)
+        return (0);
+    return (1);
 }
 
 int main(int argc, char **argv)
 {
     if (argc != 2)
     {
-        print_string("Expecting only one argument\n");
+        show_error("Expecting only one argument");
         return (0);
     }
 
-    collect_file_information(argv[1]);
+    if(!collect_file_information(argv[1]))
+        show_error("Something went wrong collecting the data from the file");
 
     return (0);
 }

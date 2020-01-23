@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:34:22 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/22 16:47:21 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/23 11:23:41 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,10 @@ int     find_strlen(char *str)
 void    print_string(char *str)
 {
     write(1, str, find_strlen(str));
+}
+
+void    show_error(char *error_message)
+{
+    print_string("Error\n");
+    print_string(error_message);
 }
