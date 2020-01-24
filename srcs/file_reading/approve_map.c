@@ -6,11 +6,11 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/23 09:01:13 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/23 11:31:02 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/24 14:59:52 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../cub3d.h"
+#include "../../cub3d.h"
 
 int     check_outer_line(int *column)
 {
@@ -20,9 +20,7 @@ int     check_outer_line(int *column)
     while (column[index] != -1)
     {
         if (column[index] != 1)
-        {
             return (0);
-        }
         index++;
     }
     return (1);
@@ -38,9 +36,7 @@ int     check_inner_line(int *column)
         if (index == 0 || column[index + 1] == -1) /* First or last one of every column */
         {
             if (column[index] != 1)
-            {
                 return (0);
-            }
         }
         index++;
     }
@@ -66,7 +62,6 @@ int     approve_map(int **map, int height)
             if (!check_inner_line(map[y]))
                 return (0);
         }
-        
         y++;
     }
     return (1);

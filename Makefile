@@ -6,7 +6,7 @@
 #    By: mvan-gin <mvan-gin@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/22 09:47:24 by mvan-gin       #+#    #+#                 #
-#    Updated: 2020/01/23 09:02:30 by mvan-gin      ########   odam.nl          #
+#    Updated: 2020/01/24 19:06:25 by mvan-gin      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,11 @@ NAME = cub3d
 
 FILES = main.c \
 
-MAP_FILES = srcs/map_checker.c \
-			srcs/approve_map.c \
+MAP_FILES = srcs/file_reading/read_file.c \
+			srcs/file_reading/read_map.c \
+			srcs/file_reading/read_map_utils.c \
+			srcs/file_reading/approve_map.c \
+			srcs/file_reading/general_file_info.c \
 			srcs/standards.c \
 			srcs/get_next_line/get_next_line.c \
 			srcs/get_next_line/get_next_line_utils.c \
