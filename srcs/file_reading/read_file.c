@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 11:53:34 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/24 19:02:12 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/25 16:28:36 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ t_file_data     empty_file_data()
     file_data.west_texture = 0;
     file_data.east_texture = 0;
     file_data.sprite_texture = 0;
-    file_data.floor_texture = 0;
-    file_data.ceiling_texture = 0;
+    file_data.floor_color = 0;
+    file_data.ceiling_color = 0;
     file_data.map = 0;
     return (file_data);
 }
@@ -80,9 +80,8 @@ int             collect_file_information(char *file_name)
     file_data.map = allocate_map(file_data.full_file); // Make sure to only send the string that contains the start of the map
     if (!file_data.map)
         return (0);
-    write(1, "hoi", 4);
 
-    free_map(file_data.map);
+    //free_map(file_data.map);
     
     return (1);
 }
@@ -98,10 +97,10 @@ int             main(int argc, char **argv)
     if(!collect_file_information(argv[1]))
         show_error("Something went wrong collecting the data from the file");
 
-    while (1)
-    {
+    // while (1)
+    // {
         
-    }
+    // }
 
     return (0);
 }

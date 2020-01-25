@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/24 19:05:55 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/25 16:08:53 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,27 +21,28 @@
 typedef struct  s_file_data
 {
     char        *full_file;
+    int         **map;
 
     int         res_width;
     int         res_height;
 
-    char        *north_texture;
+    char        **north_texture;
     char        *south_texture;
     char        *west_texture;
     char        *east_texture;
 
     char        *sprite_texture;
-    char        *floor_texture;
-    char        *ceiling_texture;
+    char        *floor_color;
+    char        *ceiling_color;
 
-    int         **map;
 }               t_file_data;
 
 /* Struct that holds the identifier_tag and the function that goes with it */
 typedef struct  s_id_tuple
 {
     char        *identifier;
-    int        (*function)(char *, int *, t_file_data *);
+    int        (*function)(char *, int *, t_file_data *, struct s_id_tuple *);
+    char        **value;
 }               t_id_tuple;
 
 /* Standards */
