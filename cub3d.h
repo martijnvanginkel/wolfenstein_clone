@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/25 16:08:53 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/27 14:59:21 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,13 @@ typedef struct  s_file_data
     int         res_height;
 
     char        **north_texture;
-    char        *south_texture;
-    char        *west_texture;
-    char        *east_texture;
+    char        **south_texture;
+    char        **west_texture;
+    char        **east_texture;
 
-    char        *sprite_texture;
-    char        *floor_color;
-    char        *ceiling_color;
+    char        **sprite_texture;
+    char        **floor_color;
+    char        **ceiling_color;
 
 }               t_file_data;
 
@@ -51,6 +51,8 @@ void    print_string(char *str);
 char    *make_empty_string();
 void    show_error(char *error_message);
 int     same_string(char *s1, char *s2, int length);
+int     empty_till_n(char *str, int n);
+int     is_empty_line(char *str);
 
 /* File reading */
 int     **allocate_map(char *content_string);
