@@ -6,29 +6,11 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 11:53:34 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/25 16:28:36 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/28 17:46:25 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
-
-t_file_data     empty_file_data()
-{
-    t_file_data file_data;
-
-    file_data.full_file = 0;
-    file_data.res_width = 0;
-    file_data.res_height = 0;
-    file_data.north_texture = 0;
-    file_data.south_texture = 0;
-    file_data.west_texture = 0;
-    file_data.east_texture = 0;
-    file_data.sprite_texture = 0;
-    file_data.floor_color = 0;
-    file_data.ceiling_color = 0;
-    file_data.map = 0;
-    return (file_data);
-}
 
 /* Joins a newly read line to the string that contains the entire file content */
 void            glue_lines(char **full_file, char *read_line)

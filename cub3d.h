@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/27 14:59:21 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/28 17:47:33 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ typedef struct  s_file_data
     char        *full_file;
     int         **map;
 
-    int         res_width;
-    int         res_height;
+    int         **resolution;
 
     char        **north_texture;
     char        **south_texture;
@@ -32,8 +31,8 @@ typedef struct  s_file_data
     char        **east_texture;
 
     char        **sprite_texture;
-    char        **floor_color;
-    char        **ceiling_color;
+    int         **floor_color;
+    int         **ceiling_color;
 
 }               t_file_data;
 
@@ -42,7 +41,7 @@ typedef struct  s_id_tuple
 {
     char        *identifier;
     int        (*function)(char *, int *, t_file_data *, struct s_id_tuple *);
-    char        **value;
+    void        **value;
 }               t_id_tuple;
 
 /* Standards */
@@ -51,8 +50,9 @@ void    print_string(char *str);
 char    *make_empty_string();
 void    show_error(char *error_message);
 int     same_string(char *s1, char *s2, int length);
-int     empty_till_n(char *str, int n);
-int     is_empty_line(char *str);
+int     is_empty_line(char *str, int index);
+int     str_to_number(int *num_ptr, char *file_string, int *index);
+void	loop_empty_space(char *file_string, int *index);
 
 /* File reading */
 int     **allocate_map(char *content_string);
@@ -62,6 +62,15 @@ void    free_map(int **map);
 int     get_map_width(char *content_string, int index);
 int     get_map_height(char *content_string);
 void    print_map(int **map, int height);
+
+t_file_data     empty_file_data(void);
+int            	all_info_filled(t_file_data *data);
+void			print_file_data(t_file_data *file_data);
+
+
+int		find_resolution(char *file_string, int *index, t_file_data *data, t_id_tuple *id_tuple);
+int		find_texture(char *file_string, int *index, t_file_data *file_data, t_id_tuple *id_tuple);
+int		find_color(char *file_string, int *index, t_file_data *file_data, t_id_tuple *id_tuple);
 
 
 

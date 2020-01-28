@@ -1,12 +1,18 @@
+R    1920     800     
 
-S ./path_to_sprite
-R 1920      800   
+WE ./path_to_the_west_texture        
+   
+       
+SO     ./path_to_south_texture
 
+  
+ 
+S      ./path_to_sprite
+F    220  ,  100  ,    0   
+C    220  ,  100  ,    0   
+EA   ./path_to_east
+NO  ./path_to_north_texture
 
-WE ./path_to_the_west_texture   
-NO ./path_to_north_texture
-SO ./path_to_south_texture
-EA ./path_to_east
 
 
 
@@ -18,6 +24,6 @@ EA ./path_to_east
 1 0 0 1 1 0 0 0 0 1 1 1 1
 1 0 0 1 1 0 0 1 0 1 1 1 1
 1 0 0 1 1 0 0 0 0 1 1 1 1
-1 1 1 1 1 1 1 1 1 1 1 1 1 
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
 1 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1

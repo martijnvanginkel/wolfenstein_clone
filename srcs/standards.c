@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:34:22 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/27 12:57:08 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/28 17:46:49 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,34 +23,29 @@ char    *make_empty_string()
     return (str);
 }
 
-int     empty_till_n(char *str, int n)
+int         str_to_number(int *num_ptr, char *file_string, int *index)
 {
-    int i;
-
-    i = 0;
-    while (i < n)
+    *num_ptr = 0;
+    while (file_string[*index] >= '0' && file_string[*index] <= '9')
     {
-        if (str[i] == '\n')
-            return (1);
-        else if (str[i] != ' ')
-            return (0);
-        i++;
+        *num_ptr = *num_ptr * 10 + (file_string[*index] - 48);
+        (*index)++;
     }
-    return (1);
+    return (*num_ptr);
 }
 
-int     is_empty_line(char *str)
+int     is_empty_line(char *str, int index)
 {
     int i;
 
     i = 0;
-    while (str[i] != '\0' && str[i] != '\n')
+    while (str[index] != '\0' && str[index] != '\n')
     {
-        if (str[i] != ' ' || str[i] != '\t')
+        if (str[index] != ' ' && str[index] != '\t')
         {
             return (0);
         }
-        i++;   
+        index++;   
     }
     return (1);
 }
