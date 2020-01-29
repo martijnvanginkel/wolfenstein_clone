@@ -6,51 +6,20 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/23 09:01:13 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/29 16:16:14 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/29 16:39:17 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-// int     check_outer_line(int *column)
-// {
-//     int index;
-
-//     index = 0;
-//     while (column[index] != -1)
-//     {
-//         if (column[index] != 1)
-//             return (0);
-//         index++;
-//     }
-//     return (1);
-// }
-
-// int     check_inner_line(int *column)
-// {
-//     int index;
-
-//     index = 0;
-//     while (column[index] != -1)
-//     {
-//         if (index == 0 || column[index + 1] == -1) /* First or last one of every column */
-//         {
-//             if (column[index] != 1)
-//                 return (0);
-//         }
-//         index++;
-//     }
-//     return (1);
-// }
-
-static t_map_tile 	*find_first_tile(t_map_tile ***map)
+static t_map_tile 	*find_first_tile(t_map_tile **map)
 {
 	int i;
 
 	i = 0;
-	while (map[0][i]->value != 1 && map[0][i] != 0)
+	while (map[0][i].value != 1)
 		i++;
-	return (map[0][i]);
+	return (&(map[0][i]));
 }
 
 static int			tile_exists(t_map_tile *tile, t_map_tile **next_tile)
@@ -93,12 +62,11 @@ int     approve_map(t_map_tile **map)
 	t_map_tile *first_tile;
 	t_map_tile *current_tile;
 
-	first_tile = find_first_tile(&map);
+	first_tile = find_first_tile(map);
 	current_tile = first_tile;
-
-	printf("%d", first_tile->value);
-
-	// printf("%d", map[3][2].value);
+	
+	printf("%d", current_tile->y_cord);
+	printf("%d\n", current_tile->x_cord);
 
 	
 
