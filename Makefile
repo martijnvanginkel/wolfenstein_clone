@@ -6,7 +6,7 @@
 #    By: mvan-gin <mvan-gin@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/22 09:47:24 by mvan-gin       #+#    #+#                 #
-#    Updated: 2020/01/28 17:45:37 by mvan-gin      ########   odam.nl          #
+#    Updated: 2020/01/29 09:50:17 by mvan-gin      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ FILES = main.c \
 
 MAP_FILES = srcs/file_reading/read_file.c \
 			srcs/file_reading/read_file_utils.c \
-			srcs/file_reading/read_map.c \
-			srcs/file_reading/read_map_utils.c \
+			srcs/file_reading/find_map.c \
+			srcs/file_reading/find_map_utils.c \
 			srcs/file_reading/approve_map.c \
 			srcs/file_reading/general_file_info.c \
 			srcs/file_reading/find_resolution.c \

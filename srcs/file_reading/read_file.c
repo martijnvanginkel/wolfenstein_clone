@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 11:53:34 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/28 17:46:25 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/29 10:24:12 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,15 @@ int             collect_file_information(char *file_name)
         return (0);
 
     
-    if (!get_general_info(&file_data))
-        return (0);
+    // if (!get_general_info(&file_data))
+    //     return (0);
 
 
-    file_data.map = allocate_map(file_data.full_file); // Make sure to only send the string that contains the start of the map
+    file_data.map = get_map(file_data.full_file);
+	//allocate_map(file_data.full_file); // Make sure to only send the string that contains the start of the map
     if (!file_data.map)
         return (0);
 
-    //free_map(file_data.map);
     
     return (1);
 }

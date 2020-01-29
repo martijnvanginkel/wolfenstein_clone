@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/28 17:44:11 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/28 17:48:07 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/29 09:53:59 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ int            all_info_filled(t_file_data *data)
 
 void		print_file_data(t_file_data *file_data)
 {
-	printf("width : %d \n", (file_data->resolution)[0][0]);
+	printf("width  : %d \n", (file_data->resolution)[0][0]);
 	printf("height : %d \n", (file_data->resolution)[0][1]);
-	printf("n_tex : %s \n", *(file_data->north_texture));
-	printf("n_tex : %s \n", *(file_data->south_texture));
-	printf("n_tex : %s \n", *(file_data->west_texture));
-    printf("n_tex : %s \n", *(file_data->east_texture));
-    printf("n_tex : %s \n", *(file_data->sprite_texture));
-    printf("floor: %d\n %d\n %d\n", (file_data->floor_color)[0][0], (file_data->floor_color)[0][1], (file_data->floor_color)[0][2]);
-    printf("ceiling: %d\n %d\n %d\n", (file_data->ceiling_color)[0][0], (file_data->ceiling_color)[0][1], (file_data->ceiling_color)[0][2]);
+	printf("n_tex  : %s \n", *(file_data->north_texture));
+	printf("s_tex  : %s \n", *(file_data->south_texture));
+	printf("w_tex  : %s \n", *(file_data->west_texture));
+    printf("e_tex  : %s \n", *(file_data->east_texture));
+    printf("sprite : %s \n", *(file_data->sprite_texture));
+    printf("floor  : r:%d\n         g:%d\n         b:%d\n", (file_data->floor_color)[0][0], (file_data->floor_color)[0][1], (file_data->floor_color)[0][2]);
+    printf("ceiling: r:%d\n         g:%d\n         b:%d\n", (file_data->ceiling_color)[0][0], (file_data->ceiling_color)[0][1], (file_data->ceiling_color)[0][2]);
 }
 

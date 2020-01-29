@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/28 17:47:33 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/29 14:54:18 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,21 @@
 #include <fcntl.h>
 #include "srcs/get_next_line/get_next_line.h"
 
+/* Struct that holds map_tile values */
+typedef struct			s_map_tile
+{
+	int					value;
+	int					x_cord;
+	int					y_cord;
+	int					is_visited;
+	struct s_map_tile 	*previous_tile;
+}						t_map_tile;
+
 /* Struct with all the file information */
 typedef struct  s_file_data
 {
     char        *full_file;
-    int         **map;
+    t_map_tile  **map;
 
     int         **resolution;
 
@@ -55,13 +65,14 @@ int     str_to_number(int *num_ptr, char *file_string, int *index);
 void	loop_empty_space(char *file_string, int *index);
 
 /* File reading */
-int     **allocate_map(char *content_string);
-int     approve_map(int **map, int height);
-int     get_general_info(t_file_data *file_data);
-void    free_map(int **map);
-int     get_map_width(char *content_string, int index);
-int     get_map_height(char *content_string);
-void    print_map(int **map, int height);
+t_map_tile	**get_map(char *content_string);
+// int			**allocate_map(char *content_string);
+int			approve_map(t_map_tile **map);
+int			get_general_info(t_file_data *file_data);
+// void		free_map(int **map);
+int			get_map_width(char *content_string, int index);
+int			get_map_height(char *content_string);
+// void		print_map(int **map, int height);
 
 t_file_data     empty_file_data(void);
 int            	all_info_filled(t_file_data *data);
