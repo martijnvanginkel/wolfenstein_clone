@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 11:53:34 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 11:14:59 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/30 15:34:01 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,23 +48,22 @@ char            *read_content_from_file(char *file_name)
 int             collect_file_information(char *file_name)
 {
     t_file_data file_data;
+	int index; /* Index from where reading the map will start */
 
     file_data = empty_file_data();
     file_data.full_file = read_content_from_file(file_name);
     if (!file_data.full_file)
         return (0);
-
-    
-    // if (!get_general_info(&file_data))
-    //     return (0);
-
-
-    file_data.map = get_map(file_data.full_file);
-	//allocate_map(file_data.full_file); // Make sure to only send the string that contains the start of the map
+	index = get_general_info(&file_data);
+	if (index == 0)
+		return (0);
+	while (is_empty_line(file_data.full_file, index))
+	{
+		loop_till_next_line(file_data.full_file, &index);
+	}
+    file_data.map = get_map(&(file_data.full_file)[index]);
     if (!file_data.map)
         return (0);
-
-    
     return (1);
 }
 
@@ -75,14 +74,14 @@ int             main(int argc, char **argv)
         show_error("Expecting only one argument");
         return (0);
     }
-
     if(!collect_file_information(argv[1]))
+	{
         show_error("Something went wrong collecting the data from the file");
+		return (0);
+	}
 
-    // while (1)
-    // {
-        
-    // }
+	print_string("All info successfully collected");
+
 
     return (0);
 }

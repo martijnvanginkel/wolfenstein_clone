@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/28 17:27:35 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/28 17:42:33 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/30 15:30:18 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ int				find_color(char *file_string, int *index,
 		free(rgb_colors);
 		return (0);
 	}
-	if (!loop_and_find_color(&rgb_colors[2], file_string, index))
+	loop_empty_space(file_string, index);
+	if (!valid_rgb_number(str_to_number(&rgb_colors[2], file_string, index)))
 		return (0);
 	*(id_tuple->value) = rgb_colors;
 	return (1);

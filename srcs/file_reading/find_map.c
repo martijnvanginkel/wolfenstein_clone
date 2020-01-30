@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/24 14:58:12 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 11:00:39 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/30 14:36:27 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,7 @@ t_map_tile		**get_map(char *content_string)
 		return (0);
 	if (!fill_map(&map, height, content_string))
 		return (0);
-
-	approve_map(map, height);
-
-	return (0);
+	if (!approve_map(map, height))
+		return (0);
+	return (map);
 }

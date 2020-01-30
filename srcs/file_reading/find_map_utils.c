@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/24 19:04:55 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/29 10:23:22 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/30 14:37:21 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,21 +31,6 @@ void    print_map(int **map, int height)
         y++;
     }
 }
-
-// void    free_map(int **map)
-// {
-//     int x;
-//     int y;
-
-//     x = 0;
-//     y = 0;
-//     while (map[y] != 0)
-//     {
-//         free(map[y]);
-//         y++;
-//     }
-//     free(map);
-// }
 
 int     get_map_height(char *content_string)
 {

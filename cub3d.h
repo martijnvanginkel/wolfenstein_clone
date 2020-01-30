@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 11:00:46 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/30 15:22:00 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ int			get_general_info(t_file_data *file_data);
 // void		free_map(int **map);
 int			get_map_width(char *content_string, int index);
 int			get_map_height(char *content_string);
+void		loop_till_next_line(char *str, int *index);
 // void		print_map(int **map, int height);
 
 t_file_data     empty_file_data(void);

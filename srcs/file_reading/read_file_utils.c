@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/28 17:44:11 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/29 09:53:59 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/30 15:21:39 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,19 @@ int            all_info_filled(t_file_data *data)
         data->ceiling_color != 0)
         return (1);
     return (0);
+}
+
+void			loop_till_next_line(char *str, int *index)
+{
+	while (str[*index] != '\0')
+	{
+		if (str[*index] == '\n')
+		{
+			(*index)++;
+			return ;
+		}
+		(*index)++;
+	}
 }
 
 void		print_file_data(t_file_data *file_data)

@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/28 17:16:41 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/28 17:27:16 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/30 15:29:59 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,5 @@ int			find_texture(char *file_string, int *index, t_file_data *file_data,
 	}
 	path[i] = '\0';
 	*(id_tuple->value) = path;
-	loop_empty_space(file_string, index);
 	return (1);
 }
