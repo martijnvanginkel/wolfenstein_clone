@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/29 14:54:18 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/30 11:00:46 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@
 typedef struct			s_map_tile
 {
 	int					value;
-	int					x_cord;
-	int					y_cord;
+	int					x;
+	int					y;	
 	int					is_visited;
 	struct s_map_tile 	*previous_tile;
 }						t_map_tile;
@@ -67,7 +67,7 @@ void	loop_empty_space(char *file_string, int *index);
 /* File reading */
 t_map_tile	**get_map(char *content_string);
 // int			**allocate_map(char *content_string);
-int			approve_map(t_map_tile **map);
+int			approve_map(t_map_tile **map, int height);
 int			get_general_info(t_file_data *file_data);
 // void		free_map(int **map);
 int			get_map_width(char *content_string, int index);

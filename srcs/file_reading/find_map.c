@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/24 14:58:12 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/29 16:20:43 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/30 11:00:39 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static int				set_player_spawn(t_map_tile *tile, char c)
 	return (1);
 }
 
-static int				fill_map_tile(t_map_tile *tile, char c, int x_cord)
+static int				fill_map_tile(t_map_tile *tile, char c, int x_cord, int y_cord)
 {
 	if (c >= '0' && c <= '2')
 		tile->value = c - 48;
@@ -61,35 +61,37 @@ static int				fill_map_tile(t_map_tile *tile, char c, int x_cord)
 		if (!set_player_spawn(tile, c))
 			return (0);
 	}
-	tile->x_cord = x_cord;
+	tile->x = x_cord;
+	tile->y = y_cord;
 	tile->is_visited = 0;
 	tile->previous_tile = 0;
 	return (1);
 }
 
-static int				fill_map_line(t_map_tile *tile, char *content_string, int length, int *index)
+static int				fill_map_line(t_map_tile *tile, char *content_string, int *index, int y_cord)
 {
 	int x;
 
 	x = 0;
-	while (x < length && content_string[*index] != '\0')
+	while (tile[x].value != -1 && content_string[*index] != '\0')
 	{
-		if (!fill_map_tile(&(tile[x]), content_string[*index], x))
+		if (!fill_map_tile(&(tile[x]), content_string[*index], x, y_cord))
 			return (0);
 		(*index) = (*index) + 2;
 		x++;
 	}
-	tile[x].value = -1;
 	return (1);
 }
 
 static int				fill_map(t_map_tile ***map, int height, char *content_string)
 {
 	int y;
+	int x;
 	int index;
 	int width;
 
 	y = 0;
+	x = 0;
 	index = 0;
 	while (y < height && content_string[index] != '\0')
 	{
@@ -97,8 +99,8 @@ static int				fill_map(t_map_tile ***map, int height, char *content_string)
 		(*map)[y] = (t_map_tile *)malloc(sizeof(t_map_tile) * width + 1);
 		if (!(*map)[y])
 			return (0);
-		(*map)[y]->y_cord = y;
-		if (!fill_map_line((*map)[y], content_string, width, &index))
+		(*map)[y][width].value = -1;
+		if (!fill_map_line((*map)[y], content_string, &index, y))
 			return (0);
         y++;
 	}
@@ -117,7 +119,7 @@ t_map_tile		**get_map(char *content_string)
 	if (!fill_map(&map, height, content_string))
 		return (0);
 
-	approve_map(map);
+	approve_map(map, height);
 
 	return (0);
 }
