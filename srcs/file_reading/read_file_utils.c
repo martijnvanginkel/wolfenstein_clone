@@ -6,26 +6,27 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/28 17:44:11 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 15:21:39 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/31 11:36:54 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-t_file_data     empty_file_data(void)
+t_file_data     *empty_file_data(void)
 {
-    t_file_data file_data;
+    t_file_data *file_data;
 
-    file_data.full_file = 0;
-    file_data.resolution = 0;
-    file_data.north_texture = 0;
-    file_data.south_texture = 0;
-    file_data.west_texture = 0;
-    file_data.east_texture = 0;
-    file_data.sprite_texture = 0;
-    file_data.floor_color = 0;
-    file_data.ceiling_color = 0;
-    file_data.map = 0;
+	file_data = (t_file_data *)malloc(sizeof(t_file_data) * 1);
+    file_data->full_file = 0;
+    file_data->resolution = 0;
+    file_data->north_texture = 0;
+    file_data->south_texture = 0;
+    file_data->west_texture = 0;
+    file_data->east_texture = 0;
+    file_data->sprite_texture = 0;
+    file_data->floor_color = 0;
+    file_data->ceiling_color = 0;
+    file_data->map = 0;
     return (file_data);
 }
 

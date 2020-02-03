@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 11:53:34 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 15:34:01 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/03 10:32:10 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,27 +44,28 @@ char            *read_content_from_file(char *file_name)
     return (full_file);
 }
 
-/* Function that collects all the data from the file*/
-int             collect_file_information(char *file_name)
+/* Function that collects all the data from the file */
+t_file_data        *collect_file_information(char *file_name)
 {
-    t_file_data file_data;
 	int index; /* Index from where reading the map will start */
+    t_file_data *file_data;
 
     file_data = empty_file_data();
-    file_data.full_file = read_content_from_file(file_name);
-    if (!file_data.full_file)
+    file_data->full_file = read_content_from_file(file_name);
+    if (!file_data->full_file)
         return (0);
-	index = get_general_info(&file_data);
+	index = get_general_info(file_data);
 	if (index == 0)
 		return (0);
-	while (is_empty_line(file_data.full_file, index))
+	while (is_empty_line(file_data->full_file, index))
 	{
-		loop_till_next_line(file_data.full_file, &index);
+		loop_till_next_line(file_data->full_file, &index);
 	}
-    file_data.map = get_map(&(file_data.full_file)[index]);
-    if (!file_data.map)
+    //file_data->map = get_map(&(file_data->full_file)[index]);
+	file_data->map = get_map(file_data, index);
+    if (!file_data->map)
         return (0);
-    return (1);
+    return (file_data);
 }
 
 int             main(int argc, char **argv)
@@ -80,8 +81,8 @@ int             main(int argc, char **argv)
 		return (0);
 	}
 
+		
 	print_string("All info successfully collected");
-
-
     return (0);
+
 }

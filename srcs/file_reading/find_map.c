@@ -6,29 +6,11 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/24 14:58:12 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 14:36:27 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/03 13:00:54 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
-
-static void				print_map(t_map_tile **map, int height)
-{
-	int x = 0;
-	int y = 0;
-
-	while (y < height)
-	{
-		while (map[y][x].value != -1)
-		{
-			printf("%d ", map[y][x].value);
-			x++;
-		}
-		printf("\n");
-		x = 0;
-		y++;
-	}
-}
 
 static int				set_player_spawn(t_map_tile *tile, char c)
 {
@@ -52,10 +34,11 @@ static int				set_player_spawn(t_map_tile *tile, char c)
 
 static int				fill_map_tile(t_map_tile *tile, char c, int x_cord, int y_cord)
 {
+	tile->value = 0;
 	if (c >= '0' && c <= '2')
 		tile->value = c - 48;
 	else if (c == ' ')
-		tile->value = 9;
+		tile->value = 0; /* Was 9 before */
 	else
 	{
 		if (!set_player_spawn(tile, c))
@@ -73,52 +56,58 @@ static int				fill_map_line(t_map_tile *tile, char *content_string, int *index, 
 	int x;
 
 	x = 0;
-	while (tile[x].value != -1 && content_string[*index] != '\0')
+	while (content_string[*index + 1] != '\n' && content_string[*index + 1] != '\0')
 	{
-		if (!fill_map_tile(&(tile[x]), content_string[*index], x, y_cord))
-			return (0);
+		fill_map_tile(&(tile[x]), content_string[*index], x, y_cord);
 		(*index) = (*index) + 2;
+		x++;
+	}
+	fill_map_tile(&(tile[x]), content_string[*index], x, y_cord);
+	(*index) = (*index) + 2;
+	x++;
+	while (tile[x].value != -1)
+	{
+		fill_map_tile(&(tile[x]), ' ', x, y_cord);
 		x++;
 	}
 	return (1);
 }
 
-static int				fill_map(t_map_tile ***map, int height, char *content_string)
+static int				fill_map(t_map_tile ***map, t_file_data *file_data, char *content_string)
 {
 	int y;
 	int x;
 	int index;
-	int width;
 
 	y = 0;
 	x = 0;
 	index = 0;
-	while (y < height && content_string[index] != '\0')
+	while (y < file_data->map_height && content_string[index] != '\0')
 	{
-		width = get_map_width(content_string, index);
-		(*map)[y] = (t_map_tile *)malloc(sizeof(t_map_tile) * width + 1);
+		(*map)[y] = (t_map_tile *)malloc(sizeof(t_map_tile) * file_data->map_width);
 		if (!(*map)[y])
 			return (0);
-		(*map)[y][width].value = -1;
+		(*map)[y][file_data->map_width].value = -1;
 		if (!fill_map_line((*map)[y], content_string, &index, y))
 			return (0);
+		printf("\n");
         y++;
 	}
 	return (1);
 }
 
-t_map_tile		**get_map(char *content_string)
+t_map_tile		**get_map(t_file_data *file_data, int index)
 {
-	int			height;
 	t_map_tile	**map;
 
-	height = get_map_height(content_string);
-	map = (t_map_tile **)malloc(sizeof(t_map_tile *) * (height + 1));
+	file_data->map_height = get_map_height(&(file_data->full_file)[index]);
+	file_data->map_width = get_widest_map_line(file_data->full_file, index);
+	map = (t_map_tile **)malloc(sizeof(t_map_tile *) * (file_data->map_height + 1));
 	if (!map)
 		return (0);
-	if (!fill_map(&map, height, content_string))
+	if (!fill_map(&map, file_data, &(file_data->full_file)[index]))
 		return (0);
-	if (!approve_map(map, height))
+	if (!approve_map(map, file_data))
 		return (0);
 	return (map);
 }

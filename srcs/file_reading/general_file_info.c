@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/24 15:21:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 15:15:28 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/01/31 12:56:59 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,10 +123,6 @@ int            get_general_info(t_file_data *file_data)
             }       
         }
     }
-
-	// printf("\n\n%s\n\n", &(file_data->full_file)[index]);
-	// while (is_empty_line(file_data->full_file, index))
-    // 	loop_empty_space(file_data->full_file, &index);
 	print_file_data(file_data);
     return (index);
 }

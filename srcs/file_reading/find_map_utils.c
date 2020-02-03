@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/24 19:04:55 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 14:37:21 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/03 12:13:50 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,29 @@ int     get_map_height(char *content_string)
     }
     height++;
     return (height);
+}
+
+int     get_widest_map_line(char *content_string, int index)
+{
+    int width;
+    int line_index;
+
+    width = 0;
+    line_index = 0;
+    while (content_string[index] != '\0')
+    { 
+        if (content_string[index] == '\n')
+        {
+            if (line_index > width)
+                width = line_index;
+            line_index = 0;
+        }
+        line_index++;
+        index++;
+    }
+    width = (width / 2);
+    printf("width:%d\n", width);
+    return (width);
 }
 
 int     get_map_width(char *content_string, int index)

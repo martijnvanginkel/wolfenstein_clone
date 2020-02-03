@@ -1,7 +1,6 @@
 NO ./path_to_the_north_texture
 
 
-
 SO   ./path_to_the_south_texture
 
 
@@ -15,8 +14,9 @@ F 220,100,0
 C 225,30,0
 
 
+
 S   ./path_to_the_sprite_texture
-R 1000   500
+R 960   640
 
 
 

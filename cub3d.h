@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 15:22:00 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/03 12:16:47 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ typedef struct			s_map_tile
 typedef struct  s_file_data
 {
     char        *full_file;
+	
     t_map_tile  **map;
+	int			map_width;
+	int			map_height;
 
     int         **resolution;
 
@@ -39,8 +42,8 @@ typedef struct  s_file_data
     char        **south_texture;
     char        **west_texture;
     char        **east_texture;
-
     char        **sprite_texture;
+	
     int         **floor_color;
     int         **ceiling_color;
 
@@ -65,25 +68,24 @@ int     str_to_number(int *num_ptr, char *file_string, int *index);
 void	loop_empty_space(char *file_string, int *index);
 
 /* File reading */
-t_map_tile	**get_map(char *content_string);
-// int			**allocate_map(char *content_string);
-int			approve_map(t_map_tile **map, int height);
-int			get_general_info(t_file_data *file_data);
-// void		free_map(int **map);
-int			get_map_width(char *content_string, int index);
-int			get_map_height(char *content_string);
-void		loop_till_next_line(char *str, int *index);
-// void		print_map(int **map, int height);
-
-t_file_data     empty_file_data(void);
+t_map_tile		**get_map(t_file_data *file_data, int index);
+int				approve_map(t_map_tile **map, t_file_data *file_data);
+int				get_general_info(t_file_data *file_data);
+int				get_map_width(char *content_string, int index);
+int             get_widest_map_line(char *content_string, int index);
+int				get_map_height(char *content_string);
+void			loop_till_next_line(char *str, int *index);
+t_file_data		*get_file_data(int argc, char**argv);
+t_file_data     *empty_file_data(void);
 int            	all_info_filled(t_file_data *data);
 void			print_file_data(t_file_data *file_data);
+t_file_data		*collect_file_information(char *file_name);
+int				find_resolution(char *file_string, int *index, t_file_data *data, t_id_tuple *id_tuple);
+int				find_texture(char *file_string, int *index, t_file_data *file_data, t_id_tuple *id_tuple);
+int				find_color(char *file_string, int *index, t_file_data *file_data, t_id_tuple *id_tuple);
 
-
-int		find_resolution(char *file_string, int *index, t_file_data *data, t_id_tuple *id_tuple);
-int		find_texture(char *file_string, int *index, t_file_data *file_data, t_id_tuple *id_tuple);
-int		find_color(char *file_string, int *index, t_file_data *file_data, t_id_tuple *id_tuple);
-
+/* Window drawing */
+void			update_game(t_file_data *file_data);
 
 
 
