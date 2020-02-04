@@ -68,21 +68,26 @@ t_file_data        *collect_file_information(char *file_name)
     return (file_data);
 }
 
-int             main(int argc, char **argv)
-{
-    if (argc != 2)
-    {
-        show_error("Expecting only one argument");
-        return (0);
-    }
-    if(!collect_file_information(argv[1]))
-	{
-        show_error("Something went wrong collecting the data from the file");
-		return (0);
-	}
+// int             main(int argc, char **argv)
+// {
+//     if (argc != 2)
+//     {
+//         show_error("Expecting only one argument");
+//         return (0);
+//     }
+//     if(!collect_file_information(argv[1]))
+// 	{
+//         show_error("Something went wrong collecting the data from the file");
+// 		return (0);
+// 	}
 
 		
-	print_string("All info successfully collected");
-    return (0);
+// 	print_string("All info successfully collected");
 
-}
+//     // while (1)
+//     // {
+
+//     // }
+//     return (0);
+
+// }

@@ -28,7 +28,7 @@ MAP_FILES = srcs/file_reading/read_file.c \
 			srcs/get_next_line/get_next_line_utils.c \
 
 DRAW_FILES =	srcs/win_drawing/update.c \
-				srcs/win_drawing/draw_map.c \
+				srcs/win_drawing/get_and_draw_map.c \
 
 CC = gcc -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
 

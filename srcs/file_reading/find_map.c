@@ -111,3 +111,11 @@ t_map_tile		**get_map(t_file_data *file_data, int index)
 		return (0);
 	return (map);
 }
+
+// void			free_map(t_file_data *file_data)
+// {
+// 	int y;
+
+// 	y = 0;
+// 	free((file_data->map)[0]);
+// }

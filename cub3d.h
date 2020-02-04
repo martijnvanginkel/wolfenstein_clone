@@ -83,6 +83,7 @@ t_file_data		*collect_file_information(char *file_name);
 int				find_resolution(char *file_string, int *index, t_file_data *data, t_id_tuple *id_tuple);
 int				find_texture(char *file_string, int *index, t_file_data *file_data, t_id_tuple *id_tuple);
 int				find_color(char *file_string, int *index, t_file_data *file_data, t_id_tuple *id_tuple);
+void			free_map(t_file_data *file_data);
 
 /* Window drawing */
 void			update_game(t_file_data *file_data);
