@@ -13,6 +13,13 @@
 #include "../../minilibx/mlx.h"
 #include "../../cub3d.h"
 
+typedef struct  s_data {
+    void        *img;
+    char        *addr;
+    int         bits_per_pixel;
+    int         line_length;
+    int         endian;
+}               t_data;
 
 typedef struct 	s_game_tile
 {
@@ -30,21 +37,16 @@ typedef struct	s_game_manager
 	int				map_width;
 	int				tile_width;
 	int				tile_height;
+
 	t_game_tile		*player_tile;
 	int				player_x;
 	int				player_y;
 
 	void			*mlx;
     void			*win;
+	t_data  		*img;
 }				t_game_manager;
 
-typedef struct  s_data {
-    void        *img;
-    char        *addr;
-    int         bits_per_pixel;
-    int         line_length;
-    int         endian;
-}               t_data;
 
 void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
@@ -123,16 +125,17 @@ static t_game_manager	setup_game_manager(t_file_data *file_data)
 	game_manager.map_width = file_data->map_width;
 	game_manager.map_height = file_data->map_height;
 	game_manager.map = replace_map(file_data, tile_width, tile_height);
+	game_manager.player_tile = 0;
 	return (game_manager);
 }
 
-static int	decide_tile_color(t_game_tile game_tile)
+static int	decide_tile_color(t_game_tile *game_tile)
 {
-	if (game_tile.value == 0)
+	if (game_tile->value == 0 || game_tile->value == 3 || game_tile->value == 4 || game_tile->value == 5 || game_tile->value == 6)
 	{
 		return (0x00FF0000);
 	}
-	else if (game_tile.value == 1)
+	else if (game_tile->value == 1)
 	{
 		return (0x00FF7777);
 	}
@@ -145,27 +148,28 @@ static void	spawn_player(t_game_manager *game_manager, t_game_tile *game_tile)
 	game_manager->player_y = (game_tile->start_y + (game_tile->start_y + game_manager->tile_height)) / 2;
 }
 
-static void	draw_tile(t_game_tile game_tile, t_game_manager *game_manager, t_data img)
+static void	draw_tile(t_game_tile *game_tile, t_game_manager *game_manager, t_data img)
 {
-	int x = game_tile.start_x;
-	int y = game_tile.start_y;
+	int x = game_tile->start_x;
+	int y = game_tile->start_y;
 
-	if (game_tile.value == 3 || game_tile.value == 4 || game_tile.value == 5 || game_tile.value == 6)
+	if (game_tile->value == 3 || game_tile->value == 4 || game_tile->value == 5 || game_tile->value == 6)
 	{
-		spawn_player(game_manager, &game_tile);
-		return ;
+		spawn_player(game_manager, game_tile);
+		// game_manager->player_tile = game_tile;
 	}
 
-	while (y < (game_tile.start_y + game_manager->tile_height))
+	while (y < (game_tile->start_y + game_manager->tile_height))
 	{
-		while (x < (game_tile.start_x + game_manager->tile_width))
+		while (x < (game_tile->start_x + game_manager->tile_width))
 		{
 			my_mlx_pixel_put(&img, x, y, decide_tile_color(game_tile)); //pick color
 			x++;
 		}
-		x = game_tile.start_x;
+		x = game_tile->start_x;
 		y++;
 	}
+
 }
 
 static void draw_map(t_game_manager *game_manager, t_data img)
@@ -179,12 +183,14 @@ static void draw_map(t_game_manager *game_manager, t_data img)
 	{
 		while (x < game_manager->map_width)
 		{
-			draw_tile(game_manager->map[y][x], game_manager, img);
+			draw_tile(&(game_manager->map[y][x]), game_manager, img);
 			x++;
 		}
 		x = 0;
 		y++;
 	}
+
+	printf("x3:%d\n", (game_manager->player_tile)->x);
 }
 
 
@@ -200,11 +206,27 @@ int             player_input(int keycode, t_game_manager *game_manager)
    	printf("pressed: %d\n", keycode);
 	if (keycode == 13) // up
 	{
+		printf("[%d][%d]\n", game_manager->player_y, game_manager->player_x);
+		(game_manager->player_y)++;
+		printf("[%d][%d]\n", game_manager->player_y, game_manager->player_x);
+
 		printf("reached %d \n", (game_manager->tile_height));
 	}
 	else if (keycode == 0) // left
 	{
+		int x = 200;
+		int y = 200;
 
+		while (y < 300)
+		{
+			while (x < 300)
+			{
+				my_mlx_pixel_put(game_manager->img, x, y, 0x11FF1111);
+				x++;
+			}
+			x = 0;
+			y++;
+		}
 	}
 	else if (keycode == 1) // down
 	{
@@ -236,6 +258,7 @@ void	update_game(t_file_data *file_data)
 
 	game_manager.mlx = mlx;
 	game_manager.win = mlx_win;
+	game_manager.img = &img;
 	// vars.win = mlx_win;
 	// vars.mlx = mlx;
 
