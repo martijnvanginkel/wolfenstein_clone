@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:09:15 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/31 13:19:55 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/05 12:13:05 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int             main(int argc, char **argv)
 	}
 	print_string("All info successfully collected");
 
-	update_game(file_data);
+	run_game(file_data);
 
 
     return (0);

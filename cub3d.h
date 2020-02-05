@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/03 12:16:47 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/05 15:25:50 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,41 @@
 #include <stdio.h>
 #include <fcntl.h>
 #include "srcs/get_next_line/get_next_line.h"
+
+typedef struct  s_data {
+    void        *img;
+	void		*mlx;
+	void		*mlx_win;
+
+    char        *addr;
+    int         bits_per_pixel;
+    int         line_length;
+    int         endian;
+}               t_data;
+
+typedef struct 	s_game_tile
+{
+	int			value;
+	int			x;
+	int			y;
+	int			start_x;
+	int			start_y;
+}				t_game_tile;
+
+typedef struct	s_game_manager
+{
+	t_game_tile		**map;
+	int				map_height;
+	int				map_width;
+	int				tile_width;
+	int				tile_height;
+
+	t_game_tile		*player_tile;
+	int				player_x;
+	int				player_y;
+
+	t_data  		*img_data;
+}				t_game_manager;
 
 /* Struct that holds map_tile values */
 typedef struct			s_map_tile
@@ -86,10 +121,16 @@ int				find_color(char *file_string, int *index, t_file_data *file_data, t_id_tu
 void			free_map(t_file_data *file_data);
 
 /* Window drawing */
-void			update_game(t_file_data *file_data);
+void            my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
+void			run_game(t_file_data *file_data);
+t_data          setup_image_data(t_file_data *file_data);
+t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img);
 
+void            draw_map(t_game_manager *game_manager);
+void			draw_player(t_game_manager *game_manager);
 
+void            update_player(t_game_manager *game_manager, int x_diff, int y_diff);
 
 
 #endif

@@ -6,7 +6,7 @@
 #    By: mvan-gin <mvan-gin@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/22 09:47:24 by mvan-gin       #+#    #+#                 #
-#    Updated: 2020/01/31 11:51:54 by mvan-gin      ########   odam.nl          #
+#    Updated: 2020/02/05 15:03:26 by mvan-gin      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,8 +27,11 @@ MAP_FILES = srcs/file_reading/read_file.c \
 			srcs/get_next_line/get_next_line.c \
 			srcs/get_next_line/get_next_line_utils.c \
 
-DRAW_FILES =	srcs/win_drawing/update.c \
-				srcs/win_drawing/get_and_draw_map.c \
+WIN_FILES =	srcs/win_drawing/update.c \
+			srcs/win_drawing/draw_map.c \
+			srcs/win_drawing/setup_game.c \
+			srcs/win_drawing/update_player.c \
+				
 
 CC = gcc -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
 
@@ -36,7 +39,7 @@ $(NAME): fclean
 	$(CC) $(FILES) $(MAP_FILES) -o $(NAME) && ./$(NAME)
 
 game: fclean
-	$(CC) $(FILES) $(MAP_FILES) $(DRAW_FILES) -o game && ./game
+	$(CC) $(FILES) $(MAP_FILES) $(WIN_FILES) -o game && ./game
 
 map_checker: fclean
 	gcc $(MAP_FILES) -o map_checker && ./map_checker map.cub
