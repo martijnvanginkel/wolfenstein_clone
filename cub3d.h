@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/05 15:25:50 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/06 12:01:35 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #include <stdio.h>
 #include <fcntl.h>
+#include <math.h>
 #include "srcs/get_next_line/get_next_line.h"
 
 typedef struct  s_data {
@@ -48,6 +49,10 @@ typedef struct	s_game_manager
 	t_game_tile		*player_tile;
 	int				player_x;
 	int				player_y;
+	
+	double			player_dir;
+	double			x_dir;
+	double			y_dir;
 
 	t_data  		*img_data;
 }				t_game_manager;
