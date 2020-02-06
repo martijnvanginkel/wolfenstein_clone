@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:37 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/06 13:03:14 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/06 15:08:38 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,34 @@ void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
+t_game_tile		*find_game_tile(t_game_manager *game_manager, int x_value, int y_value)
+{
+	int y = 0;
+	int x = 0;
+
+	while (y < game_manager->file_data->map_height)
+	{
+		while (x < game_manager->file_data->map_width)
+		{
+			if (x_value >= game_manager->map[y][x].start_x && x_value < game_manager->map[y][x].start_x + game_manager->tile_width &&
+				y_value >= game_manager->map[y][x].start_y && y_value < game_manager->map[y][x].start_y + game_manager->tile_height)
+			{
+				printf("[%d]", game_manager->map[y][x].start_x);
+				printf("[%d]\n", game_manager->map[y][x].start_y);
+				printf("[%d]", game_manager->map[y][x].x);
+				printf("[%d]\n", game_manager->map[y][x].y);
+				return (&(game_manager->map[y][x]));
+			}
+			x++;
+		}
+		x = 0;
+		y++;
+	}
+	return (0);
+}
+
 int             get_player_input(int keycode, t_game_manager *game_manager)
 {
-   	// printf("pressed: %d\n", keycode);
-	// double dir = M_PI;
-
-	// printf("dir_value;%d\n", dir);
-
-	// printf("%f\n", cos(1));
-	// printf("%f\n", sin(1));
-
 
 	if (keycode == 13) // up
 	{
@@ -38,39 +56,33 @@ int             get_player_input(int keycode, t_game_manager *game_manager)
 	}
 	else if (keycode == 0) // left
 	{
+
+		t_game_tile *game_tile;
+		
 		game_manager->player_dir = (game_manager->player_dir - 0.05);
-		// game_manager->x_dir = cos(game_manager->player_dir);
-		// game_manager->y_dir = sin(game_manager->player_dir);
-
-
 		printf("pd: %f\n", game_manager->player_dir);
-
-		// float x = game_manager->x_dir;
-		// float y = game_manager->y_dir;
-		int i = 0;
 		printf("x_dir: %f\n", game_manager->x_dir);
 		printf("y_dir: %f\n", game_manager->y_dir);
 		double x = game_manager->player_x;
 		double y = game_manager->player_y;
 		double x1 = sin(game_manager->player_dir);
 		double y1 = cos(game_manager->player_dir);
-
-		// while (i < 10)
-		// {
-			// game_manager->player_x = (game_manager->player_x + (1 * game_manager->x_dir));
-			// game_manager->player_y = (game_manager->player_y + (1 * game_manager->y_dir));
-
-
-		while (i < 50)
+		
+		while (x > 0 && x < game_manager->file_data->resolution[0][0] && y > 0 && y < game_manager->file_data->resolution[0][1])
 		{
-			my_mlx_pixel_put(game_manager->img_data, x, y, 0x000000);
+			printf("[%d][%d]\n", (int)x, (int)y);
+			game_tile = find_game_tile(game_manager, (int)x, (int)y);
 
+			if (game_tile->value == 1)
+			{
+				printf("end");
+				break;
+			}
+			
+			my_mlx_pixel_put(game_manager->img_data, x, y, 0x000000);
 			x += x1;
 			y += y1;
-			i++;
 		}
-		
-
 		
 		mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
 	}

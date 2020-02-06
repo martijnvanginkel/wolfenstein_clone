@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:12 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/05 14:01:00 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/06 14:03:27 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void    draw_map(t_game_manager *game_manager)
 
 	x = 0;
 	y = 0;
-	while (y < game_manager->map_height)
+	while (y < game_manager->file_data->map_height)
 	{
-		while (x < game_manager->map_width)
+		while (x < game_manager->file_data->map_width)
 		{
 			draw_tile(&(game_manager->map[y][x]), game_manager);
 			x++;

@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 12:28:29 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/06 12:10:29 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/06 14:04:14 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void          fill_tile_line(t_file_data *file_data, t_game_manager *game
 
     x = 0;
     start_width = 0;
-    while (x < game_manager->map_width)
+    while (x < game_manager->file_data->map_width)
     {
         (game_manager->map)[y][x].start_x = start_width;
         (game_manager->map)[y][x].start_y = start_height;
@@ -82,8 +82,9 @@ t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img)
 	tile_height = (file_data->resolution)[0][1] / file_data->map_height;
 	game_manager.tile_width = tile_width;
 	game_manager.tile_height = tile_height;
-	game_manager.map_width = file_data->map_width;
-	game_manager.map_height = file_data->map_height;
+	game_manager.file_data = file_data;
+	// game_manager.map_width = file_data->map_width;
+	// game_manager.map_height = file_data->map_height;
 	game_manager.player_tile = 0;
 	game_manager.img_data = img;
 
