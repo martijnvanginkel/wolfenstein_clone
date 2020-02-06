@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:37 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/06 15:08:38 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/06 15:48:17 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ void	run_game(t_file_data *file_data)
 
 
 	draw_map(&game_manager);
+	draw_grid(&game_manager);
 
 
 	//draw_line(&game_manager);

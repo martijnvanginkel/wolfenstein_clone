@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:12 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/06 14:03:27 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/06 15:47:30 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,34 @@ void    draw_map(t_game_manager *game_manager)
 		x = 0;
 		y++;
 	}
+}
 
-	printf("x3:%d\n", (game_manager->player_tile)->x);
+void	draw_grid(t_game_manager *game_manager)
+{
+	int x = 0;
+	int y = game_manager->tile_height;
+
+	while (y < game_manager->file_data->resolution[0][1])
+	{
+		while (x < game_manager->file_data->resolution[0][0])
+		{
+			my_mlx_pixel_put(game_manager->img_data, x, y, 0x0000FF);
+			x++;
+		}
+		x = 0;
+		y = y + game_manager->tile_height;
+	}
+	x = game_manager->tile_width;
+	y = 0;
+	while (x < game_manager->file_data->resolution[0][0])
+	{
+		while (y < game_manager->file_data->resolution[0][1])
+		{
+			my_mlx_pixel_put(game_manager->img_data, x, y, 0x0000FF);
+			y++;
+		}
+		y = 0;
+		x = x + game_manager->tile_width;
+	}
+	mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
 }

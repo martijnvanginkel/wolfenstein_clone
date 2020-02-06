@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/06 14:03:57 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/06 15:47:58 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,8 @@ void			run_game(t_file_data *file_data);
 t_data          setup_image_data(t_file_data *file_data);
 t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img);
 
-void            draw_map(t_game_manager *game_manager);
+void            draw_map(t_game_manager *game_manager); // temp
+void			draw_grid(t_game_manager *game_manager); // temp
 void			draw_player(t_game_manager *game_manager);
 
 void            update_player(t_game_manager *game_manager, int x_diff, int y_diff);
