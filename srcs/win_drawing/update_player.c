@@ -13,7 +13,16 @@
 #include "../../minilibx/mlx.h"
 #include "../../cub3d.h"
 
-static void            draw_vision_line(t_game_manager *game_manager, int color)
+static int          available_pixel(t_game_manager *game_manager, int x, int y)
+{
+    if (game_manager->map[y / game_manager->tile_height][x / game_manager->tile_width].value != 1)
+    {
+        return (1);
+    }
+    return (0);
+}        
+
+static void         draw_vision_line(t_game_manager *game_manager, int color)
 {
     int res_width;
     int res_height;
@@ -24,7 +33,7 @@ static void            draw_vision_line(t_game_manager *game_manager, int color)
     res_height = game_manager->file_data->resolution[0][1];
     while (x > 0 && x < res_width && y > 0 && y < res_height)
     {
-        if (game_manager->map[(int)y / game_manager->tile_height][(int)x / game_manager->tile_width].value == 1)
+        if (!available_pixel(game_manager, (int)x, (int)y))
         {
             break;
         }
@@ -42,5 +51,21 @@ void            rotate_player(t_game_manager *game_manager, double rotation)
     draw_vision_line(game_manager, 0x000000);
 }
 
-void            move_player(t_game_manager *game_manager)
+void            move_player(t_game_manager *game_manager, double walk_speed)
+{
+    double new_x_value;
+    double new_y_value;
+
+    new_x_value = game_manager->player_x + (walk_speed * sin(game_manager->player_dir));
+    new_y_value = game_manager->player_y + (walk_speed * cos(game_manager->player_dir));
+    if (available_pixel(game_manager, (int)new_x_value, (int)new_y_value))
+    {
+        printf("%f ", new_x_value);
+        printf("%f\n", new_y_value);
+        draw_vision_line(game_manager, 0xFF0000);
+        game_manager->player_x = new_x_value;
+        game_manager->player_y = new_y_value;
+        draw_vision_line(game_manager, 0x000000);
+    }
+}
 

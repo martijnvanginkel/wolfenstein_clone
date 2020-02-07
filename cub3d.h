@@ -137,6 +137,8 @@ void			draw_grid(t_game_manager *game_manager); // temp
 
 //void            update_player(t_game_manager *game_manager, int x_diff, int y_diff);
 void            rotate_player(t_game_manager *game_manager, double rotation);
-t_game_tile		*find_game_tile(t_game_manager *game_manager, int x_value, int y_value);
+void			move_player(t_game_manager *game_manager, double walk_speed);
+
+// t_game_tile		*find_game_tile(t_game_manager *game_manager, int x_value, int y_value);
 
 #endif
