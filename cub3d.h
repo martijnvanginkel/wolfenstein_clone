@@ -73,8 +73,7 @@ typedef struct 	s_game_tile
 typedef struct	s_game_manager
 {
 	t_game_tile		**map;
-	// int				map_height;
-	// int				map_width;
+
 	t_file_data		*file_data;
 	int				tile_width;
 	int				tile_height;
@@ -83,8 +82,8 @@ typedef struct	s_game_manager
 	int				player_x;
 	int				player_y;
 	
-	double			player_dir;
-	double			x_dir;
+	double			player_dir; /* m_pi / radiant value that the player is looking at*/
+	double			x_dir; /* Relative x-position that the player is looking at */
 	double			y_dir;
 
 	t_data  		*img_data;
@@ -135,9 +134,9 @@ t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img);
 
 void            draw_map(t_game_manager *game_manager); // temp
 void			draw_grid(t_game_manager *game_manager); // temp
-void			draw_player(t_game_manager *game_manager);
 
-void            update_player(t_game_manager *game_manager, int x_diff, int y_diff);
-
+//void            update_player(t_game_manager *game_manager, int x_diff, int y_diff);
+void            rotate_player(t_game_manager *game_manager, double rotation);
+t_game_tile		*find_game_tile(t_game_manager *game_manager, int x_value, int y_value);
 
 #endif
