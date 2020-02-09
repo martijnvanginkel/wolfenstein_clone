@@ -91,6 +91,9 @@ t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img)
 	game_manager.x_dir = sin(game_manager.player_dir);
 	game_manager.y_dir = cos(game_manager.player_dir);
 
+	game_manager.left_edge_dir = game_manager.player_dir - 0.3;
+	game_manager.right_edge_dir = game_manager.player_dir + 0.3;
+
 	game_manager.map = replace_map(file_data, &game_manager);
 	return (game_manager);
 }

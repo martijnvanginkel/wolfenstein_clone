@@ -24,33 +24,24 @@ void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
 static int             get_player_input(int keycode, t_game_manager *game_manager)
 {
 	if (keycode == 13) // up
-	{
 		move_player(game_manager, 15);
-	}
 	else if (keycode == 0) // left
-	{
 		rotate_player(game_manager, 0.1);
-	}
 	else if (keycode == 1) // down
-	{
 		move_player(game_manager, -15);
-	}
 	else if (keycode == 2) // right
-	{
 		rotate_player(game_manager, -0.1);
-	}
 	return (0);
 }
 
 void	run_game(t_file_data *file_data)
 {
     t_data  img_data;
+	t_data img_data2;
 	t_game_manager game_manager;
 
 	img_data = setup_image_data(file_data);
 	game_manager = setup_game_manager(file_data, &img_data);
-
-
 	draw_map(&game_manager);
 	draw_grid(&game_manager);
 

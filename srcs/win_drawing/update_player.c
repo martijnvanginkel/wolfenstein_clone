@@ -13,16 +13,16 @@
 #include "../../minilibx/mlx.h"
 #include "../../cub3d.h"
 
-static int          available_pixel(t_game_manager *game_manager, int x, int y)
+static int          available_pixel(t_game_manager *g_m, int x, int y)
 {
-    if (game_manager->map[y / game_manager->tile_height][x / game_manager->tile_width].value != 1)
+    if (g_m->map[y / g_m->tile_height][x / g_m->tile_width].value != 1)
     {
         return (1);
     }
     return (0);
 }        
 
-static void         draw_vision_line(t_game_manager *game_manager, int color)
+static void         draw_vision_line(t_game_manager *game_manager, double dir, int color)
 {
     int res_width;
     int res_height;
@@ -38,17 +38,34 @@ static void         draw_vision_line(t_game_manager *game_manager, int color)
             break;
         }
         my_mlx_pixel_put(game_manager->img_data, x, y, color);
-        x += sin(game_manager->player_dir);
-        y += cos(game_manager->player_dir);
+        x += sin(dir);
+        y += cos(dir);
     }  
+
     mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
+}
+
+static void     draw_sight_edges(t_game_manager *game_manager, double rotation)
+{
+    // double  left_edge_dir;
+    // double  right_edge_dir;
+
+    draw_vision_line(game_manager, game_manager->left_edge_dir, 0xFF0000);
+    draw_vision_line(game_manager, game_manager->right_edge_dir, 0xFF0000);
+
+    game_manager->left_edge_dir = game_manager->player_dir - 0.3;
+    draw_vision_line(game_manager, game_manager->left_edge_dir, 0x000000);
+    game_manager->right_edge_dir = game_manager->player_dir + 0.3;
+    draw_vision_line(game_manager, game_manager->right_edge_dir, 0x000000);
+
 }
 
 void            rotate_player(t_game_manager *game_manager, double rotation)
 {
-    draw_vision_line(game_manager, 0xFF0000);
+    draw_vision_line(game_manager, game_manager->player_dir, 0xFF0000);
     game_manager->player_dir = (game_manager->player_dir + rotation);
-    draw_vision_line(game_manager, 0x000000);
+    draw_sight_edges(game_manager, rotation);
+    draw_vision_line(game_manager, game_manager->player_dir, 0x000000);
 }
 
 void            move_player(t_game_manager *game_manager, double walk_speed)
@@ -58,14 +75,14 @@ void            move_player(t_game_manager *game_manager, double walk_speed)
 
     new_x_value = game_manager->player_x + (walk_speed * sin(game_manager->player_dir));
     new_y_value = game_manager->player_y + (walk_speed * cos(game_manager->player_dir));
-    if (available_pixel(game_manager, (int)new_x_value, (int)new_y_value))
+    if (available_pixel(game_manager, new_x_value, new_y_value))
     {
         printf("%f ", new_x_value);
         printf("%f\n", new_y_value);
-        draw_vision_line(game_manager, 0xFF0000);
+        draw_vision_line(game_manager, game_manager->player_dir, 0xFF0000);
         game_manager->player_x = new_x_value;
         game_manager->player_y = new_y_value;
-        draw_vision_line(game_manager, 0x000000);
+        draw_vision_line(game_manager, game_manager->player_dir, 0x000000);
     }
 }
 

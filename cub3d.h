@@ -86,6 +86,9 @@ typedef struct	s_game_manager
 	double			x_dir; /* Relative x-position that the player is looking at */
 	double			y_dir;
 
+	double			left_edge_dir;
+	double			right_edge_dir;
+
 	t_data  		*img_data;
 }				t_game_manager;
 
