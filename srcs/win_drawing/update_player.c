@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 15:01:59 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/11 16:01:01 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/11 16:50:39 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static void draw_vision_line(t_game_manager *game_manager, double dir, int color
     mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
 }
 
-static float calculate_side_distances(t_game_manager *game_manager, float *side_dist_x, float *side_dist_y)
+static void calculate_side_distances(t_game_manager *game_manager, t_ray_info *ray_info)
 {
     float x;
     float y;
@@ -60,60 +60,50 @@ static float calculate_side_distances(t_game_manager *game_manager, float *side_
         y = game_manager->player_tile->start_y;
     else if (game_manager->y_dir > 0)
         y = game_manager->player_tile->start_y + game_manager->tile_height;
-    *side_dist_x = fabs((game_manager->player_x - x) / sin(game_manager->player_dir));
-    *side_dist_y = fabs((game_manager->player_y - y) / cos(game_manager->player_dir));
+    ray_info->side_dist_x = fabs((game_manager->player_x - x) / sin(game_manager->player_dir));
+    ray_info->side_dist_y = fabs((game_manager->player_y - y) / cos(game_manager->player_dir));
 }
 
-static void calculate_ray_distance(t_game_manager *game_manager)
+static void calculate_deltas(t_game_manager *game_manager, t_ray_info *ray_info)
+{
+    ray_info->delta_dist_x = fabs(game_manager->tile_width / game_manager->x_dir);
+    ray_info->delta_dist_y = fabs(game_manager->tile_height / game_manager->y_dir);
+}
+
+static void calculate_steps(t_game_manager *game_manager, int *step_x, int *step_y)
+{
+    if (game_manager->x_dir < 0)
+        *step_x = -1;
+    else
+        *step_x = 1;
+    if (game_manager->y_dir < 0)
+        *step_y = -1;
+    else
+        *step_y = 1;
+}
+
+static void calculate_ray_distance(t_game_manager *game_manager, t_ray_info *ray_info)
 {
     int side;
-
-    float side_dist_x;
-    float side_dist_y;
-
-    float delta_dist_x;
-    float delta_dist_y;
-
-
-    calculate_side_distances(game_manager, &side_dist_x, &side_dist_y);
-    
-    delta_dist_x = fabs(game_manager->tile_width / game_manager->x_dir);
-    delta_dist_y = fabs(game_manager->tile_height / game_manager->y_dir);
-
     int map_y_position;
     int map_x_position;
     int step_x;
     int step_y;
 
+    float perp_wall_dist;
+
     map_x_position = game_manager->player_tile->x;
     map_y_position = game_manager->player_tile->y;
-
-    if (game_manager->x_dir < 0)
-    {
-        step_x = -1;
-    }
-    else
-    {
-        step_x = 1;
-    }
-    if (game_manager->y_dir < 0)
-    {
-        step_y = -1;
-    }
-    else
-    {
-        step_y = 1;
-    }
-
+    calculate_steps(game_manager, &step_x, &step_y);
     while (1)
     {
-        if (side_dist_x < side_dist_y)
+        if (ray_info->side_dist_x < ray_info->side_dist_y)
         {
             side = 0;
             map_x_position += step_x;
             if (game_manager->map[map_y_position][map_x_position].value == 1)
                 break ;
-            side_dist_x += delta_dist_x;
+            ray_info->side_dist_x += ray_info->delta_dist_x;
         }
         else
         {
@@ -121,15 +111,8 @@ static void calculate_ray_distance(t_game_manager *game_manager)
             map_y_position += step_y;
             if (game_manager->map[map_y_position][map_x_position].value == 1)
                 break ;
-            side_dist_y += delta_dist_y;
+            ray_info->side_dist_y += ray_info->delta_dist_y;
         }
-        // if (game_manager->map[map_y_position][map_x_position].value == 1)
-        // {
-        //     printf("values:\n[%d][%d]\n", game_manager->map[map_y_position][map_x_position].x, game_manager->map[map_y_position][map_x_position].y);
-        //     //printf("side_dist: %f %f\n", side_dist_x, side_dist_y);
-        //     // my_mlx_pixel_put(game_manager->img_data, game_manager->map[map_y_position][map_x_position].start_x, game_manager->map[map_y_position][map_x_position].start_y, 0x000000);
-        //     wall_hit = 1;
-        // }
     }
 
 
@@ -138,14 +121,26 @@ static void calculate_ray_distance(t_game_manager *game_manager)
     //mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
     if (side == 0)
     {
-        printf("$x%f\n", side_dist_x);
+        printf("$x%f\n", ray_info->side_dist_x);
         //perpWallDist = fabs((map_x_position - game_manager->player_x + (1 - step_x) / 2) / game_manager->x_dir);
     }
     else
     {
-        printf("$y%f\n", side_dist_y);
+        printf("$y%f\n", ray_info->side_dist_y);
         //perpWallDist = fabs((map_y_position - game_manager->player_y + (1 - step_y) / 2) / game_manager->y_dir);
-    }
+    }  
+
+}
+
+
+static void calculate_ray(t_game_manager *game_manager)
+{
+    t_ray_info ray_info;
+
+    calculate_side_distances(game_manager, &ray_info);
+    calculate_deltas(game_manager, &ray_info);
+    calculate_ray_distance(game_manager, &ray_info);
+
     
 }
 
@@ -155,12 +150,14 @@ void rotate_player(t_game_manager *game_manager, double rotation)
     game_manager->player_dir = (game_manager->player_dir + rotation);
     game_manager->x_dir = sin(game_manager->player_dir);
     game_manager->y_dir = cos(game_manager->player_dir);
-
-    // printf("\nx_dir:[%f] | y_dir[%f]\n", game_manager->x_dir, game_manager->y_dir);
-
     draw_vision_line(game_manager, game_manager->player_dir, 0x000000);
 
-    calculate_ray_distance(game_manager);
+    // The moment the player rotates it needs to shoot multiple ray's 
+    // There will be a container function triggered in here that loops the calculate_ray function
+    // The calculate_ray function will also calculate the perp distance and then immediately draw it to the screen
+    
+
+    calculate_ray(game_manager);
 }
 
 void move_player(t_game_manager *game_manager, double walk_speed)

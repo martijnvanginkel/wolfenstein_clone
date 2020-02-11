@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/11 15:35:30 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/11 16:27:42 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,14 @@ typedef struct  s_data {
     int         line_length;
     int         endian;
 }               t_data;
+
+typedef struct  s_ray_info
+{
+    float       side_dist_x;
+    float       side_dist_y;
+    float       delta_dist_x;
+    float       delta_dist_y;
+}               t_ray_info;
 
 typedef struct 	s_game_tile
 {
