@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 15:01:59 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/11 10:09:53 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/11 11:44:03 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ static void draw_vision_line(t_game_manager *game_manager, double dir, int color
 
 static void find_x_point(t_game_manager *game_manager)
 {
-
     int wall_hit = 0;
+    int side;
 
     double side_dist_x;
     double side_dist_y;
@@ -56,16 +56,10 @@ static void find_x_point(t_game_manager *game_manager)
     double delta_dist_x;
     double delta_dist_y;
 
-    // int     step_x;
-    // int     step_y;
-
-    // delta_dist_x = fabs(1 / game_manager->x_dir);
-    // delta_dist_y = fabs(1 / game_manager->y_dir);
-
-    // int hit = 0;
-
     double x = game_manager->player_x;
     double y = game_manager->player_y;
+
+    double perpWallDist;
 
     if (game_manager->x_dir > 0)
     {
@@ -80,27 +74,19 @@ static void find_x_point(t_game_manager *game_manager)
     if (game_manager->y_dir < 0)
     {
         while (y > game_manager->player_tile->start_y)
-        {
-            printf("1");
             y--;
-        }
     }
     else if (game_manager->y_dir > 0)
     {
         while (y < game_manager->player_tile->start_y + game_manager->tile_height)
-        {
-            printf("2");
             y++;
-        }
     }
     side_dist_x = fabs((game_manager->player_x - x) / sin(game_manager->player_dir));
     side_dist_y = fabs((game_manager->player_y - y) / cos(game_manager->player_dir));
-
-    printf("\nx_dist:%f\n", side_dist_x);
-    printf("y_dist:%f\n", side_dist_y);
-
+    
     delta_dist_x = fabs(game_manager->tile_width / game_manager->x_dir);
     delta_dist_y = fabs(game_manager->tile_height / game_manager->y_dir);
+
     printf("\ndelta_dist_x: %f \n", delta_dist_x);
     printf("\ndelta_dist_y: %f \n", delta_dist_y);
 
@@ -129,31 +115,49 @@ static void find_x_point(t_game_manager *game_manager)
         step_y = 1;
     }
 
-    while (wall_hit == 0)
+    while (1)
     {
-        //printf("[%d][%d]  !", game_manager->map[map_y_position][map_x_position].y, game_manager->map[map_y_position][map_x_position].x);
         if (side_dist_x < side_dist_y)
         {
-            side_dist_x += delta_dist_x;
+            side = 0;
             map_x_position += step_x;
+            if (game_manager->map[map_y_position][map_x_position].value == 1)
+                break ;
+            side_dist_x += delta_dist_x;
         }
         else
         {
-            side_dist_y += delta_dist_y;
+            side = 1;
             map_y_position += step_y;
+            if (game_manager->map[map_y_position][map_x_position].value == 1)
+                break ;
+            side_dist_y += delta_dist_y;
         }
-
-        if (game_manager->map[map_y_position][map_x_position].value == 1)
-        {
-            printf("values:\n[%d][%d]\n", game_manager->map[map_y_position][map_x_position].x, game_manager->map[map_y_position][map_x_position].y);
-            //printf("side_dist: %f %f\n", side_dist_x, side_dist_y);
-            // my_mlx_pixel_put(game_manager->img_data, game_manager->map[map_y_position][map_x_position].start_x, game_manager->map[map_y_position][map_x_position].start_y, 0x000000);
-            wall_hit = 1;
-        }
+        // if (game_manager->map[map_y_position][map_x_position].value == 1)
+        // {
+        //     printf("values:\n[%d][%d]\n", game_manager->map[map_y_position][map_x_position].x, game_manager->map[map_y_position][map_x_position].y);
+        //     //printf("side_dist: %f %f\n", side_dist_x, side_dist_y);
+        //     // my_mlx_pixel_put(game_manager->img_data, game_manager->map[map_y_position][map_x_position].start_x, game_manager->map[map_y_position][map_x_position].start_y, 0x000000);
+        //     wall_hit = 1;
+        // }
     }
-    //mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
 
-    // printf("side_dists: %f %f \n", side_dist_x, side_dist_y);
+
+
+    //printf("\nside_x: %f %f\n", side_dist_x, side_dist_y);
+    //mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
+    if (side == 0)
+    {
+        printf("$x%f\n", side_dist_x);
+        //perpWallDist = fabs((map_x_position - game_manager->player_x + (1 - step_x) / 2) / game_manager->x_dir);
+    }
+    else
+    {
+        printf("$y%f\n", side_dist_y);
+        //perpWallDist = fabs((map_y_position - game_manager->player_y + (1 - step_y) / 2) / game_manager->y_dir);
+    }
+    
+    //printf("perpwall:%f\n", perpWallDist);
 
     //printf("\n\nmycalc%f\n\n", (game_manager->player_x - x) / sin(game_manager->player_dir));
 
@@ -168,9 +172,9 @@ static void calculate_delta(t_game_manager *game_manager)
     player_x = game_manager->player_x;
     player_y = game_manager->player_y;
 
-    printf("player_pos: [%f][%f]\n", player_x, player_y);
-    printf("x_dir: %f", game_manager->x_dir);
-    printf("y_dir: %f", game_manager->y_dir);
+    // printf("player_pos: [%f][%f]\n", player_x, player_y);
+    // printf("x_dir: %f", game_manager->x_dir);
+    // printf("y_dir: %f", game_manager->y_dir);
 
     find_x_point(game_manager);
 }
@@ -182,7 +186,7 @@ void rotate_player(t_game_manager *game_manager, double rotation)
     game_manager->x_dir = sin(game_manager->player_dir);
     game_manager->y_dir = cos(game_manager->player_dir);
 
-    printf("\nx_dir:[%f] | y_dir[%f]\n", game_manager->x_dir, game_manager->y_dir);
+    // printf("\nx_dir:[%f] | y_dir[%f]\n", game_manager->x_dir, game_manager->y_dir);
 
     draw_vision_line(game_manager, game_manager->player_dir, 0x000000);
 
