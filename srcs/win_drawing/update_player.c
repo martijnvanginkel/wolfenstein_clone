@@ -6,23 +6,23 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 15:01:59 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/10 17:38:54 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/11 10:09:53 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minilibx/mlx.h"
 #include "../../cub3d.h"
 
-static int          available_pixel(t_game_manager *g_m, int x, int y)
+static int available_pixel(t_game_manager *g_m, int x, int y)
 {
     if (g_m->map[y / g_m->tile_height][x / g_m->tile_width].value != 1)
     {
         return (1);
     }
     return (0);
-}        
+}
 
-static void         draw_vision_line(t_game_manager *game_manager, double dir, int color)
+static void draw_vision_line(t_game_manager *game_manager, double dir, int color)
 {
     int res_width;
     int res_height;
@@ -40,21 +40,21 @@ static void         draw_vision_line(t_game_manager *game_manager, double dir, i
         my_mlx_pixel_put(game_manager->img_data, x, y, color);
         x += sin(dir);
         y += cos(dir);
-    }  
+    }
 
     mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
 }
 
-static void            find_x_point(t_game_manager *game_manager)
+static void find_x_point(t_game_manager *game_manager)
 {
 
-    int     wall_hit = 0;
+    int wall_hit = 0;
 
-    double  side_dist_x;
-    double  side_dist_y;
+    double side_dist_x;
+    double side_dist_y;
 
-    double  delta_dist_x;
-    double  delta_dist_y;
+    double delta_dist_x;
+    double delta_dist_y;
 
     // int     step_x;
     // int     step_y;
@@ -93,13 +93,11 @@ static void            find_x_point(t_game_manager *game_manager)
             y++;
         }
     }
-    side_dist_x = (game_manager->player_x - x) / sin(game_manager->player_dir);
-    side_dist_y = (game_manager->player_y - y) / cos(game_manager->player_dir);
+    side_dist_x = fabs((game_manager->player_x - x) / sin(game_manager->player_dir));
+    side_dist_y = fabs((game_manager->player_y - y) / cos(game_manager->player_dir));
 
     printf("\nx_dist:%f\n", side_dist_x);
     printf("y_dist:%f\n", side_dist_y);
-
-
 
     delta_dist_x = fabs(game_manager->tile_width / game_manager->x_dir);
     delta_dist_y = fabs(game_manager->tile_height / game_manager->y_dir);
@@ -133,6 +131,7 @@ static void            find_x_point(t_game_manager *game_manager)
 
     while (wall_hit == 0)
     {
+        //printf("[%d][%d]  !", game_manager->map[map_y_position][map_x_position].y, game_manager->map[map_y_position][map_x_position].x);
         if (side_dist_x < side_dist_y)
         {
             side_dist_x += delta_dist_x;
@@ -147,21 +146,21 @@ static void            find_x_point(t_game_manager *game_manager)
         if (game_manager->map[map_y_position][map_x_position].value == 1)
         {
             printf("values:\n[%d][%d]\n", game_manager->map[map_y_position][map_x_position].x, game_manager->map[map_y_position][map_x_position].y);
+            //printf("side_dist: %f %f\n", side_dist_x, side_dist_y);
+            // my_mlx_pixel_put(game_manager->img_data, game_manager->map[map_y_position][map_x_position].start_x, game_manager->map[map_y_position][map_x_position].start_y, 0x000000);
             wall_hit = 1;
         }
     }
-    
-    
-    
+    //mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
+
+    // printf("side_dists: %f %f \n", side_dist_x, side_dist_y);
+
     //printf("\n\nmycalc%f\n\n", (game_manager->player_x - x) / sin(game_manager->player_dir));
 
-
     //my_mlx_pixel_put(game_manager->img_data, x, game_manager->player_y, 0x000000);
-
-
 }
 
-static void            calculate_delta(t_game_manager *game_manager)
+static void calculate_delta(t_game_manager *game_manager)
 {
     double player_x;
     double player_y;
@@ -176,22 +175,21 @@ static void            calculate_delta(t_game_manager *game_manager)
     find_x_point(game_manager);
 }
 
-void            rotate_player(t_game_manager *game_manager, double rotation)
+void rotate_player(t_game_manager *game_manager, double rotation)
 {
     draw_vision_line(game_manager, game_manager->player_dir, 0xFF0000);
     game_manager->player_dir = (game_manager->player_dir + rotation);
     game_manager->x_dir = sin(game_manager->player_dir);
-	game_manager->y_dir = cos(game_manager->player_dir);
+    game_manager->y_dir = cos(game_manager->player_dir);
 
     printf("\nx_dir:[%f] | y_dir[%f]\n", game_manager->x_dir, game_manager->y_dir);
 
     draw_vision_line(game_manager, game_manager->player_dir, 0x000000);
 
     calculate_delta(game_manager);
-
 }
 
-void            move_player(t_game_manager *game_manager, double walk_speed)
+void move_player(t_game_manager *game_manager, double walk_speed)
 {
     double new_x_value;
     double new_y_value;
@@ -209,4 +207,3 @@ void            move_player(t_game_manager *game_manager, double walk_speed)
         draw_vision_line(game_manager, game_manager->player_dir, 0x000000);
     }
 }
-
