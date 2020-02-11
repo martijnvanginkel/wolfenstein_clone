@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/10 10:44:46 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/11 15:35:30 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ typedef struct	s_game_manager
 	int				tile_height;
 
 	t_game_tile		*player_tile;
-	double			player_x;
-	double			player_y;
+	float			player_x;
+	float			player_y;
 	
-	double			player_dir; /* m_pi / radiant value that the player is looking at*/
-	double			x_dir; /* Relative x-position that the player is looking at */
-	double			y_dir;
+	float			player_dir; /* m_pi / radiant value that the player is looking at*/
+	float			x_dir; /* Relative x-position that the player is looking at */
+	float			y_dir;
 
 	
 
