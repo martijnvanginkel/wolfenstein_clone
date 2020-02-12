@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/11 16:27:42 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/12 11:26:48 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,10 @@ typedef struct  s_data {
 
 typedef struct  s_ray_info
 {
+	float		ray_dir;
+	float		ray_x_dir;
+	float		ray_y_dir;
+
     float       side_dist_x;
     float       side_dist_y;
     float       delta_dist_x;
@@ -97,6 +101,7 @@ typedef struct	s_game_manager
 	
 
 	t_data  		*img_data;
+	t_data			*img_data2;
 }				t_game_manager;
 
 /* Struct that holds the identifier_tag and the function that goes with it */
@@ -140,7 +145,7 @@ void            my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 void			run_game(t_file_data *file_data);
 t_data          setup_image_data(t_file_data *file_data);
-t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img);
+t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *img2);
 
 void            draw_map(t_game_manager *game_manager); // temp
 void			draw_grid(t_game_manager *game_manager); // temp

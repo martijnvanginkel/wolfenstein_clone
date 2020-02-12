@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 12:28:29 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/10 12:19:30 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/12 11:26:35 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_data	setup_image_data(t_file_data *file_data)
 	return (img);
 }
 
-t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img)
+t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *img2)
 {
 	t_game_manager	game_manager;
 	int				tile_width;
@@ -86,6 +86,7 @@ t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img)
 
 	game_manager.player_tile = 0;
 	game_manager.img_data = img;
+	game_manager.img_data2 = img2;
 
 	game_manager.player_dir = M_PI;
 	game_manager.x_dir = sin(game_manager.player_dir);

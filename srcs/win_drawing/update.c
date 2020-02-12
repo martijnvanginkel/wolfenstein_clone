@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:37 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/06 15:48:17 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/12 11:28:29 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,18 @@ void	run_game(t_file_data *file_data)
 	t_game_manager game_manager;
 
 	img_data = setup_image_data(file_data);
-	game_manager = setup_game_manager(file_data, &img_data);
+	img_data2 = setup_image_data(file_data);
+
+	// game_manager.img_data2 = &img_data2; // temp;
+
+	game_manager = setup_game_manager(file_data, &img_data, &img_data2);
 	draw_map(&game_manager);
 	draw_grid(&game_manager);
 
+    // return ;
 
 	mlx_hook(game_manager.img_data->mlx_win, 2, 1L<<0, get_player_input, &game_manager);
 
     mlx_loop(game_manager.img_data->mlx);
+	mlx_loop(game_manager.img_data2->mlx);
 }
