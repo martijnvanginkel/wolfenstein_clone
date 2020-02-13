@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/12 11:26:48 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/13 12:08:08 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ typedef struct  s_ray_info
     float       side_dist_y;
     float       delta_dist_x;
     float       delta_dist_y;
+
+	float		perp_dist;
 }               t_ray_info;
 
 typedef struct 	s_game_tile

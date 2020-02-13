@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 15:01:59 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/13 11:18:05 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/13 17:21:20 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,40 @@ static void calculate_steps(t_ray_info *ray_info, int *step_x, int *step_y)
         *step_y = 1;
 }
 
+static void clean_wall_line(t_game_manager *game_manager, int x_value)
+{
+    int height;
+    int y;
+
+    y = 0;
+    height = game_manager->file_data->resolution[0][1];
+    while (y < height)
+    {
+        my_mlx_pixel_put(game_manager->img_data2, x_value, y, 0x000000);
+        y++;
+    }
+}
+
+static void draw_wall_line(t_game_manager *game_manager, int res_i, float perp_distance)
+{
+    int res_height;
+    int incre;
+    int middle;
+    
+
+    res_height = (int)(game_manager->file_data->resolution[0][1]);
+    incre = (((1 / perp_distance) * res_height) * 10);
+    middle = (res_height / 2) + (incre / 2);
+    while (incre > 0)
+    {
+        if (middle < 0 || middle > res_height)
+            break;
+        my_mlx_pixel_put(game_manager->img_data2, res_i, middle, 0xFF0000);
+        middle--;
+        incre--;
+    }
+}
+
 static float calculate_ray_distance(t_game_manager *game_manager, t_ray_info *ray_info)
 {
     int side;
@@ -110,30 +144,12 @@ static float calculate_ray_distance(t_game_manager *game_manager, t_ray_info *ra
             ray_info->side_dist_y += ray_info->delta_dist_y;
         }
     }
-
     if (side == 0)
     {
-        //printf("ray_lengthx : %f\n", ray_info->side_dist_x);
-
-        //printf(":%f\n", cos(M_PI) * game_manager->player_dir);
-
-        // perp_wall_dist = (ray_info->ray_dir - game_manager->player_dir * ray_info->side_dist_x);
-        // // ray_info->side_dist_x * ray
-        // printf("n-perp: %f\n", ray_info->side_dist_x);
-        // printf("perp: %f\n", perp_wall_dist);
-
         return (ray_info->side_dist_x);
     }
     else
     {
-        // perp_wall_dist = (game_manager->player_dir - ray_info->ray_dir * ray_info->side_dist_y);
-        // // ray_info->side_dist_x * ray
-        // printf("n-perp: %f\n", ray_info->side_dist_y);
-        // printf("perp: %f\n", perp_wall_dist);
-
-        //printf("ray_lengthy : %f\n", ray_info->side_dist_y);
-
-
         return (ray_info->side_dist_y);
     }
 }
@@ -143,7 +159,6 @@ static float calculate_ray(t_game_manager *game_manager, float ray_dir)
 {
     t_ray_info  ray_info;
     float       ray_distance;
-    float       perp_distance;
 
     ray_info.ray_dir = ray_dir;
     ray_info.ray_x_dir = sin(ray_dir);
@@ -152,43 +167,28 @@ static float calculate_ray(t_game_manager *game_manager, float ray_dir)
     calculate_side_distances(game_manager, &ray_info);
     calculate_deltas(game_manager, &ray_info);
     ray_distance = calculate_ray_distance(game_manager, &ray_info);
-    perp_distance = cos(game_manager->player_dir - ray_dir) * ray_distance;
-    printf("perp:%f\n", perp_distance);
-    return (perp_distance);
+    ray_info.perp_dist = cos(game_manager->player_dir - ray_dir) * ray_distance;
+    return (ray_info.perp_dist);
 }
 
-static void clean_wall_line(t_game_manager *game_manager, int x_value)
+static float    get_radius_increment(t_game_manager *game_manager, float current_ray)
 {
-    int height;
-    int y;
+    int current;
+    int start;
+    int end;
+    float player_length;
 
-    y = 0;
-    height = game_manager->file_data->resolution[0][1];
-    while (y < height)
-    {
-        my_mlx_pixel_put(game_manager->img_data2, x_value, y, 0x000000);
-        y++;
-    }
-}
+    end = (game_manager->file_data->resolution[0][0] / 2);
+    start = end * -1;
 
-static void draw_wall_line(t_game_manager *game_manager, int res_i, float ray_distance)
-{
-    int res_height;
-    int incre;
-    int middle;
-    
+    //printf("cur_ray:%f\n", gamecurrent_ray);
 
-    res_height = (int)(game_manager->file_data->resolution[0][1]);
-    incre = (((1 / ray_distance) * res_height) * 10);
-    middle = (res_height / 2) + (incre / 2);
-    while (incre > 0)
-    {
-        if (middle < 0 || middle > res_height)
-            break;
-        my_mlx_pixel_put(game_manager->img_data2, res_i, middle, 0xFF0000);
-        middle--;
-        incre--;
-    }
+    player_length = fabs(start) / tan(current_ray);
+    printf("player_length:%f\n", player_length);
+
+    printf("new_ray:%f\n", fabs(start) / player_length);
+
+    return (0);
 }
 
 static void shoot_rays(t_game_manager *game_manager, float player_dir, int color)
@@ -196,22 +196,79 @@ static void shoot_rays(t_game_manager *game_manager, float player_dir, int color
     float   current_ray;
     float   left_ray;
     float   right_ray;
-    float   increment;
+    float   new_cur_ray;
     int     i;
- 
+    float   increment;
+
     left_ray = (player_dir - ((M_PI / 3) / 2));
     right_ray = (player_dir + ((M_PI / 3) / 2));
-    increment = (right_ray - left_ray) / (game_manager->file_data->resolution[0][0]);
     current_ray = right_ray;
+
+
+    float start_incr;
+    float start;
+    float end;
+    float player_length;
+
+    end = 1;
+    start = 1;
+    start_incr = 2.0 / (float)(game_manager->file_data->resolution[0][0]);
+    player_length = fabs(start) / tan(M_PI / 6);
+
+
+    // printf("start_len%f\n", start);
+    // printf("player_len%f\n", player_length);
+
+    // printf("m_pi%f\n", (M_PI / 6) / 960);
+    // printf("tan:%f\n", tan(fabs(start) / player_length));
+
+
+    // // return ;
+    increment = (right_ray - left_ray) / (game_manager->file_data->resolution[0][0]);
+
+
+    
+    // printf("cur_ray: %f\n", current_ray);
+
+    // printf("cur_ray_2: %f\n", atan(start / player_length));
+
+
+   // current_ray = left_ray;
+    int counter = 0;
+    // i = game_manager->file_data->resolution[0][0];
+    // while (right_ray > left_ray && i >= 0)
     i = game_manager->file_data->resolution[0][0];
-    while (right_ray > left_ray && i >= 0)
+    // if (game_manager->player_dir > 2 * M_PI)
+    //     game_manager->player_dir -= 2 * M_PI;
+    // if (game_manager->player_dir < 0)
+    //     game_manager->player_dir += 2 * M_PI;
+    while (start > -1)
     {
+
+
+        printf("cur_ray:%f\n", current_ray);
+        
+        current_ray = game_manager->player_dir + atan(start / player_length);
+        //  if (current_ray > 2 * M_PI)
+        // current_ray -= 2 * M_PI;
+        // if (current_ray < 0)
+        // current_ray += 2 * M_PI;
+        printf("atan: %f\n", atan(start / player_length));
+        printf("cur_ray2:%f\n", current_ray);
+        printf("player_dir%f\n", game_manager->player_dir);
+         printf("player_len%f\n", player_length);
+      //  break;
+       // current_ray += increment;
+        start -= start_incr;
+        
+        i--;
+        
         draw_vision_line(game_manager, current_ray, color);
         clean_wall_line(game_manager, i);
         draw_wall_line(game_manager, i, calculate_ray(game_manager, current_ray));
-        current_ray -= increment;
-        i--;
     }
+
+    // printf("incr_amount:%f\n", start);
 
     mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
     mlx_put_image_to_window(game_manager->img_data2->mlx, game_manager->img_data2->mlx_win, game_manager->img_data2->img, 0, 0);
@@ -226,7 +283,7 @@ void rotate_player(t_game_manager *game_manager, double rotation)
     game_manager->x_dir = sin(game_manager->player_dir);
     game_manager->y_dir = cos(game_manager->player_dir);
     draw_vision_line(game_manager, game_manager->player_dir, 0x000000);
-    
+
     shoot_rays(game_manager, game_manager->player_dir, 0x000000);
 }
 
@@ -240,8 +297,6 @@ void move_player(t_game_manager *game_manager, double walk_speed)
     if (available_pixel(game_manager, new_x_value, new_y_value))
     {
         game_manager->player_tile = &game_manager->map[(int)new_y_value / game_manager->tile_height][(int)new_x_value / game_manager->tile_width];
-        // printf("%f ", new_x_value);
-        // printf("%f\n", new_y_value);
         draw_vision_line(game_manager, game_manager->player_dir, 0xFF0000);
         game_manager->player_x = new_x_value;
         game_manager->player_y = new_y_value;
