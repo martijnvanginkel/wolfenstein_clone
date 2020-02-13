@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 15:01:59 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/12 17:16:05 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/13 11:18:05 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ static float calculate_ray_distance(t_game_manager *game_manager, t_ray_info *ra
         // printf("n-perp: %f\n", ray_info->side_dist_y);
         // printf("perp: %f\n", perp_wall_dist);
 
-        printf("ray_lengthy : %f\n", ray_info->side_dist_y);
+        //printf("ray_lengthy : %f\n", ray_info->side_dist_y);
 
 
         return (ray_info->side_dist_y);
@@ -143,22 +143,18 @@ static float calculate_ray(t_game_manager *game_manager, float ray_dir)
 {
     t_ray_info  ray_info;
     float       ray_distance;
+    float       perp_distance;
 
     ray_info.ray_dir = ray_dir;
     ray_info.ray_x_dir = sin(ray_dir);
     ray_info.ray_y_dir = cos(ray_dir);
 
-    // printf("%f", )
-
     calculate_side_distances(game_manager, &ray_info);
     calculate_deltas(game_manager, &ray_info);
-    // length = calculate_ray_distance
     ray_distance = calculate_ray_distance(game_manager, &ray_info);
-
-    printf("ray_d: %f\n", ray_distance);
-
-    return (ray_distance);
-    // length wordt naar een draw functie gestuurd om de hoogte te berekenen
+    perp_distance = cos(game_manager->player_dir - ray_dir) * ray_distance;
+    printf("perp:%f\n", perp_distance);
+    return (perp_distance);
 }
 
 static void clean_wall_line(t_game_manager *game_manager, int x_value)
@@ -202,32 +198,20 @@ static void shoot_rays(t_game_manager *game_manager, float player_dir, int color
     float   right_ray;
     float   increment;
     int     i;
-
-
-    i = 0;
+ 
     left_ray = (player_dir - ((M_PI / 3) / 2));
     right_ray = (player_dir + ((M_PI / 3) / 2));
     increment = (right_ray - left_ray) / (game_manager->file_data->resolution[0][0]);
-    current_ray = left_ray;
-
-    while (current_ray < right_ray)
+    current_ray = right_ray;
+    i = game_manager->file_data->resolution[0][0];
+    while (right_ray > left_ray && i >= 0)
     {
         draw_vision_line(game_manager, current_ray, color);
         clean_wall_line(game_manager, i);
         draw_wall_line(game_manager, i, calculate_ray(game_manager, current_ray));
-        if (i == 20)
-            break;
-        current_ray += increment;
-        i++;
+        current_ray -= increment;
+        i--;
     }
-
-    // float   ray_length;
-    // ray_length = calculate_ray(game_manager, player_dir);
-
-    // printf("ray_length: %f\n", ray_length);
-
-    // draw_vision_line(game_manager, left_ray, color);
-    // draw_wall_line(game_manager, i, ray_length);
 
     mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
     mlx_put_image_to_window(game_manager->img_data2->mlx, game_manager->img_data2->mlx_win, game_manager->img_data2->img, 0, 0);
