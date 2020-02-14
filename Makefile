@@ -6,7 +6,7 @@
 #    By: mvan-gin <mvan-gin@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/22 09:47:24 by mvan-gin       #+#    #+#                 #
-#    Updated: 2020/02/05 15:03:26 by mvan-gin      ########   odam.nl          #
+#    Updated: 2020/02/14 10:12:08 by mvan-gin      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,9 @@ WIN_FILES =	srcs/win_drawing/update.c \
 			srcs/win_drawing/draw_map.c \
 			srcs/win_drawing/setup_game.c \
 			srcs/win_drawing/update_player.c \
-				
+			srcs/win_drawing/drawing_utils.c \
+			srcs/win_drawing/shoot_3d_rays.c \
+			srcs/win_drawing/calculate_ray_utils.c \			
 
 CC = gcc -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
 

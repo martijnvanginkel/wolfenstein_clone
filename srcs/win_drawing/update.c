@@ -6,20 +6,20 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:37 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/12 11:28:29 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/14 09:56:32 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minilibx/mlx.h"
 #include "../../cub3d.h"
 
-void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
-{
-    char    *dst;
+// void            my_mlx_pixel_put(t_data *data, int x, int y, int color)
+// {
+//     char    *dst;
 
-    dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-    *(unsigned int*)dst = color;
-}
+//     dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+//     *(unsigned int*)dst = color;
+// }
 
 static int             get_player_input(int keycode, t_game_manager *game_manager)
 {

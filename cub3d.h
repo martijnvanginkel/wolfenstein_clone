@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/14 09:31:39 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/14 10:10:28 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,20 +143,32 @@ int				find_texture(char *file_string, int *index, t_file_data *file_data, t_id_
 int				find_color(char *file_string, int *index, t_file_data *file_data, t_id_tuple *id_tuple);
 void			free_map(t_file_data *file_data);
 
-/* Window drawing */
+/* Drawing utils */
 void            my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void			draw_2d_vision_line(t_game_manager *game_manager, double dir, int color);
+void			clean_3d_wall_line(t_game_manager *game_manager, int x_value);
+void			draw_3d_wall_line(t_game_manager *game_manager, int res_i, float perp_distance);
 
+/* Update */
 void			run_game(t_file_data *file_data);
 t_data          setup_image_data(t_file_data *file_data);
 t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *img2);
 
+/* Draw map */
 void            draw_map(t_game_manager *game_manager); // temp
 void			draw_grid(t_game_manager *game_manager); // temp
 
-//void            update_player(t_game_manager *game_manager, int x_diff, int y_diff);
+/* Update player */
 void            rotate_player(t_game_manager *game_manager, double rotation);
 void			move_player(t_game_manager *game_manager, double walk_speed);
+int				available_pixel(t_game_manager *g_m, int x, int y);
 
-// t_game_tile		*find_game_tile(t_game_manager *game_manager, int x_value, int y_value);
+/* Calculate ray utils */
+void			calculate_side_distances(t_game_manager *game_manager, t_ray_info *ray_info);
+void			calculate_deltas(t_game_manager *game_manager, t_ray_info *ray_info);
+void			calculate_steps(t_ray_info *ray_info, int *step_x, int *step_y);
+
+/* Shoot 3d rays */
+void			shoot_rays(t_game_manager *game_manager, float player_dir, int color);
 
 #endif
