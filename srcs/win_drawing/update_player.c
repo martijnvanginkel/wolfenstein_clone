@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 15:01:59 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/14 10:01:58 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/14 10:58:41 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int available_pixel(t_game_manager *g_m, int x, int y)
 
 void rotate_player(t_game_manager *game_manager, double rotation)
 {
+
     shoot_rays(game_manager, game_manager->player_dir, 0xFF0000);
     
     draw_2d_vision_line(game_manager, game_manager->player_dir, 0xFF0000);
@@ -31,6 +32,11 @@ void rotate_player(t_game_manager *game_manager, double rotation)
     game_manager->x_dir = sin(game_manager->player_dir);
     game_manager->y_dir = cos(game_manager->player_dir);
     draw_2d_vision_line(game_manager, game_manager->player_dir, 0x000000);
+
+    draw_floor(game_manager);
+    // printf("hoi\n");
+    // printf("%s\n", dec_to_hex(123, 1));
+
 
     shoot_rays(game_manager, game_manager->player_dir, 0x000000);
 }

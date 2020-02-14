@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:55:51 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/14 10:07:59 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/14 11:03:25 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,33 @@ void draw_3d_wall_line(t_game_manager *game_manager, int res_i, float perp_dista
         middle--;
         incre--;
     }
+}
+
+void    draw_floor(t_game_manager *game_manager)
+{
+    int cur_px;
+    int cur_line;
+    int res_width;
+    int res_height;
+
+    cur_px = 0;
+    res_width = game_manager->file_data->resolution[0][0];
+    res_height = game_manager->file_data->resolution[0][1];
+    cur_line = res_height / 2;
+
+    int x = 0;
+    int y = 0;
+
+    while (y < 100)
+    {
+        while (x < 100)
+        {
+            my_mlx_pixel_put(game_manager->img_data2, cur_px, cur_line, 0xFF0000);
+            x++;
+        }
+        x = 0;
+        y++;
+    }
+    mlx_put_image_to_window(game_manager->img_data2->mlx, game_manager->img_data2->mlx_win, game_manager->img_data2->img, 0, 0);
+
 }

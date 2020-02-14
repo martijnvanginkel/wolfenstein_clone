@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:37 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/14 09:56:32 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/14 10:58:35 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ void	run_game(t_file_data *file_data)
 	game_manager = setup_game_manager(file_data, &img_data, &img_data2);
 	draw_map(&game_manager);
 	draw_grid(&game_manager);
+
+	// draw_floor(&game_manager);
 
     // return ;
 

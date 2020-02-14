@@ -6,11 +6,23 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:34:22 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/01/30 15:29:36 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/14 10:34:26 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+char	make_upper_on_yes(char c, int yes)
+{
+	if ((c >= 'a' && c <= 'z') && yes == 1)
+	{
+		return (c - 32);
+	}
+	else
+	{
+		return (c);
+	}
+}
 
 char    *make_empty_string()
 {
