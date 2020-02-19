@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/14 10:55:39 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/19 15:57:02 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,6 +126,8 @@ int     str_to_number(int *num_ptr, char *file_string, int *index);
 void	loop_empty_space(char *file_string, int *index);
 char	make_upper_on_yes(char c, int yes);
 char	*dec_to_hex(long dec_num, int is_upper);
+int		ft_atoi(char *str);
+int     dec_from_hex_color(int *rgb_code);
 
 /* File reading */
 t_map_tile		**get_map(t_file_data *file_data, int index);
@@ -150,8 +152,7 @@ void            my_mlx_pixel_put(t_data *data, int x, int y, int color);
 void			draw_2d_vision_line(t_game_manager *game_manager, double dir, int color);
 void			clean_3d_wall_line(t_game_manager *game_manager, int x_value);
 void			draw_3d_wall_line(t_game_manager *game_manager, int res_i, float perp_distance);
-
-void    draw_floor(t_game_manager *game_manager);
+void			draw_floor_and_ceiling(t_game_manager *game_manager);
 
 /* Update */
 void			run_game(t_file_data *file_data);

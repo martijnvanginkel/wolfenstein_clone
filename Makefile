@@ -6,7 +6,7 @@
 #    By: mvan-gin <mvan-gin@student.codam.nl>         +#+                      #
 #                                                    +#+                       #
 #    Created: 2020/01/22 09:47:24 by mvan-gin       #+#    #+#                 #
-#    Updated: 2020/02/14 10:27:49 by mvan-gin      ########   odam.nl          #
+#    Updated: 2020/02/19 15:57:22 by mvan-gin      ########   odam.nl          #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,6 +16,7 @@ FILES =		srcs/main.c \
 
 U_FILES =	srcs/standards.c \
 			srcs/dec_to_hex.c \
+			srcs/rgb_to_hex.c \
 
 MAP_FILES = srcs/file_reading/read_file.c \
 			srcs/file_reading/read_file_utils.c \
@@ -36,6 +37,7 @@ WIN_FILES =	srcs/win_drawing/update.c \
 			srcs/win_drawing/drawing_utils.c \
 			srcs/win_drawing/shoot_3d_rays.c \
 			srcs/win_drawing/calculate_ray_utils.c \
+			srcs/win_drawing/floor_and_ceiling.c \
 
 CC = gcc -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
 

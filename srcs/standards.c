@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:34:22 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/14 10:34:26 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/19 15:46:55 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,4 +87,31 @@ void    show_error(char *error_message)
 {
     print_string("Error\n");
     print_string(error_message);
+}
+
+int	ft_atoi(char *str)
+{
+	int neg;
+	int num;
+	int i;
+
+	i = 0;
+	neg = 1;
+	num = 0;
+	while (str[i] <= ' ')
+		i++;
+	if (str[i] == '-' || str[i] == '+')
+	{
+		if (str[i] == '-')
+		{
+			neg *= -1;
+		}
+		i++;
+	}
+	while (str[i] >= '0' && str[i] <= 'F')
+	{
+		num = num * 10 + (str[i] - 48);
+		i++;
+	}
+	return (num * neg);
 }

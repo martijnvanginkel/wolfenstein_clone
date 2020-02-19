@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 10:21:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/14 10:34:18 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/19 15:01:51 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,7 @@ char		*fill_str_with_remainders(long dec_num, int size, int **remainders,
 	index = 0;
 	malloc_size = size;
 	if (dec_num < 0)
-	{
 		dec_num = dec_num * -1;
-	}
 	result = malloc(sizeof(char) * malloc_size);
 	if (!result)
 		return (0);
@@ -67,9 +65,7 @@ void		fill_hex_remainders(long dec_num, int **remainders)
 
 	index = 0;
 	if (dec_num < 0)
-	{
 		dec_num = (dec_num * -1);
-	}
 	while (dec_num >= 16)
 	{
 		(*remainders)[index] = dec_num % 16;
@@ -86,9 +82,7 @@ int			hex_array_size(long dec_num)
 
 	index = 0;
 	if (dec_num < 0)
-	{
 		dec_num = (dec_num * -1);
-	}
 	while (dec_num >= 16)
 	{
 		dec_num = (dec_num / 16);
@@ -103,6 +97,7 @@ char		*dec_to_hex(long dec_num, int is_upper)
 	int		hex_size;
 	char	*result;
 	int		*remainders;
+	char	*temp;
 
 	hex_size = hex_array_size(dec_num);
 	remainders = malloc(sizeof(int) * hex_size);
@@ -110,6 +105,12 @@ char		*dec_to_hex(long dec_num, int is_upper)
 		return (0);
 	fill_hex_remainders(dec_num, &remainders);
 	result = fill_str_with_remainders(dec_num, hex_size, &remainders, is_upper);
+	if (get_strlen(result) == 1)
+	{
+		temp = result;
+		result = strjoin(result, "0");
+		free(temp);
+	}
 	free(remainders);
 	return (result);
 }
