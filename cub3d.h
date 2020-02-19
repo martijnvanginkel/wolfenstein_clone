@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/19 16:25:05 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/19 17:25:41 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ typedef struct  s_ray_info
 	float		final_dist;
 
 	float		perp_dist;
+	int			side_hit; /* 0 = NO | 1 = EA | 2 = SO | 3 == WE */
 }               t_ray_info;
 
 typedef struct 	s_game_tile
@@ -100,8 +101,6 @@ typedef struct	s_game_manager
 	float			player_dir; /* m_pi / radiant value that the player is looking at*/
 	float			x_dir; /* Relative x-position that the player is looking at */
 	float			y_dir;
-
-	
 
 	t_data  		*img_data;
 	t_data			*img_data2;
@@ -152,7 +151,7 @@ void            my_mlx_pixel_put(t_game_manager *gm, int x, int y, int color);
 void            my_mlx_pixel_put2(t_game_manager *gm, int x, int y, int color);
 void			draw_2d_vision_line(t_game_manager *game_manager, double dir, int color);
 void			clean_3d_wall_line(t_game_manager *game_manager, int x_value);
-void			draw_3d_wall_line(t_game_manager *game_manager, int res_i, float perp_distance);
+void			draw_3d_wall_line(t_game_manager *game_manager, int res_i, t_ray_info ray);
 void			draw_floor_and_ceiling(t_game_manager *game_manager);
 
 /* Update */

@@ -6,21 +6,38 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/19 16:24:25 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/19 17:53:16 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minilibx/mlx.h"
 #include "../../cub3d.h"
 
+static void set_final_ray_info(t_ray_info *ray, int side)
+{
+    if (side == 0)
+    {
+        if (ray->ray_x_dir < 0)
+            ray->side_hit = 3;
+        else
+            ray->side_hit = 1;
+        ray->final_dist = ray->side_dist_x;
+    }
+    else
+    {
+        if (ray->ray_y_dir < 0)
+            ray->side_hit = 2;
+        else
+            ray->side_hit = 0;
+        ray->final_dist = ray->side_dist_y;
+    } 
+}
+
 static int  increase_ray_distance(t_game_tile tile, t_ray_info *ray, int side)
 {
     if (tile.value == 1)
     {
-        if (side == 0)
-            ray->final_dist = ray->side_dist_x;
-        else 
-            ray->final_dist = ray->side_dist_y;
+        set_final_ray_info(ray, side);
         return (0);
     }
     if (side == 0)
@@ -59,7 +76,7 @@ static float calculate_ray_distance(t_game_manager *gm, t_ray_info *ray_info)
 }
 
 
-static float calculate_ray(t_game_manager *game_manager, float ray_dir)
+static t_ray_info calculate_ray(t_game_manager *game_manager, float ray_dir)
 {
     t_ray_info  ray_info;
     float       ray_distance;
@@ -67,12 +84,11 @@ static float calculate_ray(t_game_manager *game_manager, float ray_dir)
     ray_info.ray_dir = ray_dir;
     ray_info.ray_x_dir = sin(ray_dir);
     ray_info.ray_y_dir = cos(ray_dir);
-
     calculate_side_distances(game_manager, &ray_info);
     calculate_deltas(game_manager, &ray_info);
     ray_distance = calculate_ray_distance(game_manager, &ray_info);
     ray_info.perp_dist = cos(game_manager->player_dir - ray_dir) * ray_distance;
-    return (ray_info.perp_dist);
+    return (ray_info);
 }
 
 /* Container function for shooting all the rays in the player's view */
@@ -80,9 +96,9 @@ void shoot_rays(t_game_manager *game_manager, float player_dir, int color)
 {
     float   ray;
     int     cur_px;
-    float start_incr;
-    float start;
-    float player_length;
+    float   start_incr;
+    float   start;
+    float   player_length;
 
     start = 1;
     start_incr = 2.0 / (float)(game_manager->file_data->resolution[0][0]);
