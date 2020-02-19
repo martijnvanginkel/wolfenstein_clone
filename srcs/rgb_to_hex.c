@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/19 15:36:40 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/19 15:48:10 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/19 16:11:36 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static int     hex_char_to_dec(char c)
         return (14);
     else if (c == 'F')
         return (15);
+    return (0);
 }
 
 static char    *rgb_to_hex(int *rgb_code)

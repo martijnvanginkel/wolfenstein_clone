@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/19 15:56:00 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/19 15:56:39 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/19 16:24:01 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static void    draw_floor(t_game_manager *game_manager)
     {
         while (x < res_width)
         {
-            my_mlx_pixel_put(game_manager->img_data2, x, y, color_code);
+            my_mlx_pixel_put2(game_manager, x, y, color_code);
             x++;
         }
         x = 0;
@@ -54,7 +54,7 @@ static void    draw_ceiling(t_game_manager *game_manager)
     {
         while (x < res_width)
         {
-            my_mlx_pixel_put(game_manager->img_data2, x, y, color_code);
+            my_mlx_pixel_put2(game_manager, x, y, color_code);
             x++;
         }
         x = 0;

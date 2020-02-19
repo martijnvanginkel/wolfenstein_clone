@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:12 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/11 09:59:10 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/19 16:23:31 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ static int	decide_tile_color(t_game_tile *game_tile)
 	{
 		return (0x00FF7777);
 	}
+	return (0x00FF0000);
 }
 
 static void	spawn_player(t_game_manager *game_manager, t_game_tile *game_tile)
@@ -43,7 +44,7 @@ static void	draw_tile(t_game_tile *game_tile, t_game_manager *game_manager)
 	{
 		while (x < (game_tile->start_x + game_manager->tile_width))
 		{
-			my_mlx_pixel_put(game_manager->img_data, x, y, decide_tile_color(game_tile)); //pick color	
+			my_mlx_pixel_put(game_manager, x, y, decide_tile_color(game_tile)); //pick color	
 			x++;
 		}
 		x = game_tile->start_x;
@@ -80,7 +81,7 @@ void	draw_grid(t_game_manager *game_manager)
 	{
 		while (x < game_manager->file_data->resolution[0][0])
 		{
-			my_mlx_pixel_put(game_manager->img_data, x, y, 0x0000FF);
+			my_mlx_pixel_put(game_manager, x, y, 0x0000FF);
 			x++;
 		}
 		x = 0;
@@ -92,7 +93,7 @@ void	draw_grid(t_game_manager *game_manager)
 	{
 		while (y < game_manager->file_data->resolution[0][1])
 		{
-			my_mlx_pixel_put(game_manager->img_data, x, y, 0x0000FF);
+			my_mlx_pixel_put(game_manager, x, y, 0x0000FF);
 			y++;
 		}
 		y = 0;

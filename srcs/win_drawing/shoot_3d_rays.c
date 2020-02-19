@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/19 16:01:24 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/19 16:24:25 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void shoot_rays(t_game_manager *game_manager, float player_dir, int color)
         start -= start_incr;  
         cur_px--;    
         draw_2d_vision_line(game_manager, ray, color);
-        clean_3d_wall_line(game_manager, cur_px);
+        // extra floor and ceiling?
         draw_3d_wall_line(game_manager, cur_px, calculate_ray(game_manager, ray));
     }
     mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
