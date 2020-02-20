@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 12:28:29 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/20 11:29:22 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/20 12:02:22 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *i
 	game_manager.file_data = file_data;
 
 	game_manager.player_tile = 0;
-	game_manager.img_data = img;
-	game_manager.img_data2 = img2;
+	game_manager.map_image = img;
+	game_manager.world_image = img2;
 
 	game_manager.player_dir = M_PI;
 	game_manager.x_dir = sin(game_manager.player_dir);

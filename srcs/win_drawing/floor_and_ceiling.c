@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/19 15:56:00 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/19 16:24:01 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/20 12:03:29 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void    draw_floor(t_game_manager *game_manager)
         x = 0;
         y++;
     }
-    mlx_put_image_to_window(game_manager->img_data2->mlx, game_manager->img_data2->mlx_win, game_manager->img_data2->img, 0, 0);
+    mlx_put_image_to_window(game_manager->world_image->mlx, game_manager->world_image->mlx_win, game_manager->world_image->img, 0, 0);
 }
 
 static void    draw_ceiling(t_game_manager *game_manager)
@@ -60,7 +60,7 @@ static void    draw_ceiling(t_game_manager *game_manager)
         x = 0;
         y++;
     }
-    mlx_put_image_to_window(game_manager->img_data2->mlx, game_manager->img_data2->mlx_win, game_manager->img_data2->img, 0, 0);
+    mlx_put_image_to_window(game_manager->world_image->mlx, game_manager->world_image->mlx_win, game_manager->world_image->img, 0, 0);
 }
 
 void    draw_floor_and_ceiling(t_game_manager *game_manager)

@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:12 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/19 16:23:31 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/20 12:03:11 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	draw_tile(t_game_tile *game_tile, t_game_manager *game_manager)
 		x = game_tile->start_x;
 		y++;
 	}
-	mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
+	mlx_put_image_to_window(game_manager->map_image->mlx, game_manager->map_image->mlx_win, game_manager->map_image->img, 0, 0);
 }
 
 void    draw_map(t_game_manager *game_manager)
@@ -99,5 +99,5 @@ void	draw_grid(t_game_manager *game_manager)
 		y = 0;
 		x = x + game_manager->tile_width;
 	}
-	mlx_put_image_to_window(game_manager->img_data->mlx, game_manager->img_data->mlx_win, game_manager->img_data->img, 0, 0);
+	mlx_put_image_to_window(game_manager->map_image->mlx, game_manager->map_image->mlx_win, game_manager->map_image->img, 0, 0);
 }

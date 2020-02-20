@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/20 11:29:09 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/20 16:10:36 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ typedef struct	s_texture_images
 	t_data		*north_tex;
 	t_data		*east_tex;
 	t_data		*west_tex;
-	t_data		*south_text;
+	t_data		*south_tex;
 }				t_texture_images;
 
 typedef struct	s_game_manager
@@ -110,11 +110,10 @@ typedef struct	s_game_manager
 	float			x_dir; /* Relative x-position that the player is looking at */
 	float			y_dir;
 
-	// t_texture_images	*textures;
-	t_data			*north;
+	t_texture_images	*textures;
 
-	t_data  		*img_data;
-	t_data			*img_data2;
+	t_data  		*map_image;
+	t_data			*world_image;
 }				t_game_manager;
 
 /* Struct that holds the identifier_tag and the function that goes with it */
@@ -169,6 +168,10 @@ void			draw_floor_and_ceiling(t_game_manager *game_manager);
 void			run_game(t_file_data *file_data);
 t_data          setup_image_data(t_file_data *file_data);
 t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *img2);
+void			quit_game(t_game_manager *gm);
+
+/* Textures */
+void			get_textures(t_game_manager *gm);
 
 /* Draw map */
 void            draw_map(t_game_manager *game_manager); // temp
