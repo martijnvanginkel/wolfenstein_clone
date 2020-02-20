@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/19 17:25:41 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/20 11:29:09 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,14 @@ typedef struct 	s_game_tile
 	int			start_y;
 }				t_game_tile;
 
+typedef struct	s_texture_images
+{
+	t_data		*north_tex;
+	t_data		*east_tex;
+	t_data		*west_tex;
+	t_data		*south_text;
+}				t_texture_images;
+
 typedef struct	s_game_manager
 {
 	t_game_tile		**map;
@@ -101,6 +109,9 @@ typedef struct	s_game_manager
 	float			player_dir; /* m_pi / radiant value that the player is looking at*/
 	float			x_dir; /* Relative x-position that the player is looking at */
 	float			y_dir;
+
+	// t_texture_images	*textures;
+	t_data			*north;
 
 	t_data  		*img_data;
 	t_data			*img_data2;
