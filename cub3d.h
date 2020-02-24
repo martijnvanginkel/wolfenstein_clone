@@ -61,6 +61,15 @@ typedef struct  s_data {
     int         endian;
 }               t_data;
 
+typedef struct 	s_game_tile
+{
+	int			value;
+	int			x;
+	int			y;
+	int			start_x;
+	int			start_y;
+}				t_game_tile;
+
 typedef struct  s_ray_info
 {
 	float		ray_dir;
@@ -75,16 +84,9 @@ typedef struct  s_ray_info
 
 	float		perp_dist;
 	int			side_hit; /* 0 = NO | 1 = EA | 2 = SO | 3 == WE */
-}               t_ray_info;
 
-typedef struct 	s_game_tile
-{
-	int			value;
-	int			x;
-	int			y;
-	int			start_x;
-	int			start_y;
-}				t_game_tile;
+	t_game_tile	*tile_hit;
+}               t_ray_info;
 
 typedef struct	s_texture_images
 {

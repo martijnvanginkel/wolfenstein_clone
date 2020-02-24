@@ -58,19 +58,19 @@ void	run_game(t_file_data *file_data)
 
 	get_textures(&game_manager);
 
-	// int x = 0;
-	// int y = 0;
+	int x = 0;
+	int y = 0;
 
-	// while (y < 100)
-	// {
-	// 	while (x < 100)
-	// 	{
-	// 		my_image_put(game_manager.textures->south_tex, x, y, game_manager.world_image);
-	// 		x++;
-	// 	}
-	// 	x = 0;
-	// 	y++;
-	// }
+	while (y < 100)
+	{
+		while (x < 100)
+		{
+			my_image_put(game_manager.textures->south_tex, x, y, game_manager.world_image);
+			x++;
+		}
+		x = 0;
+		y++;
+	}
 
 
 

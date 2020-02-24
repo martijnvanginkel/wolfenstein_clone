@@ -38,6 +38,7 @@ static int  increase_ray_distance(t_game_tile tile, t_ray_info *ray, int side)
     if (tile.value == 1)
     {
         set_final_ray_info(ray, side);
+        ray->tile_hit = &tile;
         return (0);
     }
     if (side == 0)
@@ -76,19 +77,31 @@ static float calculate_ray_distance(t_game_manager *gm, t_ray_info *ray_info)
 }
 
 
-static t_ray_info calculate_ray(t_game_manager *game_manager, float ray_dir)
+static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
 {
-    t_ray_info  ray_info;
+    t_ray_info  ray;
     float       ray_distance;
 
-    ray_info.ray_dir = ray_dir;
-    ray_info.ray_x_dir = sin(ray_dir);
-    ray_info.ray_y_dir = cos(ray_dir);
-    calculate_side_distances(game_manager, &ray_info);
-    calculate_deltas(game_manager, &ray_info);
-    ray_distance = calculate_ray_distance(game_manager, &ray_info);
-    ray_info.perp_dist = cos(game_manager->player_dir - ray_dir) * ray_distance;
-    return (ray_info);
+    ray.ray_dir = ray_dir;
+    ray.ray_x_dir = sin(ray_dir);
+    ray.ray_y_dir = cos(ray_dir);
+    calculate_side_distances(gm, &ray);
+    calculate_deltas(gm, &ray);
+    ray_distance = calculate_ray_distance(gm, &ray);
+
+    // hier is de eucl distance bepaalt
+    // ik heb de eucl distance nodig en de gehitte muur
+    // het percentage waarin de ray de tile raakt kan nu berekend worden
+
+    printf("x_dist:%f\n", ray_distance * ray.ray_x_dir);
+    printf("y_dist:%f\n", ray_distance * ray.ray_y_dir);
+    printf("world_loc:%f,%f\n", gm->player_x, gm->player_y);
+
+    printf("hit_loc:[%f][%f]\n", gm->player_x + (ray_distance * ray.ray_x_dir), gm->player_y + (ray_distance * ray.ray_y_dir));
+    
+
+    ray.perp_dist = cos(gm->player_dir - ray_dir) * ray_distance;
+    return (ray);
 }
 
 /* Container function for shooting all the rays in the player's view */

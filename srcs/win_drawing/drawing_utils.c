@@ -60,6 +60,14 @@ void draw_3d_wall_line(t_game_manager *game_manager, int res_i, t_ray_info ray)
     int incre;
     int middle;
 
+    /* 
+        Ray is hier binnen. De eucl_dist moet nog in de ray opgeslagen worden
+        
+    
+    */
+
+
+
     res_height = (int)(game_manager->file_data->resolution[0][1]);
     incre = (((1 / ray.perp_dist) * res_height) * 10);
     middle = (res_height / 2) + (incre / 2);
@@ -68,6 +76,7 @@ void draw_3d_wall_line(t_game_manager *game_manager, int res_i, t_ray_info ray)
         /* temp test for different side-colors */
         if (ray.side_hit == 0)
         {
+
             my_mlx_pixel_put2(game_manager, res_i, middle, 0xFF0000);
         }
         else
