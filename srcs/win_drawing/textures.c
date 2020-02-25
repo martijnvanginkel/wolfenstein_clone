@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/20 16:01:06 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/20 16:26:00 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/25 09:34:35 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ static t_data	*get_texture(t_game_manager *gm, char *path)
 		return (0);
 	img->addr = mlx_get_data_addr(img->img, &img->bits_per_pixel, &img->line_length, &img->endian);
 	img->mlx_win = gm->world_image->mlx_win;
+	img->width = img_width;
+	img->height = img_height;
 	return (img);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/20 16:10:36 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/25 09:34:13 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ typedef struct  s_data {
     int         bits_per_pixel;
     int         line_length;
     int         endian;
+	int			width;
+	int			height;
 }               t_data;
 
 typedef struct 	s_game_tile

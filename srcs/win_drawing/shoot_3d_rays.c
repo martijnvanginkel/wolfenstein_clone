@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/20 12:02:00 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/25 09:42:22 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,46 @@ static float calculate_ray_distance(t_game_manager *gm, t_ray_info *ray_info)
 }
 
 
+
+static void     find_texture_line(t_game_manager *gm, t_ray_info *ray, float ray_dist)
+{
+    int x_cord;
+    int y_cord;
+
+    printf("hohoih\n\n");
+    x_cord = (int)gm->player_x + (int)(ray_dist * ray->ray_x_dir);
+    y_cord = (int)gm->player_y + (int)(ray_dist * ray->ray_y_dir);
+
+    if (ray->side_hit == 0) /* NO */
+    {
+       printf("north");
+    }
+    else if (ray->side_hit == 1) /* EA */
+    {
+        printf("east");
+    }
+    else if (ray->side_hit == 2) /* SO */
+    {
+        int from_left_side;
+        float perc;
+
+        from_left_side = x_cord % gm->tile_width;
+        perc = (float)1 / (float)gm->tile_width;
+        perc = perc * (float)from_left_side;
+
+        printf("perc:%f\n", perc);
+        
+
+        printf("south");
+    }
+    else if (ray->side_hit == 3) /* WE */
+    {
+        printf("west");
+    }
+
+
+}
+
 static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
 {
     t_ray_info  ray;
@@ -93,11 +133,9 @@ static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
     // ik heb de eucl distance nodig en de gehitte muur
     // het percentage waarin de ray de tile raakt kan nu berekend worden
 
-    printf("x_dist:%f\n", ray_distance * ray.ray_x_dir);
-    printf("y_dist:%f\n", ray_distance * ray.ray_y_dir);
-    printf("world_loc:%f,%f\n", gm->player_x, gm->player_y);
-
     printf("hit_loc:[%f][%f]\n", gm->player_x + (ray_distance * ray.ray_x_dir), gm->player_y + (ray_distance * ray.ray_y_dir));
+    find_texture_line(gm, &ray, ray_distance);
+
     
 
     ray.perp_dist = cos(gm->player_dir - ray_dir) * ray_distance;
@@ -125,6 +163,7 @@ void shoot_rays(t_game_manager *game_manager, float player_dir, int color)
         draw_2d_vision_line(game_manager, ray, color);
         // extra floor and ceiling?
         draw_3d_wall_line(game_manager, cur_px, calculate_ray(game_manager, ray));
+        break;
     }
     mlx_put_image_to_window(game_manager->map_image->mlx, game_manager->map_image->mlx_win, game_manager->map_image->img, 0, 0);
     mlx_put_image_to_window(game_manager->world_image->mlx, game_manager->world_image->mlx_win, game_manager->world_image->img, 0, 0);
