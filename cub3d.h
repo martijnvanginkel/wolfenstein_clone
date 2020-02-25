@@ -85,6 +85,7 @@ typedef struct  s_ray_info
 	float		final_dist;
 
 	float		perp_dist;
+	float		eucl_dist;
 	int			side_hit; /* 0 = NO | 1 = EA | 2 = SO | 3 == WE */
 
 	t_game_tile	*tile_hit;

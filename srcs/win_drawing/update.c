@@ -28,19 +28,6 @@ static int             get_player_input(int keycode, t_game_manager *game_manage
 	return (0);
 }
 
-// void            my_image_put(t_data *img_data, int x, int y, t_data *img_data2)
-// {
-//     char    *dst;
-// 	char	*dst2;
-
-//     dst = img_data->addr + (y * img_data->line_length + x * (img_data->bits_per_pixel / 8));
-// 	dst2 = img_data2->addr + (y * img_data2->line_length + x * (img_data2->bits_per_pixel / 8));
-
-// 	*(unsigned int *)dst2 = *(unsigned int *)dst;
-// }
-
-
-
 void	run_game(t_file_data *file_data)
 {
     t_data  map_image;
@@ -57,25 +44,6 @@ void	run_game(t_file_data *file_data)
 	draw_grid(&game_manager);
 
 	get_textures(&game_manager);
-
-	int x = 0;
-	int y = 0;
-
-	while (y < 200)
-	{
-		while (x < 200)
-		{
-			my_image_put(game_manager.textures->south_tex, x, y, x, y, game_manager.world_image);
-			x++;
-		}
-		x = 0;
-		y++;
-	}
-
-
-
-
-	mlx_put_image_to_window(world_image.mlx, world_image.mlx_win, world_image.img, 0, 0);
 
 
 	mlx_hook(game_manager.world_image->mlx_win, 2, 1L<<0, get_player_input, &game_manager);

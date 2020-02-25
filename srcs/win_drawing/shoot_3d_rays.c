@@ -76,24 +76,26 @@ static float calculate_ray_distance(t_game_manager *gm, t_ray_info *ray_info)
     }
 }
 
-
-
-static void     find_texture_line(t_game_manager *gm, t_ray_info *ray, float ray_dist, int world_x_cord)
+static  float   get_texture_start_percentage(t_game_manager *gm, t_ray_info *ray)
 {
     int x_cord;
     int y_cord;
     int from_left_side;
     float perc;
 
-    x_cord = (int)gm->player_x + (int)(ray_dist * ray->ray_x_dir);
-    y_cord = (int)gm->player_y + (int)(ray_dist * ray->ray_y_dir);
+    x_cord = (int)gm->player_x + (int)(ray->eucl_dist * ray->ray_x_dir);
+    y_cord = (int)gm->player_y + (int)(ray->eucl_dist * ray->ray_y_dir);
     from_left_side = x_cord % gm->tile_width;
     perc = (float)1 / (float)gm->tile_width;
     perc = perc * (float)from_left_side;
+    return (perc);
+}
 
+static void     find_texture_line(t_game_manager *gm, t_ray_info *ray, int world_x_cord)
+{
+    float perc;
 
-    printf("perc:%f\n", perc);
-
+    perc = get_texture_start_percentage(gm, ray);
 
 
     int x = (int)((float)gm->textures->south_tex->width * perc);
@@ -106,8 +108,7 @@ static void     find_texture_line(t_game_manager *gm, t_ray_info *ray, float ray
     int middle;
 
     res_height = (int)(gm->file_data->resolution[0][1]);
-    // printf("%d\n", res_height);
-    line_height = (((1 / ray->perp_dist) * res_height) * 20);
+    line_height = (((1 / ray->perp_dist) * res_height) * 25);
     middle = (res_height / 2) + (line_height / 2);
     
     y_incr = (float)gm->textures->south_tex->height / (float)line_height;
@@ -120,7 +121,7 @@ static void     find_texture_line(t_game_manager *gm, t_ray_info *ray, float ray
         my_image_put(gm->textures->south_tex, x, y, world_x_cord, middle, gm->world_image);
         y += y_incr;
 
-        printf("[%f] ", y);
+        //printf("[%f] ", y);
         middle--;
         line_height--;
     }
@@ -130,55 +131,49 @@ static void     find_texture_line(t_game_manager *gm, t_ray_info *ray, float ray
 
 }
 
-static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir, int x_world_cord)
+static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
 {
     t_ray_info  ray;
-    float       ray_distance;
 
     ray.ray_dir = ray_dir;
     ray.ray_x_dir = sin(ray_dir);
     ray.ray_y_dir = cos(ray_dir);
     calculate_side_distances(gm, &ray);
     calculate_deltas(gm, &ray);
-    ray_distance = calculate_ray_distance(gm, &ray);
-
-    //printf("hit_loc:[%f][%f]\n", gm->player_x + (ray_distance * ray.ray_x_dir), gm->player_y + (ray_distance * ray.ray_y_dir));
-    ray.perp_dist = cos(gm->player_dir - ray_dir) * ray_distance;
-    find_texture_line(gm, &ray, ray_distance, x_world_cord);
-
-    
-
+    ray.eucl_dist = calculate_ray_distance(gm, &ray);
+    ray.perp_dist = cos(gm->player_dir - ray_dir) * ray.eucl_dist;
     return (ray);
 }
 
-/* Container function for shooting all the rays in the player's view */
-void shoot_rays(t_game_manager *game_manager, float player_dir, int color)
+static void draw_wall_line(t_game_manager *gm , int cur_x, float ray_dir)
 {
-    float   ray;
+    t_ray_info ray;
+
+    ray = calculate_ray(gm, ray_dir);
+    find_texture_line(gm, &ray, cur_x);
+}
+
+/* Container function for shooting all the rays in the player's view */
+void shoot_rays(t_game_manager *gm, float player_dir, int color)
+{
+    float   ray_dir;
     int     cur_px;
     float   start_incr;
     float   start;
     float   player_length;
 
     start = 1;
-    start_incr = 2.0 / (float)(game_manager->file_data->resolution[0][0]);
+    start_incr = 2.0 / (float)(gm->file_data->resolution[0][0]);
     player_length = fabs(start) / tan(M_PI / 6);
-    cur_px = game_manager->file_data->resolution[0][0];
-
-    int i = 0;
-
+    cur_px = gm->file_data->resolution[0][0];
     while (start > -1)
     {
-        ray = game_manager->player_dir + atan(start / player_length);
+        ray_dir = gm->player_dir + atan(start / player_length);
         start -= start_incr;  
         cur_px--;    
-        draw_2d_vision_line(game_manager, ray, color);
-        // extra floor and ceiling?
-        draw_3d_wall_line(game_manager, cur_px, calculate_ray(game_manager, ray, cur_px));
-        // i++;
-        // if (i == 10)
-        //     break;
+        draw_2d_vision_line(gm, ray_dir, color);
+        draw_wall_line(gm, cur_px, ray_dir);
     }
-    mlx_put_image_to_window(game_manager->map_image->mlx, game_manager->map_image->mlx_win, game_manager->map_image->img, 0, 0);
-    mlx_put_image_to_window(game_manager->world_image->mlx, game_manager->world_image->mlx_win, game_manager->world_image->img, 0, 0);
+    mlx_put_image_to_window(gm->map_image->mlx, gm->map_image->mlx_win, gm->map_image->img, 0, 0);
+    mlx_put_image_to_window(gm->world_image->mlx, gm->world_image->mlx_win, gm->world_image->img, 0, 0);
 }
