@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:55:51 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/20 12:02:43 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/25 09:54:41 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ void draw_3d_wall_line(t_game_manager *game_manager, int res_i, t_ray_info ray)
     int incre;
     int middle;
 
+    return ;
     /* 
         Ray is hier binnen. De eucl_dist moet nog in de ray opgeslagen worden
         

@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/25 09:34:13 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/25 10:07:42 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ void			free_map(t_file_data *file_data);
 /* Drawing utils */
 void            my_mlx_pixel_put(t_game_manager *gm, int x, int y, int color);
 void            my_mlx_pixel_put2(t_game_manager *gm, int x, int y, int color);
+void            my_image_put(t_data *img_data, int x_img, int y_img, int x_world, int y_world, t_data *img_data2);
 void			draw_2d_vision_line(t_game_manager *game_manager, double dir, int color);
 void			clean_3d_wall_line(t_game_manager *game_manager, int x_value);
 void			draw_3d_wall_line(t_game_manager *game_manager, int res_i, t_ray_info ray);

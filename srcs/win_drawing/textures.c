@@ -6,20 +6,20 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/20 16:01:06 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/25 09:34:35 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/25 11:13:33 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minilibx/mlx.h"
 #include "../../cub3d.h"
 
-void            my_image_put(t_data *img_data, int x, int y, t_data *img_data2)
+void            my_image_put(t_data *img_data, int x_img, int y_img, int x_world, int y_world, t_data *img_data2)
 {
     char    *dst;
 	char	*dst2;
 
-    dst = img_data->addr + (y * img_data->line_length + x * (img_data->bits_per_pixel / 8));
-	dst2 = img_data2->addr + (y * img_data2->line_length + x * (img_data2->bits_per_pixel / 8));
+    dst = img_data->addr + (y_img * img_data->line_length + x_img * (img_data->bits_per_pixel / 8));
+	dst2 = img_data2->addr + (y_world * img_data2->line_length + x_world * (img_data2->bits_per_pixel / 8));
 
 	*(unsigned int *)dst2 = *(unsigned int *)dst;
 }
