@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:37 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/25 11:01:00 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/25 12:32:34 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,19 @@ void	run_game(t_file_data *file_data)
 
 	get_textures(&game_manager);
 
-	// int x = 0;
-	// int y = 0;
+	int x = 0;
+	int y = 0;
 
-	// while (y < 100)
-	// {
-	// 	while (x < 100)
-	// 	{
-	// 		my_image_put(game_manager.textures->south_tex, x, y, game_manager.world_image);
-	// 		x++;
-	// 	}
-	// 	x = 0;
-	// 	y++;
-	// }
+	while (y < 200)
+	{
+		while (x < 200)
+		{
+			my_image_put(game_manager.textures->south_tex, x, y, x, y, game_manager.world_image);
+			x++;
+		}
+		x = 0;
+		y++;
+	}
 
 
 
