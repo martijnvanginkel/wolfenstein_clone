@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/25 12:43:56 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/26 09:37:40 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,59 +76,19 @@ static float calculate_ray_distance(t_game_manager *gm, t_ray_info *ray_info)
     }
 }
 
-static  float   get_texture_start_percentage(t_game_manager *gm, t_ray_info *ray)
+static  float   get_texture_start_percentage(t_game_manager *gm, t_ray_info ray)
 {
     int x_cord;
     int y_cord;
     int from_left_side;
     float perc;
 
-    x_cord = (int)gm->player_x + (int)(ray->eucl_dist * ray->ray_x_dir);
-    y_cord = (int)gm->player_y + (int)(ray->eucl_dist * ray->ray_y_dir);
+    x_cord = (int)gm->player_x + (int)(ray.eucl_dist * ray.ray_x_dir);
+    y_cord = (int)gm->player_y + (int)(ray.eucl_dist * ray.ray_y_dir);
     from_left_side = x_cord % gm->tile_width;
     perc = (float)1 / (float)gm->tile_width;
     perc = perc * (float)from_left_side;
     return (perc);
-}
-
-static void     find_texture_line(t_game_manager *gm, t_ray_info *ray, int world_x_cord)
-{
-    float perc;
-
-    perc = get_texture_start_percentage(gm, ray);
-
-
-    int x = (int)((float)gm->textures->south_tex->width * perc);
-    printf("x:%d\n", x);
-    float y = 0;
-    float y_incr;
-
-    int res_height;
-    int line_height;
-    int middle;
-
-    res_height = (int)(gm->file_data->resolution[0][1]);
-    line_height = (((1 / ray->perp_dist) * res_height) * 25);
-    middle = (res_height / 2) + (line_height / 2);
-    
-    y_incr = (float)gm->textures->south_tex->height / (float)line_height;
-    
-    // printf("y_incr:%f\n", y_incr);
-
-    while (line_height > 0)
-    {
-        //my_mlx_pixel_put2(gm, x, middle, 0x000000);  
-        my_image_put(gm->textures->south_tex, x, y, world_x_cord, middle, gm->world_image);
-        y += y_incr;
-
-        //printf("[%f] ", y);
-        middle--;
-        line_height--;
-    }
-
-
-
-
 }
 
 static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
@@ -145,12 +105,28 @@ static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
     return (ray);
 }
 
-static void draw_wall_line(t_game_manager *gm , int cur_x, float ray_dir)
+static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
 {
     t_ray_info ray;
+    float y_incr;
+    int line_height;
+    t_coordinates tex_cords;
+    t_coordinates world_cords;
 
     ray = calculate_ray(gm, ray_dir);
-    find_texture_line(gm, &ray, cur_x);
+    line_height = (((1 / ray.perp_dist) * (int)(gm->file_data->resolution[0][1])) * 25);
+    y_incr = (float)gm->textures->south_tex->height / (float)line_height;
+    tex_cords.x = (float)gm->textures->south_tex->width * get_texture_start_percentage(gm, ray);
+    tex_cords.y = 0;
+    world_cords.x = world_img_x;
+    world_cords.y = ((int)(gm->file_data->resolution[0][1]) / 2) + (line_height / 2);;
+    while (line_height > 0)
+    {
+        my_image_put(gm->textures->south_tex, tex_cords, gm->world_image, world_cords);
+        tex_cords.y += y_incr;
+        world_cords.y -= 1;
+        line_height--;
+    }
 }
 
 /* Container function for shooting all the rays in the player's view */
