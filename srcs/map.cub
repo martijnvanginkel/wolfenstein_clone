@@ -8,10 +8,10 @@ WE ./srcs/sprites/lava.png
 EA ./srcs/sprites/diamond.png
 
 
-F 124,252,0
+F 91,135,49
 
 
-C 0,250,154
+C 128,235,255
 
 
 

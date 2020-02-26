@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/26 09:46:28 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/26 10:10:48 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,19 @@ static  float   get_texture_start_percentage(t_game_manager *gm, t_ray_info ray)
     int from_left_side;
     float perc;
 
+    from_left_side = 0;
     x_cord = (int)gm->player_x + (int)(ray.eucl_dist * ray.ray_x_dir);
     y_cord = (int)gm->player_y + (int)(ray.eucl_dist * ray.ray_y_dir);
-    from_left_side = x_cord % gm->tile_width;
-    perc = (float)1 / (float)gm->tile_width;
+    if (ray.side_hit == 0 || ray.side_hit == 2)
+    {
+        from_left_side = x_cord % gm->tile_width;
+        perc = (float)1 / (float)gm->tile_width;
+    }
+    else if (ray.side_hit == 1 || ray.side_hit == 3)
+    {
+        from_left_side = y_cord % gm->tile_height;
+        perc = (float)1 / (float)gm->tile_height;
+    }
     perc = perc * (float)from_left_side;
     return (perc);
 }
@@ -137,7 +146,7 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
     tex_cords.x = (float)texture->width * get_texture_start_percentage(gm, ray);
     tex_cords.y = 0;
     world_cords.x = world_img_x;
-    world_cords.y = ((int)(gm->file_data->resolution[0][1]) / 2) + (line_height / 2);;
+    world_cords.y = ((int)(gm->file_data->resolution[0][1]) / 2) + (line_height / 2);
     while (line_height > 0)
     {
         my_image_put(texture, tex_cords, gm->world_image, world_cords);
