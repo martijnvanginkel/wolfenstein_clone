@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:55:51 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/25 09:54:41 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/26 10:19:53 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,41 +51,5 @@ void draw_2d_vision_line(t_game_manager *game_manager, double dir, int color)
         my_mlx_pixel_put(game_manager, x, y, color);
         x += sin(dir);
         y += cos(dir);
-    }
-}
-
-void draw_3d_wall_line(t_game_manager *game_manager, int res_i, t_ray_info ray)
-{
-    int res_height;
-    int incre;
-    int middle;
-
-    return ;
-    /* 
-        Ray is hier binnen. De eucl_dist moet nog in de ray opgeslagen worden
-        
-    
-    */
-
-
-
-    res_height = (int)(game_manager->file_data->resolution[0][1]);
-    incre = (((1 / ray.perp_dist) * res_height) * 10);
-    middle = (res_height / 2) + (incre / 2);
-    while (incre > 0)
-    {
-        /* temp test for different side-colors */
-        if (ray.side_hit == 0)
-        {
-
-            my_mlx_pixel_put2(game_manager, res_i, middle, 0xFF0000);
-        }
-        else
-        {
-            my_mlx_pixel_put2(game_manager, res_i, middle, 0x000000);
-        }
-        
-        middle--;
-        incre--;
     }
 }

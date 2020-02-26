@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/26 10:10:48 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/26 10:28:44 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static float calculate_ray_distance(t_game_manager *gm, t_ray_info *ray_info)
     }
 }
 
-static  float   get_texture_start_percentage(t_game_manager *gm, t_ray_info ray)
+static float   get_texture_start_percentage(t_game_manager *gm, t_ray_info ray)
 {
     int x_cord;
     int y_cord;
@@ -114,7 +114,7 @@ static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
     return (ray);
 }
 
-static  t_data  *find_wall_texture(t_game_manager *gm, t_ray_info *ray)
+static t_data  *find_wall_texture(t_game_manager *gm, t_ray_info *ray)
 {
     t_data  *texture;
 
@@ -149,7 +149,7 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
     world_cords.y = ((int)(gm->file_data->resolution[0][1]) / 2) + (line_height / 2);
     while (line_height > 0)
     {
-        my_image_put(texture, tex_cords, gm->world_image, world_cords);
+        my_image_put(texture, tex_cords, gm->world_image, world_cords, gm);
         tex_cords.y += y_incr;
         world_cords.y -= 1;
         line_height--;
@@ -177,6 +177,6 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
         draw_2d_vision_line(gm, ray_dir, color);
         draw_wall_line(gm, cur_px, ray_dir);
     }
-    mlx_put_image_to_window(gm->map_image->mlx, gm->map_image->mlx_win, gm->map_image->img, 0, 0);
-    mlx_put_image_to_window(gm->world_image->mlx, gm->world_image->mlx_win, gm->world_image->img, 0, 0);
+    // mlx_put_image_to_window(gm->map_image->mlx, gm->map_image->mlx_win, gm->map_image->img, 0, 0);
+    // mlx_put_image_to_window(gm->world_image->mlx, gm->world_image->mlx_win, gm->world_image->img, 0, 0);
 }

@@ -6,21 +6,22 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/20 16:01:06 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/26 09:29:56 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/26 10:28:10 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../minilibx/mlx.h"
 #include "../../cub3d.h"
 
-void            my_image_put(t_data *img_data, t_coordinates cords, t_data *img_data2, t_coordinates cords2)
+void            my_image_put(t_data *img_data, t_coordinates cords, t_data *img_data2, t_coordinates cords2, t_game_manager *gm)
 {
     char    *dst;
 	char	*dst2;
 
+    if (cords2.x < 0 || cords2.y < 0 || cords2.x > gm->file_data->resolution[0][0] - 1 || cords2.y > gm->file_data->resolution[0][1] - 1)
+        return ;
     dst = img_data->addr + ((int)cords.y * img_data->line_length + (int)cords.x * (img_data->bits_per_pixel / 8));
 	dst2 = img_data2->addr + ((int)cords2.y * img_data2->line_length + (int)cords2.x * (img_data2->bits_per_pixel / 8));
-
 	*(unsigned int *)dst2 = *(unsigned int *)dst;
 }
 
