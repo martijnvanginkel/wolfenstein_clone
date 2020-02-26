@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/26 09:37:40 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/26 09:46:28 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,22 @@ static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
     return (ray);
 }
 
+static  t_data  *find_wall_texture(t_game_manager *gm, t_ray_info *ray)
+{
+    t_data  *texture;
+
+    texture = 0;
+    if (ray->side_hit == 0)
+        texture = gm->textures->north_tex;
+    else if (ray->side_hit == 1)
+        texture = gm->textures->east_tex;
+    else if (ray->side_hit == 2)
+        texture = gm->textures->south_tex;
+    else if (ray->side_hit == 3)
+        texture = gm->textures->west_tex;
+    return (texture);
+}
+
 static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
 {
     t_ray_info ray;
@@ -112,17 +128,19 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
     int line_height;
     t_coordinates tex_cords;
     t_coordinates world_cords;
+    t_data *texture;
 
     ray = calculate_ray(gm, ray_dir);
+    texture = find_wall_texture(gm, &ray);
     line_height = (((1 / ray.perp_dist) * (int)(gm->file_data->resolution[0][1])) * 25);
-    y_incr = (float)gm->textures->south_tex->height / (float)line_height;
-    tex_cords.x = (float)gm->textures->south_tex->width * get_texture_start_percentage(gm, ray);
+    y_incr = (float)texture->height / (float)line_height;
+    tex_cords.x = (float)texture->width * get_texture_start_percentage(gm, ray);
     tex_cords.y = 0;
     world_cords.x = world_img_x;
     world_cords.y = ((int)(gm->file_data->resolution[0][1]) / 2) + (line_height / 2);;
     while (line_height > 0)
     {
-        my_image_put(gm->textures->south_tex, tex_cords, gm->world_image, world_cords);
+        my_image_put(texture, tex_cords, gm->world_image, world_cords);
         tex_cords.y += y_incr;
         world_cords.y -= 1;
         line_height--;
