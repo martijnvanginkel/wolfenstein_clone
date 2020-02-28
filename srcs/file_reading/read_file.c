@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 11:53:34 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/03 10:32:10 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/26 13:42:33 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,27 +67,3 @@ t_file_data        *collect_file_information(char *file_name)
         return (0);
     return (file_data);
 }
-
-// int             main(int argc, char **argv)
-// {
-//     if (argc != 2)
-//     {
-//         show_error("Expecting only one argument");
-//         return (0);
-//     }
-//     if(!collect_file_information(argv[1]))
-// 	{
-//         show_error("Something went wrong collecting the data from the file");
-// 		return (0);
-// 	}
-
-		
-// 	print_string("All info successfully collected");
-
-//     // while (1)
-//     // {
-
-//     // }
-//     return (0);
-
-// }

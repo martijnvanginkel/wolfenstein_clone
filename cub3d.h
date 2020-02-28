@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/26 10:27:38 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/26 14:25:17 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,17 @@ typedef struct 	s_game_tile
 	int			start_y;
 }				t_game_tile;
 
+
+/* temp ? */
+typedef struct	s_sprite
+{
+	float		eucl_dist;
+	float		perp_dist;
+
+
+
+}				t_sprite;
+
 typedef struct  s_ray_info
 {
 	float		ray_dir;
@@ -87,6 +98,10 @@ typedef struct  s_ray_info
 	float		perp_dist;
 	float		eucl_dist;
 	int			side_hit; /* 0 = NO | 1 = EA | 2 = SO | 3 == WE */
+
+
+	t_sprite	sprite;
+
 
 	t_game_tile	*tile_hit;
 }               t_ray_info;

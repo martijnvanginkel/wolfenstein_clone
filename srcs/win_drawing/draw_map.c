@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:12 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/20 12:03:11 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/28 14:47:31 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,18 @@ static int	decide_tile_color(t_game_tile *game_tile)
 	{
 		return (0x00FF7777);
 	}
+	else if (game_tile->value == 2)
+	{
+		return (0x0000FFFF);
+	}
 	return (0x00FF0000);
 }
 
 static void	spawn_player(t_game_manager *game_manager, t_game_tile *game_tile)
 {
 	game_manager->player_tile = game_tile;
-	game_manager->player_x = (game_tile->start_x + (game_tile->start_x + game_manager->tile_width)) / 2;
-	game_manager->player_y = (game_tile->start_y + (game_tile->start_y + game_manager->tile_height)) / 2;
+	game_manager->player_x = (float)game_tile->x + 0.5; /* (game_tile->start_x + (game_tile->start_x + game_manager->tile_width)) / 2; */
+	game_manager->player_y = (float)game_tile->y + 0.5; /* (game_tile->start_y + (game_tile->start_y + game_manager->tile_height)) / 2; */
 }
 
 static void	draw_tile(t_game_tile *game_tile, t_game_manager *game_manager)

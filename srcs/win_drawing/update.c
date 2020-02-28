@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/31 11:53:37 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/25 12:32:34 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/28 14:13:26 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@
 static int             get_player_input(int keycode, t_game_manager *game_manager)
 {
 	if (keycode == 13) // up
-		move_player(game_manager, 15);
+		move_player(game_manager, 0.5);
 	else if (keycode == 0) // left
 		rotate_player(game_manager, 0.1);
 	else if (keycode == 1) // down
-		move_player(game_manager, -15);
+		move_player(game_manager, -0.5);
 	else if (keycode == 2) // right
 		rotate_player(game_manager, -0.1);
 	else if (keycode == 12)

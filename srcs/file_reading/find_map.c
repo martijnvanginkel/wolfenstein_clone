@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/24 14:58:12 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/03 13:00:54 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/26 13:42:51 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,3 @@ t_map_tile		**get_map(t_file_data *file_data, int index)
 		return (0);
 	return (map);
 }
-
-// void			free_map(t_file_data *file_data)
-// {
-// 	int y;
-
-// 	y = 0;
-// 	free((file_data->map)[0]);
-// }
