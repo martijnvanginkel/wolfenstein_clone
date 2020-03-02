@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 15:01:59 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/28 14:12:31 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/28 16:54:54 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 int available_pixel(t_game_manager *g_m, int x, int y)
 {
-    if (g_m->map[y/*  / g_m->tile_height*/][x /*/ g_m->tile_width*/].value != 1)
+    if (g_m->map[y][x].value != 1)
     {
         return (1);
     }
@@ -42,7 +42,7 @@ void move_player(t_game_manager *game_manager, double walk_speed)
     new_y_value = game_manager->player_y + (walk_speed * cos(game_manager->player_dir));
     if (available_pixel(game_manager, new_x_value, new_y_value))
     {
-        game_manager->player_tile = &game_manager->map[(int)new_y_value /*/ game_manager->tile_height*/][(int)new_x_value/* / game_manager->tile_width*/];
+        game_manager->player_tile = &game_manager->map[(int)new_y_value][(int)new_x_value];
         draw_2d_vision_line(game_manager, game_manager->player_dir, 0xFF0000);
         game_manager->player_x = new_x_value;
         game_manager->player_y = new_y_value;

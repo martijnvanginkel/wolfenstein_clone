@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:55:51 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/26 10:19:53 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/02 10:42:17 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,19 +37,23 @@ void draw_2d_vision_line(t_game_manager *game_manager, double dir, int color)
 {
     int res_width;
     int res_height;
-    double x = game_manager->player_x;
-    double y = game_manager->player_y;
+    float x = (float)game_manager->player_x * (float)game_manager->tile_width;
+    float y = (float)game_manager->player_y * (float)game_manager->tile_height;
 
     res_width = game_manager->file_data->resolution[0][0];
     res_height = game_manager->file_data->resolution[0][1];
-    while (x > 0 && x < res_width && y > 0 && y < res_height)
+    int i = 0;
+
+    // while (x > 0 && x < res_width && y > 0 && y < res_height)
+    while (i < 200)
     {
-        if (!available_pixel(game_manager, (int)x, (int)y))
-        {
-            break;
-        }
+        // if (!available_pixel(game_manager, (int)x, (int)y))
+        // {
+        //     break;
+        // }
         my_mlx_pixel_put(game_manager, x, y, color);
         x += sin(dir);
         y += cos(dir);
+        i++;
     }
 }

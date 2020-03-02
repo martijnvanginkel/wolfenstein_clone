@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 12:28:29 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/26 13:42:04 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/02/28 15:32:00 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ static void          fill_tile_line(t_file_data *file_data, t_game_manager *game
         (game_manager->map)[y][x].value = (file_data->map)[y][x].value;
         (game_manager->map)[y][x].x = (file_data->map)[y][x].x;
         (game_manager->map)[y][x].y = (file_data->map)[y][x].y;
-
 		printf("%d ", game_manager->map[y][x].value);
         x++;
     }
@@ -96,8 +95,6 @@ t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *i
 	game_manager.y_dir = cos(game_manager.player_dir);
 
 	game_manager.map = replace_map(file_data, &game_manager);
-
-
 
 	return (game_manager);
 }
