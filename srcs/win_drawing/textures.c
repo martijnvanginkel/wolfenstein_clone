@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/20 16:01:06 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/26 10:28:10 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/04 12:39:36 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,6 @@ void	get_textures(t_game_manager *gm)
 	textures->east_tex = get_texture(gm, *(gm->file_data->east_texture));
 	textures->south_tex = get_texture(gm, *(gm->file_data->south_texture));
 	textures->west_tex = get_texture(gm, *(gm->file_data->west_texture));
+	textures->sprite_tex = get_texture(gm, *(gm->file_data->sprite_texture));
 	gm->textures = textures;
 }
