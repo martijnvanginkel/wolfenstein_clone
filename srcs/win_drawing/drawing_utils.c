@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:55:51 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/02 10:42:17 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/03 17:20:17 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,25 +33,25 @@ void            my_mlx_pixel_put2(t_game_manager *gm, int x, int y, int color)
     *(unsigned int*)dst = color;
 }
 
-void draw_2d_vision_line(t_game_manager *game_manager, double dir, int color)
+void draw_2d_vision_line(t_game_manager *gm, double dir, int color)
 {
     int res_width;
     int res_height;
-    float x = (float)game_manager->player_x * (float)game_manager->tile_width;
-    float y = (float)game_manager->player_y * (float)game_manager->tile_height;
+    float x = (float)gm->player_x * (float)gm->tile_width;
+    float y = (float)gm->player_y * (float)gm->tile_height;
 
-    res_width = game_manager->file_data->resolution[0][0];
-    res_height = game_manager->file_data->resolution[0][1];
+    res_width = gm->file_data->resolution[0][0];
+    res_height = gm->file_data->resolution[0][1];
     int i = 0;
 
     // while (x > 0 && x < res_width && y > 0 && y < res_height)
-    while (i < 200)
+    while (i < 300)
     {
         // if (!available_pixel(game_manager, (int)x, (int)y))
         // {
         //     break;
         // }
-        my_mlx_pixel_put(game_manager, x, y, color);
+        my_mlx_pixel_put(gm, (int)x, (int)y, color);
         x += sin(dir);
         y += cos(dir);
         i++;

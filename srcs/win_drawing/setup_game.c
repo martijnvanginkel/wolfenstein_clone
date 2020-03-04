@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/05 12:28:29 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/28 15:32:00 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/04 09:30:22 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,13 @@ t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *i
 
 	tile_width = (file_data->resolution)[0][0] / file_data->map_width;
 	tile_height = (file_data->resolution)[0][1] / file_data->map_height;
+
+	if (tile_width > tile_height)
+		tile_width = tile_height;
+	else
+		tile_height = tile_width;
+	
+
 	game_manager.tile_width = tile_width;
 	game_manager.tile_height = tile_height;
 	game_manager.file_data = file_data;

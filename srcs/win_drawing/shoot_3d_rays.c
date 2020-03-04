@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/02 15:45:30 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/04 10:14:37 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,6 @@ static void     add_sprite_to_ray(t_game_tile tile, t_ray_info *ray, int side, t
     middle_x = (float)tile.x + 0.5;
     middle_y = (float)tile.y + 0.5;
 
-    //printf("[%f][%f]\n", middle_x, middle_y);
-
     if (side == 0)
     {
         if (ray->ray_x_dir < 0)
@@ -65,7 +63,13 @@ static void     add_sprite_to_ray(t_game_tile tile, t_ray_info *ray, int side, t
 
     hit_x = gm->player_x + (eucl_dist * ray->ray_x_dir);
     hit_y = gm->player_y + (eucl_dist * ray->ray_y_dir);
+
+    draw_2d_vision_line(gm, ray->ray_dir, 0x000000);
+
+    printf("hit: %f %f\n", hit_x, hit_y);
+    my_mlx_pixel_put(gm, (hit_x * gm->tile_width), (hit_y * gm->tile_height), 0x000000);
     
+
     float angle;
 
     angle = ray->ray_dir + (M_PI / 2);
@@ -80,53 +84,79 @@ static void     add_sprite_to_ray(t_game_tile tile, t_ray_info *ray, int side, t
     angle_x_dir = sin(angle);
     angle_y_dir = cos(angle);
 
-    // printf("hit: [%f][%f]\n", hit_x, hit_y);
-    // printf("angle_x_dir: %f\n", angle_x_dir);
-    // printf("angle_y_dir: %f\n", angle_y_dir);
-
     float bottom_x;
     float bottom_y;
 
     bottom_x = middle_x + (schuin * angle_x_dir);
     bottom_y = hit_y;
-    // printf("bottom_x: %f ", bottom_x);
-    // printf("bottom_y: %f\n", bottom_x);
 
     my_mlx_pixel_put(gm, bottom_x * gm->tile_width, bottom_y * gm->tile_height, 0xFFFF00);
 
-    float i = 0;
     float new_hit_x = hit_x;
     float new_bottom_x = bottom_x;
 
     printf("[%f][%f]\n", middle_x, middle_y);
     printf("hit: [%f][%f]\n", hit_x, hit_y);
     printf("bottom: [%f][%f]\n", bottom_x, bottom_y);
-    
-    while (i < 10)
-    {
-        new_hit_x = hit_x + (i * ray->ray_x_dir);
-        new_bottom_x = bottom_x - (i * angle_x_dir);
 
-       // printf("%f %f\n", new_hit_x * gm->tile_width, (hit_y + (i * ray->ray_y_dir)) * gm->tile_height);
-        
-        if (new_hit_x < new_bottom_x)
+    my_mlx_pixel_put(gm, (int)(new_hit_x * gm->tile_width), (int)(hit_y * gm->tile_height), 0xFFFF00);
+    my_mlx_pixel_put(gm, (int)(bottom_x * gm->tile_width), (int)(bottom_y * gm->tile_height), 0x00FF00);
+
+
+    int i = 0;
+
+    float bottom_x_incr;
+    float hit_x_incr;
+
+    hit_x_incr = (ray->ray_x_dir / angle_x_dir) * 0.01;
+
+    printf("bottom_x %f, hit_x %f\n", bottom_x, hit_x);
+    
+    printf("ray_x %f ray_y %f perc %f\n", ray->ray_x_dir, ray->ray_y_dir, ray->ray_x_dir / ray->ray_y_dir);
+    printf("hitx %f hiy %f perc %f\n", angle_x_dir, angle_y_dir, angle_x_dir / angle_y_dir);
+    hit_x_incr = fabs(((ray->ray_x_dir / ray->ray_y_dir) * 0.01));
+    bottom_x_incr = fabs(((angle_x_dir / angle_y_dir) * 0.01));
+
+
+    while (1)
+    {
+        bottom_y -= 0.01;
+        hit_y -= 0.01;
+        hit_x -= hit_x_incr;
+        bottom_x += bottom_x_incr;
+        my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
+        if (hit_x < bottom_x)
         {
             printf("found\n");
-            printf("%f %f\n", new_hit_x, hit_y + (i * ray->ray_y_dir));
-            printf("map_cords: %d %d\n", (int)(new_hit_x * gm->tile_width), (int)((hit_y * (hit_y + (i * ray->ray_y_dir))) * gm->tile_height));
-            my_mlx_pixel_put(gm, (int)(new_hit_x * gm->tile_width), (int)(hit_y * (hit_y + (i * ray->ray_y_dir)) * gm->tile_height), 0xFFFF00);
+            printf("x: %f y: %f\n", bottom_x, bottom_y);
             break;
         }
-
-        i += 0.01;
+        
+        i++;
     }
 
-    // printf("bottom_x %f\n", middle_x + (sin(angle) * schuin));
-    // printf("bottom_y %f\n", );
-    //printf("bottom_y %f\n", angle_y_dir);
+
+    // while (1)
+    // {
+    //     bottom_x = bottom_x - (angle_x_dir * 0.01);
+    //     bottom_y = bottom_y - (angle_y_dir * 0.01);
+    //     my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
+    //     hit_x = hit_x + (ray->ray_x_dir * 0.01);
+    //     hit_y = hit_y + (ray->ray_y_dir * 0.01);
+    //     my_mlx_pixel_put(gm, (hit_x * gm->tile_width), (hit_y * gm->tile_height), 0xFF00FF);
+    //     // if (bottom_x > hit_x){
+    //     //     printf("found %d\n", i);
+    //     //     printf("%f %f\n", bottom_x, bottom_y);
+    //     //     break;
+    //     // }
+
+    //     if (i == 200)
+    //         break;
+        
+    //     i++;
+    // }
 
 
-    //printf("[%d][%d]\n", tile.x, tile.y);
 }
 
 static int      increase_ray_distance(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
@@ -267,12 +297,13 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
     cur_px = gm->file_data->resolution[0][0];
     while (start > -1)
     {
-        draw_2d_vision_line(gm, ray_dir, 0xFF0000);
+        //draw_2d_vision_line(gm, ray_dir, 0xFF0000);
         ray_dir = gm->player_dir + atan(start / player_length);
-        draw_2d_vision_line(gm, ray_dir, 0x000000);
+        // draw_2d_vision_line(gm, ray_dir, 0x000000);
         start -= start_incr;  
         cur_px--;    
         draw_wall_line(gm, cur_px, ray_dir);
+        //draw_2d_vision_line(gm, ray_dir, 0x000000);
         break ;
     }
     mlx_put_image_to_window(gm->map_image->mlx, gm->map_image->mlx_win, gm->map_image->img, 0, 0);
