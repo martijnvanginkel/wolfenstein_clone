@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/04 14:41:48 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/05 14:52:59 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void     add_sprite_to_ray(t_game_tile tile, t_ray_info *ray, int side, t
 
     draw_2d_vision_line(gm, ray->ray_dir, 0x000000);
 
-    printf("hit: %f %f\n", hit_x, hit_y);
+    //printf("hit: %f %f\n", hit_x, hit_y);
     my_mlx_pixel_put(gm, (hit_x * gm->tile_width), (hit_y * gm->tile_height), 0x000000);
     
 
@@ -154,8 +154,8 @@ static void     add_sprite_to_ray(t_game_tile tile, t_ray_info *ray, int side, t
     perc_point = fabs((bottom_x - start_point_x) / angle_x_dir);
     eucl = sqrt(pow(bottom_x - gm->player_x, 2) + pow(bottom_y - gm->player_y, 2));
 
-    printf("eucl: %f\n", eucl);
-    printf("percentage: %f\n", perc_point);
+    // printf("eucl: %f\n", eucl);
+    // printf("percentage: %f\n", perc_point);
 
     ray->sprite.eucl_dist = eucl;
     ray->sprite.percentage = perc_point;
@@ -172,6 +172,7 @@ static int      increase_ray_distance(t_game_tile tile, t_ray_info *ray, int sid
             Soort van tussenstop maken om te kijken of er een object wordt geraakt
             Als dit zo is, stop de afstand van de speler naar het middelste punt van de tile in de ray op
         */
+        write(1, "yes\n", 4);
 
         add_sprite_to_ray(tile, ray, side, gm);
     }
@@ -238,6 +239,7 @@ static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
     ray.ray_dir = ray_dir;
     ray.ray_x_dir = sin(ray_dir);
     ray.ray_y_dir = cos(ray_dir);
+    ray.has_sprite = 0;
     calculate_side_distances(gm, &ray);
     calculate_deltas(gm, &ray);
     ray.eucl_dist = calculate_ray_distance(gm, &ray);
@@ -261,24 +263,27 @@ static t_data  *find_wall_texture(t_game_manager *gm, t_ray_info *ray)
     return (texture);
 }
 
-static void draw_sprite(t_game_manager *gm, int world_img_x, t_ray_info *ray)
+static void draw_sprite_line(t_game_manager *gm, int world_img_x, t_ray_info *ray)
 {
     t_data *sprite_texture;
     int line_height;
     t_coordinates tex_cords;
     t_coordinates world_cords;
 
+    sprite_texture = gm->textures->sprite_tex;
     tex_cords.x = (float)sprite_texture->width * ray->sprite.percentage;
+    printf("width: %d perc: %f\n", sprite_texture->width, ray->sprite.percentage);
     tex_cords.y = 0;
     world_cords.x = world_img_x;
-    world_cords.y = (int)gm->file_data->resolution[0][1] / 2;
+    line_height = (int)((float)(gm->file_data->resolution[0][1]) / ray->sprite.eucl_dist);
+    //world_cords.y = (int)gm->file_data->resolution[0][1];
+    world_cords.y = ((int)(gm->file_data->resolution[0][1]) / 2) + (line_height / 2);
 
-    sprite_texture = gm->textures->sprite_tex;
-    line_height = sprite_texture->height;
+
 
     while (line_height > 0)
     {
-       // my_image_put(sprite_texture, tex_cords, gm->world_image, world_cords, gm);
+        my_image_put(sprite_texture, tex_cords, gm->world_image, world_cords, gm);
         tex_cords.y += 1;
         world_cords.y -= 1;
         line_height--;
@@ -314,9 +319,14 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
     // /* Draw sprite */
     if (ray.has_sprite == 1)
     {
-        // printf("01\n");
-        draw_sprite(gm, world_img_x, &ray);
+        //write(1, "yes\n", 4);
+        draw_sprite_line(gm, world_img_x, &ray);
     }
+    else
+    {
+        //write(1, "no\n", 3);
+    }
+    
 
 }
 
@@ -333,6 +343,8 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
     start_incr = 2.0 / (float)(gm->file_data->resolution[0][0]);
     player_length = fabs(start) / tan(M_PI / 6);
     cur_px = gm->file_data->resolution[0][0];
+
+    int i = 0;
     while (start > -1)
     {
         //draw_2d_vision_line(gm, ray_dir, 0xFF0000);
@@ -343,6 +355,9 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
         draw_wall_line(gm, cur_px, ray_dir);
         //draw_2d_vision_line(gm, ray_dir, 0x000000);
         // break ;
+        // if (i == 20)
+        //     break ;
+        // i++;
     }
     mlx_put_image_to_window(gm->map_image->mlx, gm->map_image->mlx_win, gm->map_image->img, 0, 0);
     mlx_put_image_to_window(gm->world_image->mlx, gm->world_image->mlx_win, gm->world_image->img, 0, 0);
