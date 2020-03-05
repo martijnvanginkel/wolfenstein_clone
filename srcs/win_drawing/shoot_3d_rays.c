@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/05 14:52:59 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/05 15:11:56 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,6 +269,7 @@ static void draw_sprite_line(t_game_manager *gm, int world_img_x, t_ray_info *ra
     int line_height;
     t_coordinates tex_cords;
     t_coordinates world_cords;
+    float y_incr;
 
     sprite_texture = gm->textures->sprite_tex;
     tex_cords.x = (float)sprite_texture->width * ray->sprite.percentage;
@@ -278,13 +279,13 @@ static void draw_sprite_line(t_game_manager *gm, int world_img_x, t_ray_info *ra
     line_height = (int)((float)(gm->file_data->resolution[0][1]) / ray->sprite.eucl_dist);
     //world_cords.y = (int)gm->file_data->resolution[0][1];
     world_cords.y = ((int)(gm->file_data->resolution[0][1]) / 2) + (line_height / 2);
-
+    y_incr = (float)sprite_texture->height / (float)line_height;
 
 
     while (line_height > 0)
     {
         my_image_put(sprite_texture, tex_cords, gm->world_image, world_cords, gm);
-        tex_cords.y += 1;
+        tex_cords.y += y_incr;
         world_cords.y -= 1;
         line_height--;
     }
