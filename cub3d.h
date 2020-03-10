@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/04 14:39:33 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/05 15:13:31 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ typedef struct	s_sprite
 {
 	float		eucl_dist;
 	float		percentage;
-
+	
 }				t_sprite;
 
 typedef struct  s_ray_info

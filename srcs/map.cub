@@ -1,10 +1,10 @@
-NO ./srcs/sprites/wood.png
+NO ./srcs/sprites/purplestone.png
 
 
-SO   ./srcs/sprites/diamond.png
+SO   ./srcs/sprites/purplestone.png
 
 
-WE ./srcs/sprites/wood3.png
+WE ./srcs/sprites/wood.png
 EA ./srcs/sprites/diamond.png
 
 
@@ -16,7 +16,7 @@ C 128,235,255
 
 
 S   ./srcs/sprites/sprite_1.png
-R 1280  960
+R 960  640
 
 
 
@@ -32,8 +32,8 @@ R 1280  960
 1 0 0 1 1 1 0 0 0 1 1 1 1
 1 1 1 1 2 1 1 0 0 0 0 0 1 1 1 1 1 1 1 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+1 0 0 0 0 N 0 0 0 0 0 0 0 0 0 0 0 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
-1 0 0 0 0 0 0 N 0 0 0 0 0 0 0 0 0 0 0 1
 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
