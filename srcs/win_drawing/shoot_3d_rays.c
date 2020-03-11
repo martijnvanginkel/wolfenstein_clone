@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/10 13:39:06 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/11 13:20:00 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,25 +102,37 @@ static void     add_sprite_to_ray(t_game_tile tile, t_ray_info *ray, int side, t
     float bottom_x_incr;
     float hit_x_incr;
 
-    hit_x_incr = fabs(((ray->ray_x_dir / ray->ray_y_dir) * 0.001));
-    bottom_x_incr = fabs(((angle_x_dir / angle_y_dir) * 0.001));
+    float times_value = 0.001;
+
+    hit_x_incr = ((ray->ray_x_dir / ray->ray_y_dir) * times_value);
+    bottom_x_incr = ((angle_x_dir / angle_y_dir) * times_value);
 
 
 
-    while (1)
+    if (hit_x_incr > 0)
     {
-        bottom_y -= 0.001;
-        hit_y -= 0.001;
-        hit_x -= hit_x_incr;
-        bottom_x += bottom_x_incr;
-        my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
-        if (hit_x < bottom_x)
+        while (hit_x > bottom_x)
         {
-            // printf("found\n");
-            // printf("x: %f y: %f\n", bottom_x, bottom_y);
-            break;
+            bottom_y -= times_value;
+            hit_y -= times_value;
+            hit_x -= hit_x_incr;
+            bottom_x -= bottom_x_incr;
+            my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
         }
     }
+    else if (hit_x_incr < 0)
+    {
+        while (hit_x < bottom_x)
+        {
+            bottom_y -= times_value;
+            hit_y -= times_value;
+            hit_x -= hit_x_incr;
+            bottom_x -= bottom_x_incr;
+            my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
+        }
+
+    }
+    
 
     // bottom_x is snijpunt
     float start_point_x;
@@ -128,13 +140,25 @@ static void     add_sprite_to_ray(t_game_tile tile, t_ray_info *ray, int side, t
     float eucl;
 
     start_point_x = middle_x - (fabs(angle_x_dir) / 2);
-    if (bottom_x < start_point_x || bottom_x > (start_point_x + fabs(angle_x_dir)))
+    if (hit_x < start_point_x || hit_x > (start_point_x + fabs(angle_x_dir)))
+    {
+        ray->has_sprite = 0;
+        ray->sprite.eucl_dist = 0;
+        ray->sprite.percentage = 0;
+        //printf("yes\n");
+        return ;
+    }
+
+    
+
+    perc_point = fabs((hit_x - start_point_x) / angle_x_dir);
+    printf("bot_x:%f | angle_x:%f | perc:%f\n", bottom_x, angle_x_dir, perc_point);
+
+    
+    if (perc_point > 1 || perc_point < 0)
         return ;
 
-
-    perc_point = fabs((bottom_x - start_point_x) / angle_x_dir);
-    //printf("perc:%f\n", perc_point);
-    eucl = sqrt(pow(bottom_x - gm->player_x, 2) + pow(bottom_y - gm->player_y, 2));
+    eucl = sqrt(pow(middle_x - gm->player_x, 2) + pow(middle_y - gm->player_y, 2));
     ray->sprite.eucl_dist = eucl;
     ray->sprite.percentage = perc_point;
     ray->has_sprite = 1;
@@ -250,7 +274,7 @@ static void draw_sprite_line(t_game_manager *gm, int world_img_x, t_ray_info *ra
 
     sprite_texture = gm->textures->sprite_tex;
     tex_cords.x = ((float)sprite_texture->width * ray->sprite.percentage);
-    printf("perc:%f\n", ray->sprite.percentage);
+    // printf("perc:%f\n", ray->sprite.percentage);
     world_cords.x = (float)world_img_x;
     line_height = ((float)(gm->file_data->resolution[0][1]) / ray->sprite.eucl_dist);
     world_cords.y = ((float)(gm->file_data->resolution[0][1]) / 2) + ((float)line_height / 2);
@@ -327,7 +351,10 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
         cur_px--;    
         draw_wall_line(gm, cur_px, ray_dir);
         // draw_2d_vision_line(gm, ray_dir, 0x000000);
-        // break ;
+        // if (i == 20)
+        //     break;
+
+        // i++;
 
     }
     printf("\n---\n");
