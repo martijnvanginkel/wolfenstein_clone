@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/12 13:39:46 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/12 15:20:46 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,218 +37,64 @@ static void     add_sprite_to_ray_south(t_game_tile tile, t_ray_info *ray, int s
 
     middle_x = (float)tile.x + 0.5;
     middle_y = (float)tile.y + 0.5;
-
     eucl_dist = get_right_ray_dist(ray, side);
-
-
     hit_x = gm->player_x + (eucl_dist * ray->ray_x_dir);
-    hit_y = gm->player_y + (eucl_dist * ray->ray_y_dir);
-
-    draw_2d_vision_line(gm, ray->ray_dir, 0x000000);
-    my_mlx_pixel_put(gm, (hit_x * gm->tile_width), (hit_y * gm->tile_height), 0x000000);
-    
+    hit_y = gm->player_y + (eucl_dist * ray->ray_y_dir); 
 
     float angle;
-
-    angle = ray->ray_dir + (M_PI / 2);
-
-    float schuin;
-
-    schuin = 0.5 / cos(angle);
-
     float angle_x_dir;
     float angle_y_dir;
+    float schuin;
 
+    angle = ray->ray_dir + (M_PI / 2);
     angle_x_dir = sin(angle);
     angle_y_dir = cos(angle);
+    schuin = 0.5 / cos(angle);
 
     float bottom_x;
     float bottom_y;
+    float bottom_x_incr;
+    float hit_x_incr;
+    float times_value = -0.001;
 
     bottom_x = middle_x - (schuin * angle_x_dir);
     bottom_y = hit_y;
 
-    my_mlx_pixel_put(gm, bottom_x * gm->tile_width, bottom_y * gm->tile_height, 0xFFFF00);
-
-    float new_hit_x = hit_x;
-    float new_bottom_x = bottom_x;
-
-    my_mlx_pixel_put(gm, (int)(new_hit_x * gm->tile_width), (int)(hit_y * gm->tile_height), 0xFFFF00);
-    my_mlx_pixel_put(gm, (int)(bottom_x * gm->tile_width), (int)(bottom_y * gm->tile_height), 0x00FF00);
-
-
-    float bottom_x_incr;
-    float hit_x_incr;
-
-    float times_value = -0.001;
-
     hit_x_incr = ((ray->ray_x_dir / ray->ray_y_dir) * times_value);
     bottom_x_incr = ((angle_x_dir / angle_y_dir) * times_value);
-
 
 
     if (hit_x_incr > 0)
     {
         while (hit_x > bottom_x)
         {
-            bottom_y -= times_value;
-            hit_y -= times_value;
             hit_x -= hit_x_incr;
             bottom_x -= bottom_x_incr;
-            my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
         }
     }
     else if (hit_x_incr < 0)
     {
         while (hit_x < bottom_x)
         {
-            bottom_y -= times_value;
-            hit_y -= times_value;
             hit_x -= hit_x_incr;
             bottom_x -= bottom_x_incr;
-            my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
         }
-
     }
     
-
-    // bottom_x is snijpunt
     float start_point_x;
     float perc_point;
-    float eucl;
 
     start_point_x = middle_x - (fabs(angle_x_dir) / 2);
     if (hit_x < start_point_x || hit_x > (start_point_x + fabs(angle_x_dir)))
         return ;
 
-    
-
     perc_point = fabs((hit_x - start_point_x) / angle_x_dir);
-    //printf("bot_x:%f | angle_x:%f | perc:%f\n", bottom_x, angle_x_dir, perc_point);
-
-    
     if (perc_point > 1 || perc_point < 0)
         return ;
 
-    eucl = sqrt(pow(middle_x - gm->player_x, 2) + pow(middle_y - gm->player_y, 2));
-    ray->sprite.eucl_dist = eucl;
+    ray->sprite.eucl_dist = sqrt(pow(middle_x - gm->player_x, 2) + pow(middle_y - gm->player_y, 2));
     ray->sprite.percentage = perc_point;
     ray->has_sprite = 1;
-
-}
-
-static void     add_sprite_to_ray_east(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
-{
-    float middle_x;
-    float middle_y;
-    float   hit_x;
-    float   hit_y;
-    float   eucl_dist;
-
-    middle_x = (float)tile.x + 0.5;
-    middle_y = (float)tile.y + 0.5;
-
-    eucl_dist = get_right_ray_dist(ray, side);
-
-    // printf("x_dir%f\n", ray->ray_x_dir);
-
-    hit_x = gm->player_x + (eucl_dist * ray->ray_x_dir);
-    hit_y = gm->player_y + (eucl_dist * ray->ray_y_dir);
-
-    draw_2d_vision_line(gm, ray->ray_dir, 0x000000);
-
-    //printf("hit: %f %f\n", hit_x, hit_y);
-    my_mlx_pixel_put(gm, (hit_x * gm->tile_width), (hit_y * gm->tile_height), 0x000000);
-    
-
-    float angle;
-
-    angle = ray->ray_dir + (M_PI / 2);
-
-    float schuin;
-
-    schuin = 0.5 / cos(angle);
-
-    float angle_x_dir;
-    float angle_y_dir;
-
-    angle_x_dir = sin(angle);
-    angle_y_dir = cos(angle);
-
-    float bottom_x;
-    float bottom_y;
-
-    bottom_x = hit_x;//middle_y + (schuin * angle_y_dir);
-    bottom_y = middle_y - (schuin * angle_y_dir);
-
-    my_mlx_pixel_put(gm, bottom_x * gm->tile_width, bottom_y * gm->tile_height, 0x00FF00);
-
-
-    float new_hit_x = hit_x;
-    float new_bottom_x = bottom_x;
-
-    my_mlx_pixel_put(gm, (int)(new_hit_x * gm->tile_width), (int)(hit_y * gm->tile_height), 0xFFFF00);
-    my_mlx_pixel_put(gm, (int)(bottom_x * gm->tile_width), (int)(bottom_y * gm->tile_height), 0x00FF00);
-
-
-    float bottom_y_incr;
-    float hit_y_incr;
-
-    float times_value = -0.001;
-
-    hit_y_incr = ((ray->ray_y_dir / ray->ray_x_dir) * times_value);
-    bottom_y_incr = ((angle_y_dir / angle_x_dir) * times_value);
-
-
-
-    if (hit_y_incr > 0)
-    {
-        while (hit_y > bottom_y)
-        {
-            bottom_y -= bottom_y_incr;
-            hit_y -= hit_y_incr;
-            // hit_x -= hit_x_incr;
-            // bottom_x -= bottom_x_incr;
-            my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
-        }
-    }
-    else if (hit_y_incr < 0)
-    {
-        while (hit_y < bottom_y)
-        {
-            bottom_y -= bottom_y_incr;
-            hit_y -= hit_y_incr;
-            // hit_x -= hit_x_incr;
-            // bottom_x -= bottom_x_incr;
-            my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
-        }
-
-    }
-    
-
-    // bottom_x is snijpunt
-    float start_point_x;
-    float perc_point;
-    float eucl;
-
-    start_point_x = middle_y - (fabs(angle_y_dir) / 2);
-    if (hit_y < start_point_x || hit_y > (start_point_x + fabs(angle_y_dir)))
-        return ;
-
-    
-
-    perc_point = fabs((hit_y - start_point_x) / angle_y_dir);
-    printf("bot_x:%f | angle_x:%f | perc:%f\n", bottom_x, angle_x_dir, perc_point);
-
-    
-    if (perc_point > 1 || perc_point < 0)
-        return ;
-
-    eucl = sqrt(pow(middle_y - gm->player_y, 2) + pow(middle_x - gm->player_x, 2));
-    ray->sprite.eucl_dist = eucl;
-    ray->sprite.percentage = perc_point;
-    ray->has_sprite = 1;
-
 }
 
 static void     add_sprite_to_ray_north(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
@@ -261,104 +107,146 @@ static void     add_sprite_to_ray_north(t_game_tile tile, t_ray_info *ray, int s
 
     middle_x = (float)tile.x + 0.5;
     middle_y = (float)tile.y + 0.5;
-
     eucl_dist = get_right_ray_dist(ray, side);
-
-    // printf("x_dir%f\n", ray->ray_x_dir);
-
     hit_x = gm->player_x + (eucl_dist * ray->ray_x_dir);
     hit_y = gm->player_y + (eucl_dist * ray->ray_y_dir);
 
-    draw_2d_vision_line(gm, ray->ray_dir, 0x000000);
-
-    //printf("hit: %f %f\n", hit_x, hit_y);
-    my_mlx_pixel_put(gm, (hit_x * gm->tile_width), (hit_y * gm->tile_height), 0x000000);
-    
-
     float angle;
-
-    angle = ray->ray_dir + (M_PI / 2);
-
-    float schuin;
-
-    schuin = 0.5 / cos(angle);
-
     float angle_x_dir;
     float angle_y_dir;
+    float schuin;
 
+    angle = ray->ray_dir + (M_PI / 2);
     angle_x_dir = sin(angle);
     angle_y_dir = cos(angle);
+    schuin = 0.5 / cos(angle);
 
     float bottom_x;
     float bottom_y;
+    float bottom_x_incr;
+    float hit_x_incr;
+    float times_value = 0.001; // diff
 
     bottom_x = middle_x + (schuin * angle_x_dir);
     bottom_y = hit_y;
 
-    my_mlx_pixel_put(gm, bottom_x * gm->tile_width, bottom_y * gm->tile_height, 0xFFFF00);
-
-    float new_hit_x = hit_x;
-    float new_bottom_x = bottom_x;
-
-    my_mlx_pixel_put(gm, (int)(new_hit_x * gm->tile_width), (int)(hit_y * gm->tile_height), 0xFFFF00);
-    my_mlx_pixel_put(gm, (int)(bottom_x * gm->tile_width), (int)(bottom_y * gm->tile_height), 0x00FF00);
-
-
-    float bottom_x_incr;
-    float hit_x_incr;
-
-    float times_value = 0.001;
+    // printf("bot_x%f:\n", bottom_x);
 
     hit_x_incr = ((ray->ray_x_dir / ray->ray_y_dir) * times_value);
     bottom_x_incr = ((angle_x_dir / angle_y_dir) * times_value);
-
-
 
     if (hit_x_incr > 0)
     {
         while (hit_x > bottom_x)
         {
-            bottom_y -= times_value;
-            hit_y -= times_value;
             hit_x -= hit_x_incr;
             bottom_x -= bottom_x_incr;
-            my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
         }
     }
     else if (hit_x_incr < 0)
     {
         while (hit_x < bottom_x)
         {
-            bottom_y -= times_value;
-            hit_y -= times_value;
             hit_x -= hit_x_incr;
             bottom_x -= bottom_x_incr;
-            my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0xFFF00F);
         }
-
     }
     
-
-    // bottom_x is snijpunt
     float start_point_x;
     float perc_point;
-    float eucl;
 
     start_point_x = middle_x - (fabs(angle_x_dir) / 2);
     if (hit_x < start_point_x || hit_x > (start_point_x + fabs(angle_x_dir)))
         return ;
 
-    
-
-    perc_point = fabs((hit_x - start_point_x) / angle_x_dir);
-    //printf("bot_x:%f | angle_x:%f | perc:%f\n", bottom_x, angle_x_dir, perc_point);
-
-    
+    perc_point = fabs((hit_x - start_point_x) / angle_x_dir);    
     if (perc_point > 1 || perc_point < 0)
         return ;
 
-    eucl = sqrt(pow(middle_x - gm->player_x, 2) + pow(middle_y - gm->player_y, 2));
-    ray->sprite.eucl_dist = eucl;
+    ray->sprite.eucl_dist = sqrt(pow(middle_x - gm->player_x, 2) + pow(middle_y - gm->player_y, 2));
+    ray->sprite.percentage = perc_point;
+    ray->has_sprite = 1;
+}
+
+static void     add_sprite_to_ray_east(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
+{
+    float middle_x;
+    float middle_y;
+    float   hit_x;
+    float   hit_y;
+    float   eucl_dist;
+
+    middle_x = (float)tile.x + 0.5;
+    middle_y = (float)tile.y + 0.5;
+    eucl_dist = get_right_ray_dist(ray, side);
+    hit_x = gm->player_x + (eucl_dist * ray->ray_x_dir);
+    hit_y = gm->player_y + (eucl_dist * ray->ray_y_dir);
+
+    float angle;
+    float angle_x_dir;
+    float angle_y_dir;
+    float schuin;
+
+    angle = ray->ray_dir + (M_PI / 2);
+    angle_x_dir = sin(angle);
+    angle_y_dir = cos(angle);
+    schuin = 0.5 / sin(angle);
+
+    float bottom_x;
+    float bottom_y;
+    float bottom_y_incr;
+    float hit_y_incr;
+    float times_value = -0.001; // diff
+
+    // printf("middle_y: %f\n", middle_y);
+    // printf("schuin: %f\n", schuin);
+    // printf("angle_y: %f\n", angle_y_dir);
+    // printf("angle_y: %f\n", angle_x_dir);
+    
+    bottom_x = hit_x;//middle_y + (schuin * angle_y_dir);
+    bottom_y = middle_y - (schuin * angle_y_dir);
+
+
+
+    //bottom_y = middle_y + (schuin * angle_y_dir);//hit_y;
+
+    my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0x00FF00);
+    printf("bottom_x: %f\nbottom_y: %f\n", bottom_x, bottom_y);
+
+    hit_y_incr = ((ray->ray_y_dir / ray->ray_x_dir) * times_value); // po
+    bottom_y_incr = ((angle_y_dir / angle_x_dir) * times_value); // po
+
+    printf("hityincr: %f\nbottom_y_incr: %f\n", hit_y_incr, bottom_y_incr);
+
+    if (hit_y_incr > 0)
+    {
+        while (hit_y > bottom_y)
+        {
+            hit_y -= hit_y_incr;
+            bottom_y -= bottom_y_incr;
+        }
+    }
+    else if (hit_y_incr < 0)
+    {
+        while (hit_y < bottom_y)
+        {
+            hit_y -= hit_y_incr;
+            bottom_y -= bottom_y_incr;
+        }
+    }
+    
+    float start_point_y;
+    float perc_point;
+
+    start_point_y = middle_y - (fabs(angle_y_dir) / 2);
+    if (hit_y < start_point_y || hit_y > (start_point_y + fabs(angle_y_dir)))
+        return ;
+
+    perc_point = fabs((hit_y - start_point_y) / angle_y_dir);    
+    if (perc_point > 1 || perc_point < 0)
+        return ;
+
+    ray->sprite.eucl_dist = sqrt(pow(middle_x - gm->player_x, 2) + pow(middle_y - gm->player_y, 2));
     ray->sprite.percentage = perc_point;
     ray->has_sprite = 1;
 
@@ -570,7 +458,7 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
         // draw_2d_vision_line(gm, ray_dir, 0x000000);
         // if (i == 20)
         //     break;
-
+        // break ;
         i++;
 
     }

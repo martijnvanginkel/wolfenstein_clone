@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/20 16:01:06 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/05 14:42:05 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/12 13:50:43 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void            my_image_put(t_data *img_data, t_coordinates cords, t_data *img_
         return ;
     src = img_data->addr + ((int)cords.y * img_data->line_length + (int)cords.x * (img_data->bits_per_pixel / 8));
 	dst = img_data2->addr + ((int)cords2.y * img_data2->line_length + (int)cords2.x * (img_data2->bits_per_pixel / 8));
-	if (*src)
+	if (*(unsigned int *)src != 0x00000000)
 		*(unsigned int *)dst = *(unsigned int *)src;
 }
 
