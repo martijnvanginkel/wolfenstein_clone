@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/12 15:20:46 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/12 15:29:26 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ static float get_right_ray_dist(t_ray_info *ray, int side)
 
 static void     add_sprite_to_ray_south(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
 {
-    float middle_x;
-    float middle_y;
+    float   middle_x;
+    float   middle_y;
     float   hit_x;
     float   hit_y;
     float   eucl_dist;
@@ -130,8 +130,6 @@ static void     add_sprite_to_ray_north(t_game_tile tile, t_ray_info *ray, int s
     bottom_x = middle_x + (schuin * angle_x_dir);
     bottom_y = hit_y;
 
-    // printf("bot_x%f:\n", bottom_x);
-
     hit_x_incr = ((ray->ray_x_dir / ray->ray_y_dir) * times_value);
     bottom_x_incr = ((angle_x_dir / angle_y_dir) * times_value);
 
@@ -168,6 +166,76 @@ static void     add_sprite_to_ray_north(t_game_tile tile, t_ray_info *ray, int s
     ray->has_sprite = 1;
 }
 
+static void     add_sprite_to_ray_west(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
+{
+    float middle_x;
+    float middle_y;
+    float   hit_x;
+    float   hit_y;
+    float   eucl_dist;
+
+    middle_x = (float)tile.x + 0.5;
+    middle_y = (float)tile.y + 0.5;
+    eucl_dist = get_right_ray_dist(ray, side);
+    hit_x = gm->player_x + (eucl_dist * ray->ray_x_dir);
+    hit_y = gm->player_y + (eucl_dist * ray->ray_y_dir);
+
+    float angle;
+    float angle_x_dir;
+    float angle_y_dir;
+    float schuin;
+
+    angle = ray->ray_dir + (M_PI / 2);
+    angle_x_dir = sin(angle);
+    angle_y_dir = cos(angle);
+    schuin = 0.5 / sin(angle);
+
+    float bottom_x;
+    float bottom_y;
+    float bottom_y_incr;
+    float hit_y_incr;
+    float times_value = 0.001;
+
+    bottom_x = hit_x;
+    bottom_y = middle_y + (schuin * angle_y_dir);
+
+    hit_y_incr = ((ray->ray_y_dir / ray->ray_x_dir) * times_value); // po
+    bottom_y_incr = ((angle_y_dir / angle_x_dir) * times_value); // po
+
+    if (hit_y_incr > 0)
+    {
+        while (hit_y > bottom_y)
+        {
+            hit_y -= hit_y_incr;
+            bottom_y -= bottom_y_incr;
+        }
+    }
+    else if (hit_y_incr < 0)
+    {
+        while (hit_y < bottom_y)
+        {
+            hit_y -= hit_y_incr;
+            bottom_y -= bottom_y_incr;
+        }
+    }
+    
+    float start_point_y;
+    float perc_point;
+
+    start_point_y = middle_y - (fabs(angle_y_dir) / 2);
+    if (hit_y < start_point_y || hit_y > (start_point_y + fabs(angle_y_dir)))
+        return ;
+
+    perc_point = fabs((hit_y - start_point_y) / angle_y_dir);    
+    if (perc_point > 1 || perc_point < 0)
+        return ;
+
+    ray->sprite.eucl_dist = sqrt(pow(middle_x - gm->player_x, 2) + pow(middle_y - gm->player_y, 2));
+    ray->sprite.percentage = perc_point;
+    ray->has_sprite = 1;
+
+}
+
 static void     add_sprite_to_ray_east(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
 {
     float middle_x;
@@ -196,27 +264,13 @@ static void     add_sprite_to_ray_east(t_game_tile tile, t_ray_info *ray, int si
     float bottom_y;
     float bottom_y_incr;
     float hit_y_incr;
-    float times_value = -0.001; // diff
+    float times_value = -0.001;
 
-    // printf("middle_y: %f\n", middle_y);
-    // printf("schuin: %f\n", schuin);
-    // printf("angle_y: %f\n", angle_y_dir);
-    // printf("angle_y: %f\n", angle_x_dir);
-    
-    bottom_x = hit_x;//middle_y + (schuin * angle_y_dir);
+    bottom_x = hit_x;
     bottom_y = middle_y - (schuin * angle_y_dir);
-
-
-
-    //bottom_y = middle_y + (schuin * angle_y_dir);//hit_y;
-
-    my_mlx_pixel_put(gm, (bottom_x * gm->tile_width), (bottom_y * gm->tile_height), 0x00FF00);
-    printf("bottom_x: %f\nbottom_y: %f\n", bottom_x, bottom_y);
 
     hit_y_incr = ((ray->ray_y_dir / ray->ray_x_dir) * times_value); // po
     bottom_y_incr = ((angle_y_dir / angle_x_dir) * times_value); // po
-
-    printf("hityincr: %f\nbottom_y_incr: %f\n", hit_y_incr, bottom_y_incr);
 
     if (hit_y_incr > 0)
     {
@@ -265,6 +319,10 @@ static void     find_right_ray(t_game_tile tile, t_ray_info *ray, int side, t_ga
     else if (side == 0 && ray->ray_x_dir > 0)
     {
         add_sprite_to_ray_east(tile, ray, side, gm);
+    }
+    else if (side == 0 && ray->ray_x_dir < 0)
+    {
+        add_sprite_to_ray_west(tile, ray, side, gm);
     }
 }
 
