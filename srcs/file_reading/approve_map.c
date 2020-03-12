@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/23 09:01:13 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/02/03 12:59:50 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/12 11:23:11 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,13 @@ static t_map_tile	*find_next_tile(t_map_tile **map, t_map_tile *cur_tile,
 	
 	next_tile = 0;
 	if (cur_tile->x < file_data->map_width - 1 && tile_exists(&(map[cur_tile->y][cur_tile->x + 1]))) /* Tile to the right */
-	{
 		next_tile = &(map[cur_tile->y][cur_tile->x + 1]);
-	}	
 	else if (cur_tile->y > 0 && tile_exists(&(map[cur_tile->y - 1][cur_tile->x]))) /* Tile above */
-	{
 		next_tile = &(map[cur_tile->y - 1][cur_tile->x]);
-	}
 	else if (cur_tile->y < file_data->map_height - 1 && tile_exists(&(map[cur_tile->y + 1][cur_tile->x]))) /* Tile under */
-	{
 		next_tile = &(map[cur_tile->y + 1][cur_tile->x]);	
-	}
 	else if (cur_tile->x > 0 && tile_exists(&(map[cur_tile->y][cur_tile->x - 1]))) /* Tile to the left */
-	{
 		next_tile = &(map[cur_tile->y][cur_tile->x - 1]);
-	}
 	else
 	{
 		cur_tile->is_visited = 1;
