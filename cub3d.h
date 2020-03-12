@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/01/22 14:29:17 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/05 15:13:31 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/12 16:36:48 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,13 +72,36 @@ typedef struct 	s_game_tile
 	int			start_y;
 }				t_game_tile;
 
+typedef struct	s_sprite_hit_data
+{
+	float		tile_middle_x;
+	float		tile_middle_y;
+	float		angle;
+	float		angle_x_dir;
+	float		angle_y_dir;
+	float		ray_hit_point;
+	float		perp_hit_point;
+	float		perp_point_incr;
+	float		ray_point_incr;
+}				t_sprite_hit_data;
 
 /* temp ? */
 typedef struct	s_sprite
 {
-	float		eucl_dist;
-	float		percentage;
-	
+	float			eucl_dist;
+	float			percentage;
+
+	float			tile_middle_x;
+	float			tile_middle_y;
+	float			angle;
+	float			angle_x_dir;
+	float			angle_y_dir;
+	float			ray_hit_point;
+	float			perp_hit_point;
+	float			perp_point_incr;
+	float			ray_point_incr;
+
+	struct s_sprite	*next_sprite;
 }				t_sprite;
 
 typedef struct  s_ray_info
@@ -127,7 +150,7 @@ typedef struct	s_game_manager
 	float			player_y;
 	
 	float			player_dir; /* m_pi / radiant value that the player is looking at*/
-	float			x_dir; /* Relative x-position that the player is looking at */
+	float			x_dir;		/* Relative x-position that the player is looking at */
 	float			y_dir;
 
 	t_texture_images	*textures;

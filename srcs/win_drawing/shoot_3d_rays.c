@@ -6,7 +6,7 @@
 /*   By: mvan-gin <mvan-gin@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2020/02/14 09:51:19 by mvan-gin       #+#    #+#                */
-/*   Updated: 2020/03/12 15:29:26 by mvan-gin      ########   odam.nl         */
+/*   Updated: 2020/03/12 16:37:37 by mvan-gin      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,80 +27,73 @@ static float get_right_ray_dist(t_ray_info *ray, int side)
     } 
 }
 
-static void     add_sprite_to_ray_south(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
+static t_sprite_hit_data    collect_sprite_hit_data(t_game_tile tile, t_ray_info *ray, double (*f)(double), float increment, t_game_manager *gm)
 {
-    float   middle_x;
-    float   middle_y;
-    float   hit_x;
-    float   hit_y;
-    float   eucl_dist;
+    t_sprite_hit_data  hit_data;
+    
+    hit_data.tile_middle_x
+    hit_data.tile_middle_y
 
-    middle_x = (float)tile.x + 0.5;
-    middle_y = (float)tile.y + 0.5;
-    eucl_dist = get_right_ray_dist(ray, side);
-    hit_x = gm->player_x + (eucl_dist * ray->ray_x_dir);
-    hit_y = gm->player_y + (eucl_dist * ray->ray_y_dir); 
+}
 
-    float angle;
-    float angle_x_dir;
-    float angle_y_dir;
-    float schuin;
+static void     add_sprite_to_ray_south(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm, double (*f)(double), float increment)
+{
+    float   tile_middle_x;
+    float   tile_middle_y;
+    
+    float   angle;
+    float   angle_x_dir;
+    float   angle_y_dir;
+    
+    float   ray_hit_point;
+    float   perp_hit_point;
+    float   perp_point_incr;
+    float   ray_point_incr;
 
+    tile_middle_x = (float)tile.x + 0.5;
+    tile_middle_y = (float)tile.y + 0.5;
+    ray_hit_point = gm->player_x + (get_right_ray_dist(ray, side) * ray->ray_x_dir);
     angle = ray->ray_dir + (M_PI / 2);
     angle_x_dir = sin(angle);
     angle_y_dir = cos(angle);
-    schuin = 0.5 / cos(angle);
+    perp_hit_point = tile_middle_x - ((0.5 / f(angle)) * angle_x_dir);
+    ray_point_incr = ((ray->ray_x_dir / ray->ray_y_dir) * increment);
+    perp_point_incr = ((angle_x_dir / angle_y_dir) * increment);
 
-    float bottom_x;
-    float bottom_y;
-    float bottom_x_incr;
-    float hit_x_incr;
-    float times_value = -0.001;
+    // ray_hit_point = perp_hit_point 
 
-    bottom_x = middle_x - (schuin * angle_x_dir);
-    bottom_y = hit_y;
-
-    hit_x_incr = ((ray->ray_x_dir / ray->ray_y_dir) * times_value);
-    bottom_x_incr = ((angle_x_dir / angle_y_dir) * times_value);
-
-
-    if (hit_x_incr > 0)
+    if (ray_point_incr > 0)
     {
-        while (hit_x > bottom_x)
+        while (ray_hit_point > perp_hit_point)
         {
-            hit_x -= hit_x_incr;
-            bottom_x -= bottom_x_incr;
+            ray_hit_point -= ray_point_incr;
+            perp_hit_point -= perp_point_incr;
         }
     }
-    else if (hit_x_incr < 0)
+    else if (ray_point_incr < 0)
     {
-        while (hit_x < bottom_x)
+        while (ray_hit_point < perp_hit_point)
         {
-            hit_x -= hit_x_incr;
-            bottom_x -= bottom_x_incr;
+            ray_hit_point -= ray_point_incr;
+            perp_hit_point -= perp_point_incr;
         }
     }
     
     float start_point_x;
-    float perc_point;
 
-    start_point_x = middle_x - (fabs(angle_x_dir) / 2);
-    if (hit_x < start_point_x || hit_x > (start_point_x + fabs(angle_x_dir)))
+    start_point_x = tile_middle_x - (fabs(angle_x_dir) / 2);
+    if (ray_hit_point < start_point_x || ray_hit_point > (start_point_x + fabs(angle_x_dir)))
         return ;
 
-    perc_point = fabs((hit_x - start_point_x) / angle_x_dir);
-    if (perc_point > 1 || perc_point < 0)
-        return ;
-
-    ray->sprite.eucl_dist = sqrt(pow(middle_x - gm->player_x, 2) + pow(middle_y - gm->player_y, 2));
-    ray->sprite.percentage = perc_point;
+    ray->sprite.eucl_dist = sqrt(pow(tile_middle_x - gm->player_x, 2) + pow(tile_middle_y - gm->player_y, 2));
+    ray->sprite.percentage = fabs((ray_hit_point - start_point_x) / angle_x_dir);
     ray->has_sprite = 1;
 }
 
 static void     add_sprite_to_ray_north(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
 {
-    float middle_x;
-    float middle_y;
+    float   middle_x;
+    float   middle_y;
     float   hit_x;
     float   hit_y;
     float   eucl_dist;
@@ -308,13 +301,16 @@ static void     add_sprite_to_ray_east(t_game_tile tile, t_ray_info *ray, int si
 
 static void     find_right_ray(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
 {
+
+
+
     if (side == 1 && ray->ray_y_dir < 0)
     {
         add_sprite_to_ray_north(tile, ray, side, gm);
     }
     else if (side == 1 && ray->ray_y_dir > 0)
     {
-        add_sprite_to_ray_south(tile, ray, side, gm);
+        add_sprite_to_ray_south(tile, ray, side, gm, &cos, -0.001);
     }
     else if (side == 0 && ray->ray_x_dir > 0)
     {
@@ -339,7 +335,6 @@ static int      increase_ray_distance(t_game_tile tile, t_ray_info *ray, int sid
         find_right_ray(tile, ray, side, gm);
         //add_sprite_to_ray(tile, ray, side, gm);
     }
-        //printf("ray_dir %f\n", ray->ray_y_dir);
     if (tile.value == 1)
     {
         ray->final_dist = get_right_ray_dist(ray, side);
@@ -437,13 +432,11 @@ static void draw_sprite_line(t_game_manager *gm, int world_img_x, t_ray_info *ra
 
     sprite_texture = gm->textures->sprite_tex;
     tex_cords.x = ((float)sprite_texture->width * ray->sprite.percentage);
-    // printf("perc:%f\n", ray->sprite.percentage);
     world_cords.x = (float)world_img_x;
     line_height = ((float)(gm->file_data->resolution[0][1]) / ray->sprite.eucl_dist);
     world_cords.y = ((float)(gm->file_data->resolution[0][1]) / 2) + ((float)line_height / 2);
     y_incr = (float)sprite_texture->height / (float)line_height;
-    tex_cords.y = ((float)line_height * y_incr) - 1;
-    
+    tex_cords.y = ((float)line_height * y_incr) - 1;   
     while (line_height > 0)
     {
         my_image_put(sprite_texture, tex_cords, gm->world_image, world_cords, gm);
@@ -503,8 +496,6 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
     start_incr = 2.0 / (float)(gm->file_data->resolution[0][0]);
     player_length = fabs(start) / tan(M_PI / 6);
     cur_px = gm->file_data->resolution[0][0];
-
-    int i = 0;
     while (start > -1)
     {
         draw_2d_vision_line(gm, ray_dir, 0xFF0000);
@@ -513,14 +504,7 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
         start -= start_incr;  
         cur_px--;    
         draw_wall_line(gm, cur_px, ray_dir);
-        // draw_2d_vision_line(gm, ray_dir, 0x000000);
-        // if (i == 20)
-        //     break;
-        // break ;
-        i++;
-
     }
-    printf("\n---\n");
     mlx_put_image_to_window(gm->map_image->mlx, gm->map_image->mlx_win, gm->map_image->img, 0, 0);
     mlx_put_image_to_window(gm->world_image->mlx, gm->world_image->mlx_win, gm->world_image->img, 0, 0);
 }
