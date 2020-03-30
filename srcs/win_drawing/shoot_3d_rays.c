@@ -55,26 +55,26 @@ static void     set_basic_sprite_values(t_sprite *sprite, t_ray_info *ray, t_gam
     sprite->tile_middle_y = (float)tile.y + 0.5;
 }
 
-static t_sprite    get_basic_calculation_values(t_game_tile tile, t_ray_info *ray)
-{
-    t_sprite  hd;
+// static t_sprite    get_basic_calculation_values(t_game_tile tile, t_ray_info *ray)
+// {
+//     t_sprite  hd;
 
-    hd.angle = ray->ray_dir + (M_PI / 2);
-    hd.angle_x_dir = sin(hd.angle);
-    hd.angle_y_dir = cos(hd.angle);
-    hd.tile_middle_x = (float)tile.x + 0.5;
-    hd.tile_middle_y = (float)tile.y + 0.5;
-    return (hd);
-}
+//     hd.angle = ray->ray_dir + (M_PI / 2);
+//     hd.angle_x_dir = sin(hd.angle);
+//     hd.angle_y_dir = cos(hd.angle);
+//     hd.tile_middle_x = (float)tile.x + 0.5;
+//     hd.tile_middle_y = (float)tile.y + 0.5;
+//     return (hd);
+// }
 
-static t_sprite    set_increment_values(t_sprite hd, t_ray_info *ray, float increment, t_game_manager *gm, int side)
-{
-    hd.ray_hit_point = gm->player_x + (get_right_ray_dist(ray, side) * ray->ray_x_dir);
-    hd.ray_point_incr = ((ray->ray_x_dir / ray->ray_y_dir) * increment);
-    hd.perp_point_incr = ((hd.angle_x_dir / hd.angle_y_dir) * increment);
+// static t_sprite    set_increment_values(t_sprite hd, t_ray_info *ray, float increment, t_game_manager *gm, int side)
+// {
+//     hd.ray_hit_point = gm->player_x + (get_right_ray_dist(ray, side) * ray->ray_x_dir);
+//     hd.ray_point_incr = ((ray->ray_x_dir / ray->ray_y_dir) * increment);
+//     hd.perp_point_incr = ((hd.angle_x_dir / hd.angle_y_dir) * increment);
 
-    return (hd);
-}
+//     return (hd);
+// }
 
 static void     set_sprite_distance_to_ray(t_sprite hd, t_ray_info *ray, t_game_manager *gm)
 {
@@ -104,131 +104,74 @@ static void     set_sprite_distance_to_ray(t_sprite hd, t_ray_info *ray, t_game_
     ray->has_sprite = 1;  
 }
 
-static void     add_sprite_to_ray_south(t_sprite *sprite, t_ray_info *ray, t_game_manager *gm, float increment)
-{ 
-    sprite->ray_hit_point = gm->player_x + (get_right_ray_dist(ray, sprite->side_hit) * ray->ray_x_dir);
-    sprite->ray_point_incr = ((ray->ray_x_dir / ray->ray_y_dir) * increment);
-    sprite->perp_point_incr = ((sprite->angle_x_dir / sprite->angle_y_dir) * increment);
-    sprite->perp_hit_point = sprite->tile_middle_x - ((0.5 / cos(sprite->angle)) * sprite->angle_x_dir);
+static void     loop_to_find_percentage(t_sprite *sprite)
+{
+    if (sprite->ray_point_incr > 0)
+    {
+        while (sprite->ray_hit_point > sprite->perp_hit_point)
+        {
+            sprite->ray_hit_point -= sprite->ray_point_incr;
+            sprite->perp_hit_point -= sprite->perp_point_incr;
+        }
+    }
+    else if (sprite->ray_point_incr < 0)
+    {
+        while (sprite->ray_hit_point < sprite->perp_hit_point)
+        {
+            sprite->ray_hit_point -= sprite->ray_point_incr;
+            sprite->perp_hit_point -= sprite->perp_point_incr;
+        }
+    }
 }
 
-static void     add_sprite_to_ray_north(t_sprite *sprite, t_ray_info *ray, t_game_manager *gm, float increment)
+static void     add_sprite_to_ray_north(t_sprite *sprite, t_ray_info *ray, t_game_manager *gm, float increment, int neg)
 {
     sprite->ray_hit_point = gm->player_x + (get_right_ray_dist(ray, sprite->side_hit) * ray->ray_x_dir);
     sprite->ray_point_incr = ((ray->ray_x_dir / ray->ray_y_dir) * increment);
     sprite->perp_point_incr = ((sprite->angle_x_dir / sprite->angle_y_dir) * increment);
-    sprite->perp_hit_point = sprite->tile_middle_x + ((0.5 / cos(sprite->angle)) * sprite->angle_x_dir);
+    if (neg == 1)
+    {
+        sprite->perp_hit_point = sprite->tile_middle_x + ((0.5 / cos(sprite->angle)) * sprite->angle_x_dir);
+    }
+    else
+    {
+        sprite->perp_hit_point = sprite->tile_middle_x - ((0.5 / cos(sprite->angle)) * sprite->angle_x_dir);
+    }
+    loop_to_find_percentage(sprite);
+
+    float start_point;
+
+    start_point = sprite->tile_middle_x - (fabs(sprite->angle_x_dir) / 2);
+    if (sprite->ray_hit_point < start_point || sprite->ray_hit_point > (start_point + fabs(sprite->angle_x_dir)))
+        return ;
+    ray->sprite.eucl_dist = sqrt(pow(sprite->tile_middle_x - gm->player_x, 2) + pow(sprite->tile_middle_y - gm->player_y, 2));
+    ray->sprite.percentage = fabs((sprite->ray_hit_point - start_point) / sprite->angle_x_dir);
 }
 
-static void     add_sprite_to_ray_west(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm, double (*f)(double), float increment)
+static void     add_sprite_to_ray_west(t_sprite *sprite, t_ray_info *ray, t_game_manager *gm, float increment, int neg)
 {
-    float   angle;
-    float   angle_x_dir;
-    float   angle_y_dir;
-    float   ray_hit_point;
-    float   perp_hit_point;
-    float   perp_point_incr;
-    float   ray_point_incr;
-    float tile_middle_x;
-    float tile_middle_y;
-
-    angle = ray->ray_dir + (M_PI / 2);
-    angle_x_dir = sin(angle);
-    angle_y_dir = cos(angle);
-
-    ray_hit_point = gm->player_y + (get_right_ray_dist(ray, side) * ray->ray_y_dir);
-    ray_point_incr = ((ray->ray_y_dir / ray->ray_x_dir) * increment);
-    perp_point_incr = ((angle_y_dir / angle_x_dir) * increment);
-
-    tile_middle_x = (float)tile.x + 0.5;
-    tile_middle_y = (float)tile.y + 0.5;
-
-    perp_hit_point = tile_middle_y + ((0.5 / f(angle)) * angle_y_dir);
-
-
-    if (ray_point_incr > 0)
+    sprite->ray_hit_point = gm->player_y + (get_right_ray_dist(ray, sprite->side_hit) * ray->ray_y_dir);
+    sprite->ray_point_incr = ((ray->ray_y_dir / ray->ray_x_dir) * increment);
+    if (neg == 1)
     {
-        while (ray_hit_point > perp_hit_point)
-        {
-            ray_hit_point -= ray_point_incr;
-            perp_hit_point -= perp_point_incr;
-        }
+        sprite->perp_hit_point = sprite->tile_middle_y + ((0.5 / sin(sprite->angle)) * sprite->angle_y_dir);
     }
-    else if (ray_point_incr < 0)
+    else
     {
-        while (ray_hit_point < perp_hit_point)
-        {
-            ray_hit_point -= ray_point_incr;
-            perp_hit_point -= perp_point_incr;
-        }
+        sprite->perp_hit_point = sprite->tile_middle_y - ((0.5 / sin(sprite->angle)) * sprite->angle_y_dir);
     }
+    sprite->perp_point_incr = ((sprite->angle_y_dir / sprite->angle_x_dir) * increment);
+    loop_to_find_percentage(sprite);
     
-    float start_point_y;
+    float start_point;
 
-    start_point_y = tile_middle_y - (fabs(angle_y_dir) / 2);
-    if (ray_hit_point < start_point_y || ray_hit_point > (start_point_y + fabs(angle_y_dir)))
+    start_point = sprite->tile_middle_y - (fabs(sprite->angle_y_dir) / 2);
+    if (sprite->ray_hit_point < start_point || sprite->ray_hit_point > (start_point + fabs(sprite->angle_y_dir)))
         return ;
 
-    ray->sprite.eucl_dist = sqrt(pow(tile_middle_x - gm->player_x, 2) + pow(tile_middle_y - gm->player_y, 2));
-    ray->sprite.percentage = fabs((ray_hit_point - start_point_y) / angle_y_dir);
-    ray->has_sprite = 1;
+    ray->sprite.eucl_dist = sqrt(pow(sprite->tile_middle_x - gm->player_x, 2) + pow(sprite->tile_middle_y - gm->player_y, 2));
+    ray->sprite.percentage = fabs((sprite->ray_hit_point - start_point) / sprite->angle_y_dir);
 }
-
-static void     add_sprite_to_ray_east(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm, double (*f)(double), float increment)
-{
-    float   angle;
-    float   angle_x_dir;
-    float   angle_y_dir;
-
-    float   ray_point_hit;
-    float   perp_hit_point;
-    float   perp_point_incr;
-    float   ray_point_incr;
-
-    float   tile_middle_x;
-    float   tile_middle_y;
-
-    tile_middle_x = (float)tile.x + 0.5;
-    tile_middle_y = (float)tile.y + 0.5;
-    ray_point_hit = gm->player_y + (get_right_ray_dist(ray, side) * ray->ray_y_dir);
-    angle = ray->ray_dir + (M_PI / 2);
-    angle_x_dir = sin(angle);
-    angle_y_dir = cos(angle);
-    ray_point_incr = ((ray->ray_y_dir / ray->ray_x_dir) * increment); 
-    perp_point_incr = ((angle_y_dir / angle_x_dir) * increment);
-
-
-    perp_hit_point = tile_middle_y - ((0.5 / f(angle)) * angle_y_dir);
-
-
-    if (ray_point_incr > 0)
-    {
-        while (ray_point_hit > perp_hit_point)
-        {
-            ray_point_hit -= ray_point_incr;
-            perp_hit_point -= perp_point_incr;
-        }
-    }
-    else if (ray_point_incr < 0)
-    {
-        while (ray_point_hit < perp_hit_point)
-        {
-            ray_point_hit -= ray_point_incr;
-            perp_hit_point -= perp_point_incr;
-        }
-    }
-    
-    float start_point_y;
-
-    start_point_y = tile_middle_y - (fabs(angle_y_dir) / 2);
-    if (ray_point_hit < start_point_y || ray_point_hit > (start_point_y + fabs(angle_y_dir)))
-        return ;
-
-    ray->sprite.eucl_dist = sqrt(pow(tile_middle_x - gm->player_x, 2) + pow(tile_middle_y - gm->player_y, 2));
-    ray->sprite.percentage = fabs((ray_point_hit - start_point_y) / angle_y_dir);
-    ray->has_sprite = 1;
-}
-
 
 static void     find_right_ray(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
 {
@@ -238,24 +181,21 @@ static void     find_right_ray(t_game_tile tile, t_ray_info *ray, int side, t_ga
     set_basic_sprite_values(&sprite, ray, tile);
 
 
-
     if (side == 1 && ray->ray_y_dir < 0)
     {
-        add_sprite_to_ray_north(&sprite, ray, gm, 0.001);
-        set_sprite_distance_to_ray(sprite, ray, gm);
+        add_sprite_to_ray_north(&sprite, ray, gm, 0.001, 1);
     }
     else if (side == 1 && ray->ray_y_dir > 0)
     {
-        add_sprite_to_ray_south(&sprite, ray, gm, -0.001);
-        set_sprite_distance_to_ray(sprite, ray, gm);
+        add_sprite_to_ray_north(&sprite, ray, gm, -0.001, 0);
     }
     else if (side == 0 && ray->ray_x_dir > 0)
     {
-        add_sprite_to_ray_east(tile, ray, side, gm, &sin, -0.001); // -0.001
+        add_sprite_to_ray_west(&sprite, ray, gm, -0.001, 0);
     }
     else if (side == 0 && ray->ray_x_dir < 0)
     {
-        add_sprite_to_ray_west(tile, ray, side, gm, &sin, 0.001); // 0.001
+        add_sprite_to_ray_west(&sprite, ray, gm, 0.001, 1);
     }
 }
 
@@ -268,8 +208,8 @@ static int      increase_ray_distance(t_game_tile tile, t_ray_info *ray, int sid
             Als dit zo is, stop de afstand van de speler naar het middelste punt van de tile in de ray op
         */
         //write(1, "yes\n", 4);
-
         find_right_ray(tile, ray, side, gm);
+        ray->has_sprite = 1;
         //add_sprite_to_ray(tile, ray, side, gm);
     }
     if (tile.value == 1)
