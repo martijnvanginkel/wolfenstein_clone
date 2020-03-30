@@ -74,8 +74,6 @@ typedef struct 	s_game_tile
 
 typedef struct	s_sprite_hit_data
 {
-	float		tile_middle_x;
-	float		tile_middle_y;
 	float		angle;
 	float		angle_x_dir;
 	float		angle_y_dir;
@@ -83,6 +81,8 @@ typedef struct	s_sprite_hit_data
 	float		perp_hit_point;
 	float		perp_point_incr;
 	float		ray_point_incr;
+	float		tile_middle_x;
+	float		tile_middle_y;
 }				t_sprite_hit_data;
 
 /* temp ? */
