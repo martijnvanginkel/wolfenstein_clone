@@ -223,8 +223,10 @@ int				available_pixel(t_game_manager *g_m, int x, int y);
 void			calculate_side_distances(t_game_manager *game_manager, t_ray_info *ray_info);
 void			calculate_deltas(t_game_manager *game_manager, t_ray_info *ray_info);
 void			calculate_steps(t_ray_info *ray_info, int *step_x, int *step_y);
+float			get_right_ray_dist(t_ray_info *ray, int side);
 
 /* Shoot 3d rays */
 void			shoot_rays(t_game_manager *game_manager, float player_dir, int color);
+void			calculate_sprite_distance(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm);
 
 #endif

@@ -40,6 +40,7 @@ WIN_FILES =	srcs/win_drawing/update.c \
 			srcs/win_drawing/shoot_3d_rays.c \
 			srcs/win_drawing/calculate_ray_utils.c \
 			srcs/win_drawing/floor_and_ceiling.c \
+			srcs/win_drawing/add_sprite_to_ray.c \
 			
 
 CC = gcc -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
