@@ -14,6 +14,7 @@
 # define CUB3D_H
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <fcntl.h>
 #include <math.h>
 #include "srcs/get_next_line/get_next_line.h"
@@ -74,6 +75,7 @@ typedef struct 	s_game_tile
 
 typedef struct	s_sprite
 {
+
 	float			eucl_dist;
 	float			percentage;
 	int				side_hit;
@@ -109,7 +111,7 @@ typedef struct  s_ray_info
 
 
 	int			has_sprite;
-	t_sprite	sprite;
+	t_sprite	*sprite;
 
 
 	t_game_tile	*tile_hit;
@@ -197,8 +199,6 @@ void            my_mlx_pixel_put(t_game_manager *gm, int x, int y, int color);
 void            my_mlx_pixel_put2(t_game_manager *gm, int x, int y, int color);
 void            my_image_put(t_data *img_data, t_coordinates cords, t_data *img_data2, t_coordinates cords2, t_game_manager *gm);
 void			draw_2d_vision_line(t_game_manager *game_manager, double dir, int color);
-// void			clean_3d_wall_line(t_game_manager *game_manager, int x_value);
-// void			draw_3d_wall_line(t_game_manager *game_manager, int res_i, t_ray_info ray);
 void			draw_floor_and_ceiling(t_game_manager *game_manager);
 
 /* Update */

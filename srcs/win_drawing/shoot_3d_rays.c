@@ -29,10 +29,19 @@ float get_right_ray_dist(t_ray_info *ray, int side)
 
 static int      increase_ray_distance(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
 {
+
     if (tile.value == 2) /* On sprite hit */
     {
         calculate_sprite_distance(tile, ray, side, gm);
         ray->has_sprite = 1;
+
+
+        // if (ray->sprite != null)
+        // {
+
+        // }
+
+
     }
     if (tile.value == 1)
     {
@@ -98,6 +107,7 @@ static t_ray_info calculate_ray(t_game_manager *gm, float ray_dir)
     ray.ray_x_dir = sin(ray_dir);
     ray.ray_y_dir = cos(ray_dir);
     ray.has_sprite = 0;
+    ray.sprite = 0;
     calculate_side_distances(gm, &ray);
     calculate_deltas(gm, &ray);
     ray.eucl_dist = calculate_ray_distance(gm, &ray);
@@ -121,7 +131,7 @@ static t_data  *find_wall_texture(t_game_manager *gm, t_ray_info *ray)
     return (texture);
 }
 
-static void draw_sprite_line(t_game_manager *gm, int world_img_x, t_ray_info *ray)
+static void draw_sprite_line(t_game_manager *gm, int world_img_x, t_sprite *sprite)
 {
     t_data *sprite_texture;
     int line_height;
@@ -130,9 +140,9 @@ static void draw_sprite_line(t_game_manager *gm, int world_img_x, t_ray_info *ra
     float y_incr;
 
     sprite_texture = gm->textures->sprite_tex;
-    tex_cords.x = ((float)sprite_texture->width * ray->sprite.percentage);
+    tex_cords.x = ((float)sprite_texture->width * sprite->percentage);
     world_cords.x = (float)world_img_x;
-    line_height = ((float)(gm->file_data->resolution[0][1]) / ray->sprite.eucl_dist);
+    line_height = ((float)(gm->file_data->resolution[0][1]) / sprite->eucl_dist);
     world_cords.y = ((float)(gm->file_data->resolution[0][1]) / 2) + ((float)line_height / 2);
     y_incr = (float)sprite_texture->height / (float)line_height;
     tex_cords.y = ((float)line_height * y_incr) - 1;   
@@ -154,6 +164,9 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
     t_coordinates world_cords;
     t_data *texture;
 
+    // printf("draw wall line");
+
+    ray.sprite = NULL;
     ray = calculate_ray(gm, ray_dir);
     texture = find_wall_texture(gm, &ray);
     line_height = (int)(gm->file_data->resolution[0][1]) / ray.perp_dist;
@@ -172,7 +185,23 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
 
     if (ray.has_sprite == 1)
     {
-        draw_sprite_line(gm, world_img_x, &ray);
+
+
+        // printf("\n");
+
+        if (ray.sprite->next_sprite == NULL)
+        {
+            //printf("%f\n", ray.sprite->eucl_dist);
+            draw_sprite_line(gm, world_img_x, ray.sprite);
+        }
+        else
+        {
+            // fprintf(stderr, ":%f ", ray.sprite->eucl_dist);
+            // fprintf(stderr, ":%f \n", ray.sprite->next_sprite->eucl_dist);
+            //printf("%f %f\n", ray.sprite->eucl_dist, ray.sprite->next_sprite->eucl_dist);
+            draw_sprite_line(gm, world_img_x, ray.sprite->next_sprite);
+           draw_sprite_line(gm, world_img_x, ray.sprite);
+        }
     }
     else
     {
@@ -203,6 +232,7 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
         start -= start_incr;  
         cur_px--;    
         draw_wall_line(gm, cur_px, ray_dir);
+        //break ;
     }
     mlx_put_image_to_window(gm->map_image->mlx, gm->map_image->mlx_win, gm->map_image->img, 0, 0);
     mlx_put_image_to_window(gm->world_image->mlx, gm->world_image->mlx_win, gm->world_image->img, 0, 0);

@@ -24,6 +24,6 @@ static void     free_textures(t_game_manager *gm)
 
 void			quit_game(t_game_manager *gm)
 {
-    free_textures(gm);
+    //free_textures(gm);
     write(1, "Bye!", 4);
 }
