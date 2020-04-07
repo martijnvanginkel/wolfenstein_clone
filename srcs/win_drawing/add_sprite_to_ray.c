@@ -110,6 +110,7 @@ void     calculate_sprite_distance(t_game_tile tile, t_ray_info *ray, int side, 
     // tmp = ray->sprite;
 
     // printf("%f ", sprite.eucl_dist);
+    t_sprite *temp;
 
     if (ray->sprite == NULL)
     {
@@ -121,12 +122,30 @@ void     calculate_sprite_distance(t_game_tile tile, t_ray_info *ray, int side, 
     }
     else
     {
-        ray->sprite->next_sprite = sprite;
-        // fprintf(stderr, ":%f ", ray->sprite->eucl_dist);
-        // fprintf(stderr, ":%f \n", ray->sprite->next_sprite->eucl_dist);
-        //ray->sprite->next_sprite = &sprite;
-        // printf("%f ", ray->sprite->eucl_dist);
-        // printf("%f ", ray->sprite->next_sprite->eucl_dist);
+        // while (ray->sprite != NULL) 
+        // {
+        //     ray
+        // }
+        temp = ray->sprite;
+
+        while (temp->next_sprite != NULL)
+        {
+            temp = temp->next_sprite;
+        }
+        temp->next_sprite = sprite;
+
+
+
+        // if (temp->next_sprite->next_sprite == NULL)
+        // {
+        //     write(1, "a", 1);
+        //     temp->next_sprite->next_sprite = sprite;
+        
+        // }
+        // else if (temp->next_sprite == NULL)
+        // {
+        //     temp->next_sprite = sprite;
+        // }
 
 
     }

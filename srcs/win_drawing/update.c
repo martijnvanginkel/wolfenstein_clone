@@ -13,18 +13,18 @@
 #include "../../minilibx/mlx.h"
 #include "../../cub3d.h"
 
-static int             get_player_input(int keycode, t_game_manager *game_manager)
+static int             get_player_input(int keycode, t_game_manager *gm)
 {
 	if (keycode == 13) // up
-		move_player(game_manager, 0.5);
+		move_player(gm, 0.5);
 	else if (keycode == 0) // left
-		rotate_player(game_manager, 0.1);
+		rotate_player(gm, 0.1);
 	else if (keycode == 1) // down
-		move_player(game_manager, -0.5);
+		move_player(gm, -0.5);
 	else if (keycode == 2) // right
-		rotate_player(game_manager, -0.1);
+		rotate_player(gm, -0.1);
 	else if (keycode == 12)
-		quit_game(game_manager);
+		quit_game(gm);
 	return (0);
 }
 

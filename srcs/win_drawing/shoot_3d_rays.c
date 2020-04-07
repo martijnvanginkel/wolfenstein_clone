@@ -164,8 +164,6 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
     t_coordinates world_cords;
     t_data *texture;
 
-    // printf("draw wall line");
-
     ray.sprite = NULL;
     ray = calculate_ray(gm, ray_dir);
     texture = find_wall_texture(gm, &ray);
@@ -194,13 +192,30 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
             //printf("%f\n", ray.sprite->eucl_dist);
             draw_sprite_line(gm, world_img_x, ray.sprite);
         }
-        else
+        else if (ray.sprite->next_sprite->next_sprite == NULL)
         {
+            // t_sprite *temp;
+
+            // temp = ray.sprite;
+
+            // while (temp->next_sprite != NULL)
+            // {
+
+            // }
+
+
             // fprintf(stderr, ":%f ", ray.sprite->eucl_dist);
             // fprintf(stderr, ":%f \n", ray.sprite->next_sprite->eucl_dist);
             //printf("%f %f\n", ray.sprite->eucl_dist, ray.sprite->next_sprite->eucl_dist);
             draw_sprite_line(gm, world_img_x, ray.sprite->next_sprite);
            draw_sprite_line(gm, world_img_x, ray.sprite);
+        }
+        else
+        {     
+            draw_sprite_line(gm, world_img_x, ray.sprite->next_sprite->next_sprite);       
+            draw_sprite_line(gm, world_img_x, ray.sprite->next_sprite);
+           draw_sprite_line(gm, world_img_x, ray.sprite);
+
         }
     }
     else
@@ -232,7 +247,6 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
         start -= start_incr;  
         cur_px--;    
         draw_wall_line(gm, cur_px, ray_dir);
-        //break ;
     }
     mlx_put_image_to_window(gm->map_image->mlx, gm->map_image->mlx_win, gm->map_image->img, 0, 0);
     mlx_put_image_to_window(gm->world_image->mlx, gm->world_image->mlx_win, gm->world_image->img, 0, 0);
