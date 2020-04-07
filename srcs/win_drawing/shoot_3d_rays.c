@@ -34,14 +34,6 @@ static int      increase_ray_distance(t_game_tile tile, t_ray_info *ray, int sid
     {
         calculate_sprite_distance(tile, ray, side, gm);
         ray->has_sprite = 1;
-
-
-        // if (ray->sprite != null)
-        // {
-
-        // }
-
-
     }
     if (tile.value == 1)
     {
@@ -183,46 +175,20 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
 
     if (ray.has_sprite == 1)
     {
+        t_sprite *temp;
 
-
-        // printf("\n");
-
-        if (ray.sprite->next_sprite == NULL)
+        temp = ray.sprite;
+        draw_sprite_line(gm, world_img_x, ray.sprite);
+        while (temp->next_sprite != NULL)
         {
-            //printf("%f\n", ray.sprite->eucl_dist);
-            draw_sprite_line(gm, world_img_x, ray.sprite);
-        }
-        else if (ray.sprite->next_sprite->next_sprite == NULL)
-        {
-            // t_sprite *temp;
-
-            // temp = ray.sprite;
-
-            // while (temp->next_sprite != NULL)
-            // {
-
-            // }
-
-
-            // fprintf(stderr, ":%f ", ray.sprite->eucl_dist);
-            // fprintf(stderr, ":%f \n", ray.sprite->next_sprite->eucl_dist);
-            //printf("%f %f\n", ray.sprite->eucl_dist, ray.sprite->next_sprite->eucl_dist);
-            draw_sprite_line(gm, world_img_x, ray.sprite->next_sprite);
-           draw_sprite_line(gm, world_img_x, ray.sprite);
-        }
-        else
-        {     
-            draw_sprite_line(gm, world_img_x, ray.sprite->next_sprite->next_sprite);       
-            draw_sprite_line(gm, world_img_x, ray.sprite->next_sprite);
-           draw_sprite_line(gm, world_img_x, ray.sprite);
-
+            draw_sprite_line(gm, world_img_x, temp->next_sprite);
+            temp = temp->next_sprite;
         }
     }
     else
     {
         //write(1, "no\n", 3);
     }
-    
 
 }
 

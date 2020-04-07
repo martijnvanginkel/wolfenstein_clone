@@ -83,10 +83,8 @@ static void     west_or_east_hit(t_sprite *sprite, t_ray_info *ray, t_game_manag
 void     calculate_sprite_distance(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
 {
     t_sprite *sprite;
+    t_sprite *temp;
     float increment;
-
-    // t_sprite *tmp;
-
 
     sprite = malloc(sizeof(t_sprite) * 1);
     if (!sprite)
@@ -105,54 +103,14 @@ void     calculate_sprite_distance(t_game_tile tile, t_ray_info *ray, int side, 
         (ray->ray_x_dir > 0) ? (increment = -0.001) : (increment = 0.001);
         west_or_east_hit(sprite, ray, gm, increment);
     }
-
-
-    // tmp = ray->sprite;
-
-    // printf("%f ", sprite.eucl_dist);
-    t_sprite *temp;
-
     if (ray->sprite == NULL)
     {
-        // printf("1");
         ray->sprite = sprite;
-
-        //fprintf(stderr, "%f \n", ray->sprite->eucl_dist);
-        //printf("%f ", ray->sprite->eucl_dist);
     }
     else
     {
-        // while (ray->sprite != NULL) 
-        // {
-        //     ray
-        // }
         temp = ray->sprite;
-
-        while (temp->next_sprite != NULL)
-        {
-            temp = temp->next_sprite;
-        }
-        temp->next_sprite = sprite;
-
-
-
-        // if (temp->next_sprite->next_sprite == NULL)
-        // {
-        //     write(1, "a", 1);
-        //     temp->next_sprite->next_sprite = sprite;
-        
-        // }
-        // else if (temp->next_sprite == NULL)
-        // {
-        //     temp->next_sprite = sprite;
-        // }
-
-
+        ray->sprite = sprite;
+        ray->sprite->next_sprite = temp;
     }
-
-
-    //     tmp->next_sprite = &sprite;
-    // }
-    // printf("\n");
-
 }
