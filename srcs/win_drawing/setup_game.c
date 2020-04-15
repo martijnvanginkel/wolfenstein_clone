@@ -74,7 +74,7 @@ t_data	setup_image_data(t_file_data *file_data)
 	return (img);
 }
 
-t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *img2)
+t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img)
 {
 	t_game_manager	game_manager;
 	int				tile_width;
@@ -94,8 +94,8 @@ t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *i
 	game_manager.file_data = file_data;
 
 	game_manager.player_tile = 0;
-	game_manager.map_image = img;
-	game_manager.world_image = img2;
+	// game_manager.map_image = img;
+	game_manager.world_image = img;
 
 	game_manager.player_dir = M_PI;
 	game_manager.x_dir = sin(game_manager.player_dir);

@@ -207,13 +207,11 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
     cur_px = gm->file_data->resolution[0][0];
     while (start > -1)
     {
-        draw_2d_vision_line(gm, ray_dir, 0xFF0000);
         ray_dir = gm->player_dir + atan(start / player_length);
-        draw_2d_vision_line(gm, ray_dir, 0x000000);
         start -= start_incr;  
         cur_px--;    
         draw_wall_line(gm, cur_px, ray_dir);
     }
-    mlx_put_image_to_window(gm->map_image->mlx, gm->map_image->mlx_win, gm->map_image->img, 0, 0);
+
     mlx_put_image_to_window(gm->world_image->mlx, gm->world_image->mlx_win, gm->world_image->img, 0, 0);
 }

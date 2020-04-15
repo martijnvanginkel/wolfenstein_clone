@@ -198,13 +198,13 @@ void			free_map(t_file_data *file_data);
 void            my_mlx_pixel_put(t_game_manager *gm, int x, int y, int color);
 void            my_mlx_pixel_put2(t_game_manager *gm, int x, int y, int color);
 void            my_image_put(t_data *img_data, t_coordinates cords, t_data *img_data2, t_coordinates cords2, t_game_manager *gm);
-void			draw_2d_vision_line(t_game_manager *game_manager, double dir, int color);
+// void			draw_2d_vision_line(t_game_manager *game_manager, double dir, int color);
 void			draw_floor_and_ceiling(t_game_manager *game_manager);
 
 /* Update */
 void			run_game(t_file_data *file_data);
 t_data          setup_image_data(t_file_data *file_data);
-t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img, t_data *img2);
+t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img);
 void			quit_game(t_game_manager *gm);
 
 /* Textures */
@@ -212,7 +212,7 @@ void			get_textures(t_game_manager *gm);
 
 /* Draw map */
 void            draw_map(t_game_manager *game_manager); // temp
-void			draw_grid(t_game_manager *game_manager); // temp
+// void			draw_grid(t_game_manager *game_manager); // temp
 
 /* Update player */
 void            rotate_player(t_game_manager *game_manager, double rotation);
