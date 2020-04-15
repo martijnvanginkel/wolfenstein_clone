@@ -46,10 +46,10 @@ WIN_FILES =	srcs/win_drawing/update.c \
 CC = gcc -I minilibx -L minilibx -lmlx -framework OpenGL -framework AppKit
 
 $(NAME): fclean
-	$(CC) $(FILES) $(MAP_FILES) -o $(NAME) && ./$(NAME)
+	$(CC) $(FILES) $(MAP_FILES) $(WIN_FILES) $(U_FILES) -o game && ./game map.cub
+# 	$(CC) $(FILES) $(MAP_FILES) -o $(NAME) && ./$(NAME)
 
-game: fclean
-	$(CC) $(FILES) $(MAP_FILES) $(WIN_FILES) $(U_FILES) -o game && ./game
+# game: fclean
 
 map_checker: fclean
 	gcc $(MAP_FILES) -o map_checker && ./map_checker map.cub

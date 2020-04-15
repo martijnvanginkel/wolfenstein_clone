@@ -20,7 +20,7 @@ void            glue_lines(char **full_file, char *read_line)
     temp = *full_file;
     *full_file = strjoin(*full_file, read_line);
     free(temp);
-    free(read_line);
+    // free(read_line);
 }
 
 /* Reads the content out of the map.cub file and returns it as a string */
@@ -33,7 +33,7 @@ char            *read_content_from_file(char *file_name)
 
     read_line = NULL;
     full_file = make_empty_string();
-    fd = open("srcs/map.cub", O_RDONLY);
+    fd = open(file_name, O_RDONLY); // srcs/map.cub
     if (fd == -1)
         return (NULL);
     while (get_next_line(fd, &read_line))
@@ -61,7 +61,6 @@ t_file_data        *collect_file_information(char *file_name)
 	{
 		loop_till_next_line(file_data->full_file, &index);
 	}
-    //file_data->map = get_map(&(file_data->full_file)[index]);
 	file_data->map = get_map(file_data, index);
     if (!file_data->map)
         return (0);

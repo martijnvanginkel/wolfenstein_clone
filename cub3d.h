@@ -216,7 +216,7 @@ void            draw_map(t_game_manager *game_manager); // temp
 
 /* Update player */
 void            rotate_player(t_game_manager *game_manager, double rotation);
-void			move_player(t_game_manager *game_manager, double walk_speed);
+void			move_player(t_game_manager *game_manager, double walk_speed, double rotation);
 int				available_pixel(t_game_manager *g_m, int x, int y);
 
 /* Calculate ray utils */

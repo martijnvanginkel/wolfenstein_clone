@@ -33,13 +33,13 @@ void rotate_player(t_game_manager *game_manager, double rotation)
     shoot_rays(game_manager, game_manager->player_dir, 0x000000);
 }
 
-void move_player(t_game_manager *game_manager, double walk_speed)
+void move_player(t_game_manager *game_manager, double walk_speed, double rotation)
 {
     double new_x_value;
     double new_y_value;
 
-    new_x_value = game_manager->player_x + (walk_speed * sin(game_manager->player_dir));
-    new_y_value = game_manager->player_y + (walk_speed * cos(game_manager->player_dir));
+    new_x_value = game_manager->player_x + (walk_speed * sin(game_manager->player_dir + rotation));
+    new_y_value = game_manager->player_y + (walk_speed * cos(game_manager->player_dir + rotation));
     if (available_pixel(game_manager, new_x_value, new_y_value))
     {
         game_manager->player_tile = &game_manager->map[(int)new_y_value][(int)new_x_value];
