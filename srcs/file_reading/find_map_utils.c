@@ -70,7 +70,6 @@ int     get_widest_map_line(char *content_string, int index)
         index++;
     }
     width = (width / 2);
-    printf("width:%d\n", width);
     return (width);
 }
 

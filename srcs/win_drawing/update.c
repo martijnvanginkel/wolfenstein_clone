@@ -19,10 +19,6 @@ static int             get_player_input(int keycode, t_game_manager *gm)
 		move_player(gm, 0.5, 0);
 	else if (keycode == 1) // down
 		move_player(gm, -0.5, 0);
-	// else if (keycode == 0) // left
-	// 	move_player(gm, 0.5, (M_PI / 2));
-	// else if (keycode == 2) // right
-	// 	move_player(gm, 0.5, (M_PI / 2) * -1);
 	else if (keycode == 0) 
 		rotate_player(gm, 0.1);
 	else if (keycode == 2) // right

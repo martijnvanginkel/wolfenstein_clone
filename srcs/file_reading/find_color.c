@@ -41,14 +41,12 @@ int				find_color(char *file_string, int *index,
 		return (0);
 	if (file_string[(*index)++] != ',')
 	{
-		//free(rgb_colors);
 		return (0);
 	}
 	if (!loop_and_find_color(&rgb_colors[1], file_string, index))
 		return (0);
 	if (file_string[(*index)++] != ',')
 	{
-		//free(rgb_colors);
 		return (0);
 	}
 	loop_empty_space(file_string, index);

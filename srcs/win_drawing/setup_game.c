@@ -88,19 +88,14 @@ t_game_manager	setup_game_manager(t_file_data *file_data, t_data *img)
 	else
 		tile_height = tile_width;
 	
-
 	game_manager.tile_width = tile_width;
 	game_manager.tile_height = tile_height;
 	game_manager.file_data = file_data;
-
 	game_manager.player_tile = 0;
-	// game_manager.map_image = img;
 	game_manager.world_image = img;
-
 	game_manager.player_dir = M_PI;
 	game_manager.x_dir = sin(game_manager.player_dir);
 	game_manager.y_dir = cos(game_manager.player_dir);
-
 	game_manager.map = replace_map(file_data, &game_manager);
 
 	return (game_manager);

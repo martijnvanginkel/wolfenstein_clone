@@ -20,7 +20,6 @@ void            glue_lines(char **full_file, char *read_line)
     temp = *full_file;
     *full_file = strjoin(*full_file, read_line);
     free(temp);
-    // free(read_line);
 }
 
 /* Reads the content out of the map.cub file and returns it as a string */

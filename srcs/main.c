@@ -46,8 +46,6 @@ int             main(int argc, char **argv)
 			return (0);
 		}
 	}
-
-	printf("\n\n%s\n\n", argv[1]);
 	file_data = collect_file_information(argv[1]);
 	if (!file_data)
 	{
@@ -55,7 +53,6 @@ int             main(int argc, char **argv)
 		return (0);
 	}
 	print_string("All info successfully collected");
-
 	run_game(file_data);
 
     return (0);

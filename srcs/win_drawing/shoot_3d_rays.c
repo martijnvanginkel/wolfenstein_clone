@@ -29,7 +29,6 @@ float get_right_ray_dist(t_ray_info *ray, int side)
 
 static int      increase_ray_distance(t_game_tile tile, t_ray_info *ray, int side, t_game_manager *gm)
 {
-
     if (tile.value == 2) /* On sprite hit */
     {
         calculate_sprite_distance(tile, ray, side, gm);
@@ -185,11 +184,6 @@ static void draw_wall_line(t_game_manager *gm , int world_img_x, float ray_dir)
             temp = temp->next_sprite;
         }
     }
-    else
-    {
-        //write(1, "no\n", 3);
-    }
-
 }
 
 /* Container function for shooting all the rays in the player's view */
@@ -212,6 +206,5 @@ void shoot_rays(t_game_manager *gm, float player_dir, int color)
         cur_px--;    
         draw_wall_line(gm, cur_px, ray_dir);
     }
-
     mlx_put_image_to_window(gm->world_image->mlx, gm->world_image->mlx_win, gm->world_image->img, 0, 0);
 }
